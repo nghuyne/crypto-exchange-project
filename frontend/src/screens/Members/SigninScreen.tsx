@@ -13,7 +13,7 @@ import FormButton from '../../components/Forms/FormButton';
 
 // interfaces
 interface IFormProps {
-  phone: string;
+  email: string;
   password: string;
 }
 
@@ -23,7 +23,7 @@ const SigninScreen: React.FC = () => {
   const { onlyNumbers } = useFormEvents();
 
   const [formValues, setFormValues] = useState<IFormProps>({
-    phone: '',
+    email: '',
     password: '',
   });
 
@@ -44,14 +44,40 @@ const SigninScreen: React.FC = () => {
 
   /**
    * Handles the form submission for the sign-in screen.
+   * Goi API POST /api/v1/login, luu JWT vao localStorage.
    *
    * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
-   * @returns {void}
+   * @returns {Promise<void>}
    */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    navigate('/market');
+    if (!formValues.email || !formValues.password) {
+      alert('Vui long nhap Email va Password!');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/v1/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email:    formValues.email,
+          password: formValues.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.data.token);
+        navigate('/market');
+      } else {
+        alert(`Loi dang nhap: ${data.message}`);
+      }
+    } catch {
+      alert('Khong the ket noi Backend. Hay chay may chu Go (port 8080) truoc!');
+    }
   };
 
   return (
@@ -77,14 +103,13 @@ const SigninScreen: React.FC = () => {
                   <div className='form-elements'>
                     <div className='form-line'>
                       <div className='full-width'>
-                        <label htmlFor='phone'>Phone number</label>
+                        <label htmlFor='email'>Email address</label>
                         <FormInput
-                          type='text'
-                          name='phone'
-                          onKeyDown={onlyNumbers}
+                          type='email'
+                          name='email'
                           onChange={handleChange}
-                          value={formValues.phone}
-                          placeholder='Enter your phone number'
+                          value={formValues.email}
+                          placeholder='Enter your email address'
                         />
                       </div>
                     </div>

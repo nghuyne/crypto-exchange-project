@@ -88,12 +88,45 @@ const SignupScreen: React.FC = () => {
 
   /**
    * Handles the form submission for the sign-up screen.
+   * Goi API POST /api/v1/register de tao tai khoan that su.
    *
    * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
-   * @returns {void}
+   * @returns {Promise<void>}
    */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    if (!formValues.email || !formValues.password || !formValues.name) {
+      alert('Vui long nhap day du Email, Password va Ten!');
+      return;
+    }
+    if (formValues.password !== formValues.password1) {
+      alert('Mat khau xac nhan khong khop!');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/v1/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email:     formValues.email,
+          password:  formValues.password,
+          full_name: `${formValues.name} ${formValues.lastname}`.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Dang ky thanh cong! Hay dang nhap.');
+        window.location.href = '/';
+      } else {
+        alert(`Loi: ${data.message}`);
+      }
+    } catch {
+      alert('Khong the ket noi Backend. Hay chay may chu Go (port 8080) truoc!');
+    }
   };
 
   return (

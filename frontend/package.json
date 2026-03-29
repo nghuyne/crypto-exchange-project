@@ -2,6 +2,7 @@
   "name": "react-crypto-exchange",
   "version": "0.1.10",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "apexcharts": "^5.3.6",
     "react": "^19.2.1",
