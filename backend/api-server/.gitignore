@@ -1,0 +1,26 @@
+# Chan cac file chay nang may (Binaries)
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Chan thu muc chua code thu vien ngoai lai
+vendor/
+
+# Chan file chua mat khau, bien moi truong rieng 
+.env
+
+# Chan file cau hinh cua trinh soan thao an
+.vscode/
+.idea/
+
+# Chan thu muc tam de luu du lieu docker (neu co)
+db_data/
+docker_data/
+
+# Nhung thu linh tinh cua Windows
+.DS_Store
+Thumbs.db
