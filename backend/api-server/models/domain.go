@@ -5,8 +5,8 @@ import "time"
 // 1. BANG NGUOI DUNG
 type User struct {
 	ID        uint      `gorm:"primaryKey"`
-	Email     string    `gorm:"type:varchar(100);uniqueIndex;not null"` // <- Da sua loi 1170 o day
-	Password  string    `gorm:"not null"`                               // Se bi bam (ma hoa) bang bang bcrypt
+	Email     string    `gorm:"type:varchar(100);uniqueIndex;not null"`
+	Password  string    `gorm:"not null"` // Se bi bam (ma hoa) bang bang bcrypt
 	FullName  string    `gorm:"not null"`
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 
@@ -28,11 +28,23 @@ type Wallet struct {
 type Order struct {
 	ID        uint      `gorm:"primaryKey"`
 	UserID    uint      `gorm:"index;not null"`
-	Symbol    string    `gorm:"type:varchar(20);not null"`            // VD: "BTC_USDT"
-	Side      string    `gorm:"type:enum('BUY','SELL');not null"`     // Mua hoac Ban
-	Type      string    `gorm:"type:enum('LIMIT','MARKET');not null"` // Lenh Gioi han / Lenh Cho
+	Symbol    string    `gorm:"type:varchar(20);not null"`            // vd: "btc_usdt"
+	Side      string    `gorm:"type:enum('BUY','SELL');not null"`     // mua hoac ban
+	Type      string    `gorm:"type:enum('LIMIT','MARKET');not null"` // lenh gioi han / lenh cho
 	Price     float64   `gorm:"type:decimal(18,8);not null"`
 	Quantity  float64   `gorm:"type:decimal(18,8);not null"`
+	Filled    float64   `gorm:"type:decimal(18,8);default:0"` // so luong da khop
 	Status    string    `gorm:"type:enum('OPEN','FILLED','PARTIAL','CANCELLED');default:'OPEN'"`
 	CreatedAt time.Time `gorm:"autoCreateTime"`
+}
+
+// 4. BANG LICH SU KHOP LENH (TRADE)
+type Trade struct {
+	ID          uint      `gorm:"primaryKey"`
+	BuyOrderID  uint      `gorm:"index;not null"`
+	SellOrderID uint      `gorm:"index;not null"`
+	Symbol      string    `gorm:"type:varchar(20);not null"`
+	Price       float64   `gorm:"type:decimal(18,8);not null"`
+	Quantity    float64   `gorm:"type:decimal(18,8);not null"`
+	CreatedAt   time.Time `gorm:"autoCreateTime"`
 }
