@@ -1,9 +1,10 @@
 import { useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // hooks
 import useFormEvents from '../../hooks/useFormEvents';
+import { useAuth } from '../../hooks/useAuth';
 
 // components
 import Box from '../../components/Common/Box';
@@ -34,6 +35,9 @@ interface IFormProps {
 }
 
 const SignupScreen: React.FC = () => {
+  const navigate = useNavigate();
+  const { register } = useAuth();
+
   const { onlyNumbers, onlyEmail } = useFormEvents();
 
   const [formValues, setFormValues] = useState<IFormProps>({
@@ -55,6 +59,8 @@ const SignupScreen: React.FC = () => {
     agreeToPolicies2: false,
     agreeToPolicies3: false,
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   /**
    * Handles input changes in the sign-up form.
@@ -88,7 +94,7 @@ const SignupScreen: React.FC = () => {
 
   /**
    * Handles the form submission for the sign-up screen.
-   * Goi API POST /api/v1/register de tao tai khoan that su.
+   * Sử dụng AuthContext để register & login tự động.
    *
    * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
    * @returns {Promise<void>}
@@ -105,27 +111,19 @@ const SignupScreen: React.FC = () => {
       return;
     }
 
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/v1/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email:     formValues.email,
-          password:  formValues.password,
-          full_name: `${formValues.name} ${formValues.lastname}`.trim(),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Dang ky thanh cong! Hay dang nhap.');
-        window.location.href = '/';
-      } else {
-        alert(`Loi: ${data.message}`);
-      }
-    } catch {
-      alert('Khong the ket noi Backend. Hay chay may chu Go (port 8080) truoc!');
+      await register(
+        formValues.email,
+        formValues.password,
+        `${formValues.name} ${formValues.lastname}`.trim()
+      );
+      alert('Dang ky va dang nhap thanh cong!');
+      navigate('/market');
+    } catch (error: any) {
+      alert(`Loi: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 

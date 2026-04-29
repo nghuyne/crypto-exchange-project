@@ -1,5 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 
+// components
+import { ProtectedRoute } from '../components/ProtectedRoute';
+
 // pages
 import MarketScreen from '../screens/Market/MarketScreen';
 import SigninScreen from '../screens/Members/SigninScreen';
@@ -14,13 +17,52 @@ import TransactionsScreen from '../screens/Transactions/TransactionsScreen';
 const Navigation: React.FC = () => (
   <Routes>
     <Route path='/' element={<SigninScreen />} />
-    <Route path='/market' element={<MarketScreen />} />
-    <Route path='/members' element={<ProfileScreen />} />
-    <Route path='/capital' element={<CapitalScreen />} />
-    <Route path='/dashboard' element={<DashboardScreen />} />
     <Route path='/members/signup' element={<SignupScreen />} />
-    <Route path='/transactions' element={<TransactionsScreen />} />
     <Route path='/members/forgot-password' element={<ForgotScreen />} />
+
+    {/* Protected Routes - yêu cầu đăng nhập */}
+    <Route
+      path='/market'
+      element={
+        <ProtectedRoute>
+          <MarketScreen />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path='/members'
+      element={
+        <ProtectedRoute>
+          <ProfileScreen />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path='/capital'
+      element={
+        <ProtectedRoute>
+          <CapitalScreen />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path='/dashboard'
+      element={
+        <ProtectedRoute>
+          <DashboardScreen />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path='/transactions'
+      element={
+        <ProtectedRoute>
+          <TransactionsScreen />
+        </ProtectedRoute>
+      }
+    />
+
+    {/* 404 */}
     <Route path='*' element={<NotFoundScreen />} />
   </Routes>
 );

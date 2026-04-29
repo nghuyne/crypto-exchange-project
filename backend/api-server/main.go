@@ -50,6 +50,7 @@ func main() {
 	auth := r.Group("/api/v1")
 	auth.Use(controllers.AuthRequired())
 	{
+		auth.GET("/me", controllers.GetMe)
 		auth.GET("/wallet", controllers.GetWallet)
 		auth.POST("/deposit", controllers.Deposit)
 
