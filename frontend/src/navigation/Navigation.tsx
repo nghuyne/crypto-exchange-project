@@ -13,6 +13,7 @@ import CapitalScreen from '../screens/Capital/CapitalScreen';
 import NotFoundScreen from '../screens/NotFound/NotFoundScreen';
 import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 import TransactionsScreen from '../screens/Transactions/TransactionsScreen';
+import DataScreen from '../screens/Data/DataScreen';
 
 const Navigation: React.FC = () => (
   <Routes>
@@ -50,6 +51,14 @@ const Navigation: React.FC = () => (
       element={
         <ProtectedRoute>
           <DashboardScreen />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path='/data'
+      element={
+        <ProtectedRoute>
+          <DataScreen />
         </ProtectedRoute>
       }
     />
