@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useContext } from 'react';
+import { WebSocketContext } from '../context/WebSocketContext';
 
 // ============================================================
 // useOrderBook — Hook quan ly Order Book real-time
@@ -44,6 +45,7 @@ export function useOrderBook({
   symbol,
   wsUrl = 'ws://localhost:8081/ws',
 }: UseOrderBookOptions): UseOrderBookResult {
+  const wsCtx = useContext(WebSocketContext);
   const [bids, setBids] = useState<OrderLevel[]>([]);
   const [asks, setAsks] = useState<OrderLevel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +55,7 @@ export function useOrderBook({
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMountedRef = useRef(true);
+  const wsIdRef = useRef(`orderbook-${symbol}`); // ID để track WebSocket
 
   // --- Fetch orderbook tu REST API ---
   const fetchOrderBook = useCallback(async () => {
@@ -98,6 +101,10 @@ export function useOrderBook({
     ws.onopen = () => {
       if (!isMountedRef.current) return;
       setIsConnected(true);
+      // Dang ky WebSocket voi context
+      if (wsCtx) {
+        wsCtx.registerWebSocket(wsIdRef.current, ws);
+      }
       console.log('[OrderBook] WebSocket connected');
     };
 
@@ -118,6 +125,10 @@ export function useOrderBook({
     ws.onclose = () => {
       if (!isMountedRef.current) return;
       setIsConnected(false);
+      // Huy dang ky WebSocket
+      if (wsCtx) {
+        wsCtx.unregisterWebSocket(wsIdRef.current);
+      }
       console.log('[OrderBook] WebSocket disconnected, reconnecting in 3s...');
       // Tu dong ket noi lai sau 3 giay
       reconnectTimerRef.current = setTimeout(() => {
@@ -129,7 +140,7 @@ export function useOrderBook({
       // onerror luon di kem voi onclose, nen khong can xu ly them
       setIsConnected(false);
     };
-  }, [symbol, wsUrl, fetchOrderBook]);
+  }, [symbol, wsUrl, fetchOrderBook, wsCtx]);
 
   // --- Khoi chay khi mount / doi symbol ---
   useEffect(() => {
@@ -145,6 +156,10 @@ export function useOrderBook({
       if (wsRef.current) {
         wsRef.current.onclose = null; // Ngan reconnect sau khi unmount
         wsRef.current.close();
+      }
+      // Huy dang ky WebSocket
+      if (wsCtx) {
+        wsCtx.unregisterWebSocket(wsIdRef.current);
       }
     };
   }, [symbol]); // Chi re-run khi symbol thay doi

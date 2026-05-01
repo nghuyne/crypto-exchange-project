@@ -1,7 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useAuthLogout } from '../../hooks/useAuthLogout';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
+  const { logout } = useAuthLogout();
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    logout();
+  };
 
   return (
     <div className='header-right no-select'>
@@ -71,9 +78,9 @@ const HeaderRight: React.FC = () => {
             </Link>
           </li>
           <li className='responsive-hide'>
-            <Link to='/' className='signout'>
+            <button onClick={handleLogout} className='signout' style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
               <i className='material-icons'>power_settings_new</i>
-            </Link>
+            </button>
           </li>
         </ul>
       </div>
