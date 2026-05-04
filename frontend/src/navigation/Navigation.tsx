@@ -14,6 +14,7 @@ import NotFoundScreen from '../screens/NotFound/NotFoundScreen';
 import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 import TransactionsScreen from '../screens/Transactions/TransactionsScreen';
 import DataScreen from '../screens/Data/DataScreen';
+import BlockchainExplorer from '../pages/BlockchainExplorer';
 
 const Navigation: React.FC = () => (
   <Routes>
@@ -67,6 +68,14 @@ const Navigation: React.FC = () => (
       element={
         <ProtectedRoute>
           <TransactionsScreen />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path='/blockchain-explorer'
+      element={
+        <ProtectedRoute>
+          <BlockchainExplorer />
         </ProtectedRoute>
       }
     />

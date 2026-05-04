@@ -32,6 +32,14 @@ const HeaderRight: React.FC = () => {
           </li>
           <li>
             <Link
+              to='/blockchain-explorer'
+              className={location.pathname.toLowerCase().includes('/blockchain-explorer') ? 'active' : 'passive'}
+            >
+              Blockchain Explorer
+            </Link>
+          </li>
+          <li>
+            <Link
               to='/docs'
               className={location.pathname.toLowerCase().includes('/docs') ? 'active' : 'passive'}
             >
