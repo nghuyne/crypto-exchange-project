@@ -29,8 +29,10 @@ func NewBlockchain() *Blockchain {
 	return bc
 }
 
-// AddAuditRecord thêm một bản ghi kiểm toán AI vào Blockchain
-func (bc *Blockchain) AddAuditRecord(metadata string) {
+// AddAuditRecord thêm một bản ghi kiểm toán AI vào Blockchain.
+// Trả về error nếu persist thất bại để caller có thể log CRITICAL và quyết định flow.
+// Tại sao phải trả error? Vì silent failure = audit trail giả tạo = mất bằng chứng compliance.
+func (bc *Blockchain) AddAuditRecord(metadata string) error {
 	bc.mu.Lock()
 	defer bc.mu.Unlock()
 
@@ -41,9 +43,15 @@ func (bc *Blockchain) AddAuditRecord(metadata string) {
 	}
 	newBlock := NewBlock([]*Transaction{tx}, prevBlock.Hash, len(bc.Blocks))
 	bc.Blocks = append(bc.Blocks, newBlock)
-	
-	bc.save()
+
+	if err := bc.save(); err != nil {
+		// Block đã được append vào memory nhưng CHƯA persist xuống disk.
+		// Caller phải xử lý: log CRITICAL + quyết định có block request không.
+		log.Printf("⛓️ [CRITICAL] Block #%d created in memory but failed to persist: %v", newBlock.Index, err)
+		return err
+	}
 	log.Printf("⛓️ AUDIT LOG: Block #%d added to Blockchain Audit Trail", newBlock.Index)
+	return nil
 }
 
 func (bc *Blockchain) save() error {

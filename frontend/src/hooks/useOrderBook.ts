@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { WebSocketContext } from '../context/WebSocketContext';
 
+// Derive WebSocket URL tu window.location de hoat dong dung moi moi truong.
+// Tai sao khong hardcode? ws://localhost:8080 chi dung tren may dev,
+// fail ngay khi deploy len server khac hoac dung HTTPS (phai la wss://).
+// Uu tien: REACT_APP_WS_URL (env var) > tu dong derive tu hostname:8080.
+const _wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const DEFAULT_WS_URL =
+  process.env.REACT_APP_WS_URL ??
+  `${_wsProtocol}//${window.location.hostname}:8080/ws`;
+
 // ============================================================
 // useOrderBook — Hook quan ly Order Book real-time
 //
@@ -29,7 +38,7 @@ export interface OrderBook {
 
 interface UseOrderBookOptions {
   symbol: string;
-  wsUrl?: string; // WebSocket URL, mac dinh ws://localhost:8081/ws
+  wsUrl?: string; // WebSocket URL — mac dinh tu dong derive tu window.location
 }
 
 interface UseOrderBookResult {
@@ -43,7 +52,7 @@ interface UseOrderBookResult {
 
 export function useOrderBook({
   symbol,
-  wsUrl = 'ws://localhost:8081/ws',
+  wsUrl = DEFAULT_WS_URL,
 }: UseOrderBookOptions): UseOrderBookResult {
   const wsCtx = useContext(WebSocketContext);
   const [bids, setBids] = useState<OrderLevel[]>([]);

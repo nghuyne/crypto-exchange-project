@@ -21,7 +21,8 @@ interface Block {
   Transactions: Transaction[];
 }
 
-const API_URL = '/api/blockchain/blocks';
+// /api/v1/blockchain/blocks — khop voi route duoc dang ky trong main.go
+const API_URL = '/api/v1/blockchain/blocks';
 
 function shortenHash(hash: string): string {
   if (!hash || hash.length < 16) return hash;

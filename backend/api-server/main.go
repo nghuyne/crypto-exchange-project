@@ -19,29 +19,44 @@ func main() {
 	config.ConnectDB()
 	config.ConnectRedis()
 
-	// 2. Dong bo hoa bang
+	// 2. Khoi tao AI Risk Engine va Blockchain Audit Trail
+	// - Phai chay SAU ConnectDB/ConnectRedis vi sau nay audit record se ghi xuong
+	// - Phai chay TRUOC khi router nhan request de tranh nil pointer panic
+	// - InitAIBlockchain khoi dong cleanup goroutine ben trong RiskEvaluator
+	config.InitAIBlockchain()
+
+	// 3. Dong bo hoa bang
 	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{})
 	if err != nil {
 		log.Printf("Loi ky thuat tao bang: %v", err)
 	}
 
-	// 3. Khoi tao router cua Gin
+	// 4. Khoi tao router cua Gin
 	r := gin.Default()
 
 	r.GET("/api/v1/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "success", "message": "Trai tim Backend da dap!"})
 	})
 
-	// Phan route cua Dang Ky va Dang Nhap nam o day
 	// Route cong khai - khong can dang nhap
 	r.POST("/api/v1/register", controllers.Register)
 	r.POST("/api/v1/login", controllers.Login)
 
-	// thong tin thi truong - khong can dang nhap
+	// Thong tin thi truong - khong can dang nhap
 	r.GET("/api/v1/market/orderbook", controllers.GetOrderBook)
 	r.GET("/api/v1/market/trades", controllers.GetTrades)
 
-	// websocket cong khai
+	// DATA MODULE — Aggregation layer cho DataScreen
+	// Public vi day la thong tin tong quan san, tuong tu trang Markets tren Binance
+	r.GET("/api/v1/data/overview", controllers.GetDataOverview)
+	r.GET("/api/v1/data/coins", controllers.GetDataCoins)
+	r.GET("/api/v1/data/heatmap", controllers.GetDataHeatmap)
+	r.GET("/api/v1/data/sentiment", controllers.GetDataSentiment)
+
+	// BLOCKCHAIN AUDIT — Public vi audit trail phai minh bach de verify
+	r.GET("/api/v1/blockchain/blocks", controllers.GetBlockchainBlocks)
+
+	// WebSocket cong khai
 	r.GET("/ws", func(c *gin.Context) {
 		ws.HandleWebSocket(c.Writer, c.Request)
 	})
@@ -54,13 +69,13 @@ func main() {
 		auth.GET("/wallet", controllers.GetWallet)
 		auth.POST("/deposit", controllers.Deposit)
 
-		// quan ly lenh (orders)
+		// Quan ly lenh (orders)
 		auth.POST("/orders", controllers.CreateOrder)
 		auth.GET("/orders", controllers.GetOrders)
 		auth.DELETE("/orders/:id", controllers.CancelOrder)
 	}
 
-	// 4. Bat dau chay may chu
+	// 5. Bat dau chay may chu
 	fmt.Println("San sang don Request tai http://localhost:8080")
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("Loi may chu bi dong: %v", err)

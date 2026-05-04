@@ -80,9 +80,19 @@ const Navigation: React.FC = () => (
       }
     />
 
+    <Route
+      path='/blockchain'
+      element={
+        <ProtectedRoute>
+          <BlockchainExplorer />
+        </ProtectedRoute>
+      }
+    />
+
     {/* 404 */}
     <Route path='*' element={<NotFoundScreen />} />
   </Routes>
 );
 
 export default Navigation;
+

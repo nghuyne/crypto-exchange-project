@@ -67,13 +67,11 @@ func RunMatchingEngine(symbol string) {
 					fmt.Printf("loi khi xu ly khop lenh: %v\n", err)
 				} else {
 					fmt.Println("khop lenh thanh cong!")
-					// cap nhat lai so luong da khop trong RAM de vong lap tiep theo chay dung
-					buy.Filled += matchqty
-					sell.Filled += matchqty
-
-					// neu lenh nao da khop het thi bo qua
-					if buy.Filled >= buy.Quantity {
-						buy.Status = "FILLED"
+					// processTrade da mutate buy.Filled, sell.Filled, buy.Status, sell.Status
+					// qua pointer va da Save() xuong DB.
+					// KHONG duoc += matchqty o day — se double-count, lam sai buyrem/sellrem
+					// o vong lap tiep theo, khien sell bi stuck PARTIAL va LockedBalance bi giu mai.
+					if buy.Status == "FILLED" {
 						break
 					}
 				}

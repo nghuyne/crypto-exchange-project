@@ -37,7 +37,17 @@ func NewBlock(transactions []*Transaction, prevBlockHash []byte, index int) *Blo
 }
 
 func (b *Block) calculateHash() []byte {
-	record := fmt.Sprintf("%d%d%s%x%d", b.Index, b.Timestamp, b.Transactions, b.PrevBlockHash, b.Nonce)
+	// Serialize tung transaction bang gia tri thuc (ID + Data), KHONG dung %s tren pointer.
+	// Tai sao? fmt.Sprintf("%s", []*Transaction) in dia chi bo nho thay vi content —
+	// thay doi moi lan restart -> cung data cho hash khac nhau -> Validate() fail.
+	// Manual concat voi separator ngan prefix-collision: "10"+"1" != "1"+"01".
+	txData := ""
+	for _, tx := range b.Transactions {
+		// %x hex-encode []byte ID thanh string on dinh, khong phu thuoc pointer layout
+		txData += fmt.Sprintf("%x|%s#", tx.ID, tx.Data)
+	}
+	record := fmt.Sprintf("%d|%d|%s|%x|%d",
+		b.Index, b.Timestamp, txData, b.PrevBlockHash, b.Nonce)
 	h := sha256.New()
 	h.Write([]byte(record))
 	return h.Sum(nil)

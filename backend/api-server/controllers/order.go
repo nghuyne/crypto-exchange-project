@@ -1,12 +1,17 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"crypto-exchange-backend/config"
 	"crypto-exchange-backend/engine" // nhap engine cho phep khop lenh
 	"crypto-exchange-backend/models"
+	"crypto-exchange-backend/riskmanagement"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,6 +40,100 @@ func CreateOrder(c *gin.Context) {
 	input.Side = strings.ToUpper(input.Side)
 	input.Type = strings.ToUpper(input.Type)
 	input.Symbol = strings.ToLower(input.Symbol)
+
+	// ============================================================
+	// BUOC 2: AI Risk Check — Fail-Closed Pattern
+	// Tai sao Fail-Closed? Neu AI bi loi ma van cho qua = he thong khong co bao ve.
+	// Trong fintech, an toan > tinh san sang (availability).
+	// ============================================================
+
+	// Guard: dam bao AI Evaluator da duoc khoi tao truoc khi nhan request
+	// Tai sao can guard nay? Vi InitAIBlockchain chay async sau ConnectDB/Redis.
+	// Neu server nhan request truoc khi AI init xong -> nil pointer panic -> 500.
+	// Fail-Closed: tra 503 ro rang con hon la panic hoac skip AI check.
+	if config.AI_Evaluator == nil {
+		log.Printf("⚠️ [CRITICAL] AI_Evaluator is nil — server not fully initialized")
+		c.JSON(http.StatusServiceUnavailable, gin.H{
+			"status":  "error",
+			"message": "He thong AI chua san sang, thu lai sau",
+		})
+		return
+	}
+
+	// Xay dung transaction de dua vao AI engine phan tich
+	riskTx := riskmanagement.Transaction{
+		TxID:      fmt.Sprintf("TX-%d-%d", userid, time.Now().UnixNano()),
+		Sender:    fmt.Sprintf("user_%d", userid),
+		Receiver:  input.Symbol,
+		Amount:    input.Price * input.Quantity, // Tong gia tri USD cua lenh
+		Quantity:  input.Quantity,
+		Side:      input.Side,
+		Timestamp: time.Now().Unix(),
+	}
+
+	// Goi AI EvaluateRisk voi panic recovery (Defense in Depth)
+	// Tai sao can recover? Vi rule engine lam viec tren slice lich su -> co the panic
+	// neu co race condition chua bi bat. Fail-Closed: panic = treat as HIGH risk.
+	var riskLevel riskmanagement.RiskLevel
+	var riskScore int
+	var triggeredRules []string
+
+	func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Printf("🚨 [CRITICAL] AI Risk Engine panicked: %v — treating as HIGH risk (fail-closed)", r)
+				riskLevel = riskmanagement.RiskLevel_HIGH
+				riskScore = 999
+				triggeredRules = []string{"Rule_Panic: AI engine crash — fail-closed block"}
+			}
+		}()
+		riskLevel, riskScore, triggeredRules = config.AI_Evaluator.EvaluateRisk(riskTx)
+	}()
+
+	// BUOC 4: Log tat ca quyet dinh rui ro de thu thap data tinh chinh nguong
+	// Tai sao log ca LOW? Vi can data de biet nguong 75/35 co phu hop khong (threshold tuning).
+	log.Printf("🤖 [AI-RISK] user=%d symbol=%s side=%s amount=%.2f → level=%s score=%d rules=%v",
+		userid, input.Symbol, input.Side, riskTx.Amount, riskLevel, riskScore, triggeredRules)
+
+	// BUOC 5: Neu rui ro CAO -> audit trail + tu choi lenh
+	if riskLevel == riskmanagement.RiskLevel_HIGH {
+		// Ghi audit trail TRUOC khi tra loi 403
+		// Tai sao audit truoc? Vi neu he thong crash sau khi tra loi -> mat bang chung compliance.
+		// Tai sao van ghi audit du blockchain co the loi? Vi mat 1 audit record it nguy hiem
+		// hon la cho qua 1 lenh rui ro cao ma khong co bang chung.
+		auditPayload := map[string]interface{}{
+			"event":          "ORDER_BLOCKED",
+			"user_id":        userid,
+			"symbol":         input.Symbol,
+			"side":           input.Side,
+			"amount":         riskTx.Amount,
+			"risk_score":     riskScore,
+			"risk_level":     string(riskLevel),
+			"triggered_rules": triggeredRules,
+			"timestamp":      time.Now().UTC().Format(time.RFC3339),
+		}
+		auditJSON, _ := json.Marshal(auditPayload)
+
+		if err := config.AuditChain.AddAuditRecord(string(auditJSON)); err != nil {
+			// Audit loi NHUNG VAN phai block lenh
+			// Tai sao? Vi lenh nay THUC SU rui ro cao. Mat bang chung la bat tien,
+			// nhung cho qua lenh nguy hiem la ap luc phap ly (DoS vector reasoning).
+			log.Printf("🚨 [CRITICAL] ORDER_BLOCKED audit failed for user=%d: %v", userid, err)
+		}
+
+		c.JSON(http.StatusForbidden, gin.H{
+			"status":          "error",
+			"message":         "Lenh bi tu choi boi AI Risk Engine — rui ro qua cao",
+			"risk_score":      riskScore,
+			"risk_level":      string(riskLevel),
+			"triggered_rules": triggeredRules,
+		})
+		return
+	}
+
+	// ============================================================
+	// BUOC 6: Lock wallet + tao lenh trong DB (logic cu, khong thay doi)
+	// ============================================================
 
 	// xac dinh loai tai san can khoa (funding)
 	// neu mua btc_usdt thi khoa usdt
@@ -111,13 +210,45 @@ func CreateOrder(c *gin.Context) {
 	// commit giao dich database
 	tx.Commit()
 
+	// ============================================================
+	// BUOC 7: Audit ORDER_CREATED + start matching engine
+	// Tai sao audit SAU commit? Vi phai chac chan lenh da vao DB truoc khi ghi blockchain.
+	// Trade-off: co khoang trang giua DB commit va blockchain write (outbox pattern se fix hoan toan).
+	// Hien tai: neu audit loi, log CRITICAL nhung VAN tra 200 (lenh da thuc su duoc tao).
+	// Tai sao van tra 200? Vi rollback sau commit = inconsistent state con nguy hiem hon.
+	// ============================================================
+	auditPayload := map[string]interface{}{
+		"event":      "ORDER_CREATED",
+		"order_id":   neworder.ID,
+		"user_id":    userid,
+		"symbol":     input.Symbol,
+		"side":       input.Side,
+		"type":       input.Type,
+		"price":      input.Price,
+		"quantity":   input.Quantity,
+		"amount":     riskTx.Amount,
+		"risk_score": riskScore,
+		"risk_level": string(riskLevel),
+		"timestamp":  time.Now().UTC().Format(time.RFC3339),
+	}
+	auditJSON, _ := json.Marshal(auditPayload)
+
+	if err := config.AuditChain.AddAuditRecord(string(auditJSON)); err != nil {
+		// Audit loi nhung lenh da commit vao DB roi — van tra 200
+		// TODO: can outbox pattern de dam bao consistency tuyet doi
+		log.Printf("🚨 [CRITICAL] ORDER_CREATED audit failed for order_id=%d user=%d: %v",
+			neworder.ID, userid, err)
+	}
+
 	// phan nay se goi matching engine de khop lenh ngay lap tuc
 	go engine.RunMatchingEngine(neworder.Symbol)
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":  "success",
-		"message": "dat lenh thanh cong",
-		"data":    neworder,
+		"status":     "success",
+		"message":    "dat lenh thanh cong",
+		"data":       neworder,
+		"risk_score": riskScore,
+		"risk_level": string(riskLevel),
 	})
 }
 
