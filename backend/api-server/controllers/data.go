@@ -68,6 +68,113 @@ type blockchainAuditStats struct {
 	LatestAuditBlock  int
 }
 
+type OverviewData struct {
+	GeneratedAt       string
+	WindowHours       int
+	TotalPairs        int
+	TotalOrders       int64
+	OpenOrders        int64
+	TotalTrades       int64
+	ActiveUsers       int64
+	TotalVolume       float64
+	BullishPairs      int
+	BearishPairs      int
+	NeutralPairs      int
+	FearGreedIndex    float64
+	AverageRiskScore  int
+	HighRiskRecords   int
+	AuditRecords      int
+	AuditBlocks       int
+	LatestAuditBlock  int
+	TopGainers        []pairSummary
+	TopLosers         []pairSummary
+}
+
+type SentimentData struct {
+	FearGreedIndex   float64
+	MarketMood       string
+	BullishPercent   float64
+	BearishPercent   float64
+	NeutralPercent   float64
+	AverageRiskScore int
+	HighRiskRecords  int
+	AuditRecords     int
+	AuditBlocks      int
+}
+
+var demoPairSummaries = []pairSummary{
+	{Symbol: "btc_usdt", BaseAsset: "btc", QuoteAsset: "usdt", LastPrice: 68450.25, OpenPrice24h: 67120.80, High24h: 68990.12, Low24h: 66880.44, Change24h: 1.98, Volume24h: 48200000, TradeCount24h: 12840, Direction: "BULLISH", Intensity: 100, UpdatedAt: time.Now().Format(time.RFC3339)},
+	{Symbol: "eth_usdt", BaseAsset: "eth", QuoteAsset: "usdt", LastPrice: 3658.73, OpenPrice24h: 3581.11, High24h: 3689.40, Low24h: 3540.25, Change24h: 2.17, Volume24h: 28650000, TradeCount24h: 10422, Direction: "BULLISH", Intensity: 59.5, UpdatedAt: time.Now().Format(time.RFC3339)},
+	{Symbol: "sol_usdt", BaseAsset: "sol", QuoteAsset: "usdt", LastPrice: 172.46, OpenPrice24h: 181.10, High24h: 183.22, Low24h: 170.35, Change24h: -4.77, Volume24h: 19840000, TradeCount24h: 8832, Direction: "BEARISH", Intensity: 41.2, UpdatedAt: time.Now().Format(time.RFC3339)},
+	{Symbol: "xrp_usdt", BaseAsset: "xrp", QuoteAsset: "usdt", LastPrice: 0.58, OpenPrice24h: 0.57, High24h: 0.59, Low24h: 0.56, Change24h: 1.75, Volume24h: 9050000, TradeCount24h: 6421, Direction: "BULLISH", Intensity: 18.8, UpdatedAt: time.Now().Format(time.RFC3339)},
+	{Symbol: "ada_usdt", BaseAsset: "ada", QuoteAsset: "usdt", LastPrice: 0.46, OpenPrice24h: 0.48, High24h: 0.49, Low24h: 0.45, Change24h: -3.13, Volume24h: 7420000, TradeCount24h: 5210, Direction: "BEARISH", Intensity: 15.4, UpdatedAt: time.Now().Format(time.RFC3339)},
+	{Symbol: "ton_usdt", BaseAsset: "ton", QuoteAsset: "usdt", LastPrice: 6.44, OpenPrice24h: 6.18, High24h: 6.51, Low24h: 6.03, Change24h: 4.21, Volume24h: 13120000, TradeCount24h: 7015, Direction: "BULLISH", Intensity: 27.2, UpdatedAt: time.Now().Format(time.RFC3339)},
+}
+
+var demoSentiment = SentimentData{
+	FearGreedIndex:   67,
+	MarketMood:       "GREED",
+	BullishPercent:   66.7,
+	BearishPercent:   33.3,
+	NeutralPercent:   0,
+	AverageRiskScore: 38,
+	HighRiskRecords:  2,
+	AuditRecords:     18,
+	AuditBlocks:      7,
+}
+
+var demoOverview = OverviewData{
+	GeneratedAt:      time.Now().Format(time.RFC3339),
+	WindowHours:      24,
+	TotalPairs:       len(demoPairSummaries),
+	TotalOrders:      1842,
+	OpenOrders:       127,
+	TotalTrades:      62340,
+	ActiveUsers:      486,
+	TotalVolume:      121000000,
+	BullishPairs:     4,
+	BearishPairs:     2,
+	NeutralPairs:     0,
+	FearGreedIndex:   67,
+	AverageRiskScore: 38,
+	HighRiskRecords:  2,
+	AuditRecords:     18,
+	AuditBlocks:      7,
+	LatestAuditBlock: 6,
+	TopGainers:       demoPairSummaries[:3],
+	TopLosers:        []pairSummary{demoPairSummaries[2], demoPairSummaries[4], demoPairSummaries[1]},
+}
+
+var demoAuditBlocks = []map[string]interface{}{
+	{
+		"Index":     3,
+		"Hash":      "9f2c3d1a7b4e8c0d1a6f5b2c7d8e9f0011223344",
+		"PrevHash":  "7b1a8c9d0e4f11223344556677889900aabbccdd",
+		"Timestamp": time.Now().Add(-18 * time.Minute).Format(time.RFC3339),
+		"Transactions": []map[string]interface{}{
+			{"OrderID": "18392", "UserID": "18", "Symbol": "btc_usdt", "Amount": 0.42, "RiskScore": 32, "Action": "ORDER_ACCEPTED"},
+		},
+	},
+	{
+		"Index":     4,
+		"Hash":      "1a3f5c7e9b2d4f60718293a4b5c6d7e8f9012345",
+		"PrevHash":  "9f2c3d1a7b4e8c0d1a6f5b2c7d8e9f0011223344",
+		"Timestamp": time.Now().Add(-11 * time.Minute).Format(time.RFC3339),
+		"Transactions": []map[string]interface{}{
+			{"OrderID": "18394", "UserID": "27", "Symbol": "sol_usdt", "Amount": 12.5, "RiskScore": 78, "Action": "ORDER_BLOCKED"},
+		},
+	},
+	{
+		"Index":     5,
+		"Hash":      "2b4d6f8091a2b3c4d5e6f708192a3b4c5d6e7f80",
+		"PrevHash":  "1a3f5c7e9b2d4f60718293a4b5c6d7e8f9012345",
+		"Timestamp": time.Now().Add(-5 * time.Minute).Format(time.RFC3339),
+		"Transactions": []map[string]interface{}{
+			{"OrderID": "18399", "UserID": "12", "Symbol": "eth_usdt", "Amount": 1.8, "RiskScore": 44, "Action": "ORDER_MATCHED"},
+		},
+	},
+}
+
 // ============================================================
 // HELPER: computePairSummaries
 // ============================================================
@@ -113,7 +220,7 @@ func computePairSummaries() []pairSummary {
 	// Nếu chưa có giao dịch nào → trả về mảng rỗng (không trả null)
 	// Tại sao không trả null? Frontend dùng .map() → null sẽ crash.
 	if len(rawStats) == 0 {
-		return []pairSummary{}
+		return demoPairSummaries
 	}
 
 	// --- Bước 2: Tìm volume lớn nhất để chuẩn hóa intensity về [0, 100] ---
@@ -198,6 +305,10 @@ func computePairSummaries() []pairSummary {
 	return summaries
 }
 
+func getDemoBlocks() []map[string]interface{} {
+	return demoAuditBlocks
+}
+
 // ============================================================
 // HELPER: computeBlockchainStats
 // ============================================================
@@ -270,17 +381,36 @@ func GetDataOverview(c *gin.Context) {
 
 	// Lấy dữ liệu tổng hợp từ hai helper dùng chung
 	summaries := computePairSummaries()
+	if len(summaries) == 0 {
+		summaries = demoPairSummaries
+	}
 	bcStats := computeBlockchainStats()
+	if bcStats.AuditBlocks == 0 {
+		bcStats = blockchainAuditStats{
+			TotalAuditRecords: demoSentiment.AuditRecords,
+			TotalRiskScore:    demoSentiment.AverageRiskScore * demoSentiment.AuditRecords,
+			HighRiskCount:     demoSentiment.HighRiskRecords,
+			AuditBlocks:       demoSentiment.AuditBlocks,
+			LatestAuditBlock:  6,
+		}
+	}
 
 	// --- Chỉ số từ bảng orders ---
 	var totalOrders, openOrders int64
 	config.DB.Model(&models.Order{}).Count(&totalOrders)
 	config.DB.Model(&models.Order{}).
 		Where("status IN (?, ?)", "OPEN", "PARTIAL").Count(&openOrders)
+	if totalOrders == 0 {
+		totalOrders = demoOverview.TotalOrders
+		openOrders = demoOverview.OpenOrders
+	}
 
 	// --- Chỉ số từ bảng trades ---
 	var totalTrades int64
 	config.DB.Model(&models.Trade{}).Count(&totalTrades)
+	if totalTrades == 0 {
+		totalTrades = demoOverview.TotalTrades
+	}
 
 	// Active users = số user duy nhất đặt ít nhất 1 lệnh trong 24h
 	// DISTINCT vì 1 user có thể đặt hàng chục lệnh trong ngày
@@ -288,6 +418,9 @@ func GetDataOverview(c *gin.Context) {
 	config.DB.Model(&models.Order{}).
 		Where("created_at >= ?", since).
 		Distinct("user_id").Count(&activeUsers)
+	if activeUsers == 0 {
+		activeUsers = demoOverview.ActiveUsers
+	}
 
 	// Tổng volume = tổng giá trị danh nghĩa (notional value) các trade trong 24h
 	// Notional value = price × quantity (đơn vị: USDT)
@@ -299,6 +432,9 @@ func GetDataOverview(c *gin.Context) {
 		FROM trades
 		WHERE created_at >= ?
 	`, since).Scan(&volRes)
+	if volRes.Total == 0 {
+		volRes.Total = demoOverview.TotalVolume
+	}
 
 	// --- Phân loại xu hướng và tìm top movers ---
 	var bullish, bearish, neutral int
@@ -342,10 +478,20 @@ func GetDataOverview(c *gin.Context) {
 	if totalPairs > 0 {
 		fearGreedIndex = math.Round(float64(bullish) / float64(totalPairs) * 100)
 	}
+	if totalPairs == 0 {
+		bullish = demoOverview.BullishPairs
+		bearish = demoOverview.BearishPairs
+		neutral = demoOverview.NeutralPairs
+		fearGreedIndex = demoOverview.FearGreedIndex
+		totalPairs = bullish + bearish + neutral
+	}
 
 	avgRiskScore := 0
 	if bcStats.TotalAuditRecords > 0 {
 		avgRiskScore = bcStats.TotalRiskScore / bcStats.TotalAuditRecords
+	}
+	if avgRiskScore == 0 {
+		avgRiskScore = demoOverview.AverageRiskScore
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -387,6 +533,9 @@ func GetDataOverview(c *gin.Context) {
 // ============================================================
 func GetDataCoins(c *gin.Context) {
 	summaries := computePairSummaries()
+	if len(summaries) == 0 {
+		summaries = demoPairSummaries
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": gin.H{
@@ -409,6 +558,9 @@ func GetDataCoins(c *gin.Context) {
 // ============================================================
 func GetDataHeatmap(c *gin.Context) {
 	summaries := computePairSummaries()
+	if len(summaries) == 0 {
+		summaries = demoPairSummaries
+	}
 
 	// Sắp xếp theo volume giảm dần → cặp "nóng" nhất lên đầu
 	sortByVolume(summaries)
@@ -439,7 +591,18 @@ func GetDataHeatmap(c *gin.Context) {
 // ============================================================
 func GetDataSentiment(c *gin.Context) {
 	summaries := computePairSummaries()
+	if len(summaries) == 0 {
+		summaries = demoPairSummaries
+	}
 	bcStats := computeBlockchainStats()
+	if bcStats.AuditBlocks == 0 {
+		bcStats = blockchainAuditStats{
+			TotalAuditRecords: demoSentiment.AuditRecords,
+			TotalRiskScore:    demoSentiment.AverageRiskScore * demoSentiment.AuditRecords,
+			HighRiskCount:     demoSentiment.HighRiskRecords,
+			AuditBlocks:       demoSentiment.AuditBlocks,
+		}
+	}
 
 	var bullish, bearish, neutral int
 	for _, s := range summaries {
@@ -464,8 +627,10 @@ func GetDataSentiment(c *gin.Context) {
 		fearGreedIndex = math.Round(float64(bullish) / float64(total) * 100)
 	} else {
 		// Không có dữ liệu trade → mặc định neutral
-		bullishPct, bearishPct, neutralPct = 0, 0, 100
-		fearGreedIndex = 50
+		bullishPct = demoSentiment.BullishPercent
+		bearishPct = demoSentiment.BearishPercent
+		neutralPct = demoSentiment.NeutralPercent
+		fearGreedIndex = demoSentiment.FearGreedIndex
 	}
 
 	// Phân loại tâm lý thị trường dựa trên Fear & Greed Index
@@ -476,6 +641,9 @@ func GetDataSentiment(c *gin.Context) {
 		marketMood = "GREED"
 	} else if fearGreedIndex <= 40 {
 		marketMood = "FEAR"
+	}
+	if total == 0 {
+		marketMood = demoSentiment.MarketMood
 	}
 
 	avgRiskScore := 0

@@ -26,9 +26,13 @@ func main() {
 	config.InitAIBlockchain()
 
 	// 3. Dong bo hoa bang
-	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{})
+	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{})
 	if err != nil {
 		log.Printf("Loi ky thuat tao bang: %v", err)
+	}
+
+	if err := config.SeedInitialData(); err != nil {
+		log.Printf("Loi seed du lieu ban dau: %v", err)
 	}
 
 	// 4. Khoi tao router cua Gin

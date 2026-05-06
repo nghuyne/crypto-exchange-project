@@ -14,6 +14,11 @@ import (
 // GetBlockchainBlocks tra ve toan bo danh sach cac khoi audit tu chuoi khoi
 func GetBlockchainBlocks(c *gin.Context) {
 	// Lay du lieu blocks tu global variable config.AuditChain
+	if config.AuditChain == nil || len(config.AuditChain.Blocks) == 0 {
+		c.JSON(http.StatusOK, getDemoBlocks())
+		return
+	}
+
 	rawBlocks := config.AuditChain.Blocks
 	
 	type ResponseTransaction struct {
