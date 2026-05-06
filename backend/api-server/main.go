@@ -60,6 +60,10 @@ func main() {
 	// BLOCKCHAIN AUDIT — Public vi audit trail phai minh bach de verify
 	r.GET("/api/v1/blockchain/blocks", controllers.GetBlockchainBlocks)
 
+	// DEBUG ENDPOINTS — for development/testing only
+	r.GET("/api/v1/debug/stats", controllers.GetDataStats)
+	r.POST("/api/v1/debug/reseed", controllers.ReseedData)
+
 	// WebSocket cong khai
 	r.GET("/ws", func(c *gin.Context) {
 		ws.HandleWebSocket(c.Writer, c.Request)
@@ -71,6 +75,8 @@ func main() {
 	{
 		auth.GET("/me", controllers.GetMe)
 		auth.GET("/wallet", controllers.GetWallet)
+		auth.GET("/wallet/user-trades", controllers.GetUserTrades)
+		auth.GET("/wallet/risk-assessment", controllers.GetRiskAssessment)
 		auth.POST("/deposit", controllers.Deposit)
 
 		// Quan ly lenh (orders)

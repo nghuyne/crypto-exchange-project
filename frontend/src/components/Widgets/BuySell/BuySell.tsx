@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 // components
 import Box from '../../Common/Box';
 import { AuthContext } from '../../../context/AuthContext';
+import { useWallet } from '../../../hooks/useWallet';
 
 // ============================================================
 // BuySell — Widget dat lenh mua/ban tich hop AI Risk Engine
@@ -49,6 +50,10 @@ const BuySell: React.FC = () => {
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<OrderFeedback | null>(null);
+  const { wallets, refetch: refetchWallet } = useWallet();
+
+  const usdtWallet = wallets.find((wallet) => wallet.asset.toUpperCase() === 'USDT');
+  const btcWallet = wallets.find((wallet) => wallet.asset.toUpperCase() === 'BTC');
 
   const handlePrimaryTab = (tabNum: number): void => {
     setPrimaryTab(tabNum);
@@ -133,6 +138,7 @@ const BuySell: React.FC = () => {
         // Reset form sau khi dat thanh cong
         setPrice('');
         setQuantity('');
+        await refetchWallet();
       } else {
         // Loi server khac (400 bad request, 500, ...)
         setFeedback({ type: 'error', message: data.message || 'Dat lenh that bai' });
@@ -161,6 +167,32 @@ const BuySell: React.FC = () => {
       </div>
 
       <div className='box-horizontal-padding box-content-height-nobutton'>
+
+        <div
+          style={{
+            margin: '10px 0 12px',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '6px',
+            padding: '8px 10px',
+            fontSize: '11px',
+            opacity: 0.88,
+          }}
+        >
+          <div className='flex flex-center flex-space-between'>
+            <strong>USDT</strong>
+            <span>
+              Available: {(usdtWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })} | Locked:{' '}
+              {(usdtWallet?.locked_balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className='flex flex-center flex-space-between' style={{ marginTop: 4 }}>
+            <strong>BTC</strong>
+            <span>
+              Available: {(btcWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })} | Locked:{' '}
+              {(btcWallet?.locked_balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })}
+            </span>
+          </div>
+        </div>
 
         {/* Primary tabs: BUY / SELL */}
         <div className='tabs no-select'>

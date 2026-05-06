@@ -76,16 +76,16 @@ export function useOrderBook({
 
       if (result.data?.bids) {
         setBids(result.data.bids.map((b: any) => ({
-          Price: b.Price,
-          Quantity: b.Quantity,
-          Total: b.Price * b.Quantity,
+          Price: Number(b.price ?? b.Price ?? 0),
+          Quantity: Number((b.quantity ?? b.Quantity ?? 0) - (b.filled ?? b.Filled ?? 0)),
+          Total: Number(b.price ?? b.Price ?? 0) * Number((b.quantity ?? b.Quantity ?? 0) - (b.filled ?? b.Filled ?? 0)),
         })));
       }
       if (result.data?.asks) {
         setAsks(result.data.asks.map((a: any) => ({
-          Price: a.Price,
-          Quantity: a.Quantity,
-          Total: a.Price * a.Quantity,
+          Price: Number(a.price ?? a.Price ?? 0),
+          Quantity: Number((a.quantity ?? a.Quantity ?? 0) - (a.filled ?? a.Filled ?? 0)),
+          Total: Number(a.price ?? a.Price ?? 0) * Number((a.quantity ?? a.Quantity ?? 0) - (a.filled ?? a.Filled ?? 0)),
         })));
       }
       setLastUpdated(new Date());

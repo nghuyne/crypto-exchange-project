@@ -1,109 +1,19 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 
 // hooks
 import useClickOutside from '../../../hooks/useClickOutside';
+import { useOrderBook } from '../../../hooks/useOrderBook';
 
 // components
 import Box from '../../Common/Box';
 import BuyOrdersRow from './BuyOrdersRow';
 
-// interfaces
-interface IPriceList {
-  id: number;
-  type: number;
-  price: string;
-  total: string;
-  amount: string;
-  currency: string;
-}
-
-// variables
-const dataArray: IPriceList[] = [
-  {
-    id: 1,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 1,
-  },
-  {
-    id: 2,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 1,
-  },
-  {
-    id: 3,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 3,
-  },
-  {
-    id: 4,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 3,
-  },
-  {
-    id: 5,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 2,
-  },
-  {
-    id: 6,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 1,
-  },
-  {
-    id: 7,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 2,
-  },
-  {
-    id: 8,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 3,
-  },
-  {
-    id: 9,
-    price: '82,03',
-    amount: '0,15',
-    total: '237,31',
-    currency: 'TRY',
-    type: 3,
-  },
-];
-
 const BuyOrders: React.FC = () => {
   const ref = useRef<any>(null);
-
-  const [data, setData] = useState<IPriceList[]>([]);
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
+  const { bids, isLoading } = useOrderBook({ symbol: 'btc_usdt' });
 
   useClickOutside(ref, () => setMenuOpened(false));
-
-  useEffect(() => {
-    setData(dataArray);
-  }, []);
 
   /**
    * Toggles the state of the menu to open or close.
@@ -147,7 +57,7 @@ const BuyOrders: React.FC = () => {
       </div>
       <div className='box-content box-content-height-nobutton'>
         <div className='orders-row'>
-          {data && data.length > 0 && (
+          {bids.length > 0 && (
             <table>
               <thead>
                 <tr>
@@ -157,12 +67,20 @@ const BuyOrders: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item: IPriceList) => (
-                  <BuyOrdersRow key={item.id.toString()} item={item} />
+                {bids.slice(0, 20).map((item, index) => (
+                  <BuyOrdersRow
+                    key={`${item.Price}-${index}`}
+                    item={{
+                      price: item.Price,
+                      amount: Math.max(item.Quantity, 0),
+                      total: Math.max(item.Total, 0),
+                    }}
+                  />
                 ))}
               </tbody>
             </table>
           )}
+          {!isLoading && bids.length === 0 && <div className='box-horizontal-padding'>Chua co lenh mua.</div>}
         </div>
       </div>
     </Box>

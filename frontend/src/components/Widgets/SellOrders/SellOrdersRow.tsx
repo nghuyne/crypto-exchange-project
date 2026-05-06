@@ -1,31 +1,22 @@
-import { useState, useEffect } from 'react';
-
-// interfaces
 interface IProps {
-  item: any;
+  item: {
+    price: number;
+    amount: number;
+    total: number;
+  };
 }
 
 const SellOrdersRow: React.FC<IProps> = ({ item }) => {
-  const [color, setColor] = useState<string>('white');
-
-  useEffect(() => {
-    if (item.type === 1) {
-      setColor('green');
-    } else if (item.type === 2) {
-      setColor('red');
-    }
-  }, [item.type]);
-
   return (
-    <tr className={color}>
+    <tr className='red'>
       <td className='left'>
-        {item.price} {item.currency}
+        {item.price.toLocaleString('en-US', { maximumFractionDigits: 8 })} USDT
       </td>
       <td className='center'>
-        {item.amount} {item.currency}
+        {item.amount.toLocaleString('en-US', { maximumFractionDigits: 8 })} BTC
       </td>
       <td className='right'>
-        {item.total} {item.currency}
+        {item.total.toLocaleString('en-US', { maximumFractionDigits: 2 })} USDT
       </td>
     </tr>
   );
