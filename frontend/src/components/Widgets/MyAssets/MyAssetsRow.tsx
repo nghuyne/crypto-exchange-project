@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
 import { Sparklines, SparklinesLine, SparklinesBars } from 'react-sparklines';
 
 // interface
@@ -48,12 +47,12 @@ const MyAssetsRow: React.FC<IProps> = ({ item }) => {
         </Sparklines>
       </div>
       <div className='nowrap no-select'>
-        <Link to='/'>
+        <button type='button' title='View details' style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px' }}>
           <i className='material-icons'>visibility</i>
-        </Link>
-        <Link to='/'>
+        </button>
+        <button type='button' title='View receipt' style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px' }}>
           <i className='material-icons'>receipt</i>
-        </Link>
+        </button>
       </div>
     </div>
   );

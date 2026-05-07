@@ -68,7 +68,7 @@ const HeaderRight: React.FC = () => {
           </li>
           <li>
             <Link to='/members/notifications'>
-              <span className='notification-badge'>23</span>
+              <span className='notification-badge'>0</span>
               <i className='material-icons'>notifications</i>
             </Link>
           </li>
@@ -87,7 +87,7 @@ const HeaderRight: React.FC = () => {
                   <div
                     className='profile-picture cover'
                     style={{
-                      backgroundImage: `url('https://www.cenksari.com/content/profile.jpg')`,
+                      backgroundImage: `url('https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}')`,
                     }}
                   />
                 </Link>

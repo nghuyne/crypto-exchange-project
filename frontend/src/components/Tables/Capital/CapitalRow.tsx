@@ -67,20 +67,20 @@ const CapitalRow: React.FC<IProps> = ({ item, index }) => {
             <ul>
               <li>
                 <button type='button'>
-                  <i className='material-icons'>settings</i>
-                  Button 1
+                  <i className='material-icons'>open_in_new</i>
+                  View Details
                 </button>
               </li>
               <li>
                 <button type='button'>
-                  <i className='material-icons'>favorite</i>
-                  Button 2
+                  <i className='material-icons'>edit</i>
+                  Edit
                 </button>
               </li>
               <li>
                 <button type='button'>
-                  <i className='material-icons'>info</i>
-                  Button 3
+                  <i className='material-icons'>delete</i>
+                  Remove
                 </button>
               </li>
             </ul>

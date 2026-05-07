@@ -73,20 +73,20 @@ const TradeHistory: React.FC = () => {
               <ul>
                 <li>
                   <button type='button'>
-                    <i className='material-icons'>settings</i>
-                    Button 1
+                    <i className='material-icons'>download</i>
+                    Download
                   </button>
                 </li>
                 <li>
                   <button type='button'>
-                    <i className='material-icons'>favorite</i>
-                    Button 2
+                    <i className='material-icons'>refresh</i>
+                    Refresh
                   </button>
                 </li>
                 <li>
                   <button type='button'>
-                    <i className='material-icons'>info</i>
-                    Button 3
+                    <i className='material-icons'>filter_list</i>
+                    Filter
                   </button>
                 </li>
               </ul>

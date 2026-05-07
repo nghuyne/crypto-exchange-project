@@ -64,7 +64,7 @@ const MyAssets: React.FC = () => {
         <div className='flex flex-center flex-space-between'>
           <p>My assets</p>
           <div ref={ref}>
-            <Link to='/' type='button' className='button button-purple button-small'>
+            <Link to='/buy-crypto' type='button' className='button button-purple button-small'>
               Buy crypto
             </Link>
             <button type='button' className='box-icon pointer' onClick={() => handleMenuOpen()}>

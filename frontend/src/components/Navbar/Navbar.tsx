@@ -57,10 +57,7 @@ const Navbar: React.FC = () => (
         {new Date().getFullYear()} &copy; All rights reserved.
         <br />
         <br />
-        Made with <span>❤</span> by{' '}
-        <a target='_blank' rel='noreferrer' href='https://www.cenksari.com'>
-          Cenk SARI
-        </a>
+        Professional Crypto Trading Platform
       </p>
     </div>
   </nav>
