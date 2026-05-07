@@ -209,7 +209,7 @@ input,
 select,
 textarea,
 button {
-  font-family: Poppins, sans-serif;
+  font-family: 'Noto Sans', 'Poppins', sans-serif;
 }
 
 a {
@@ -1755,13 +1755,13 @@ header .header-right .header-user .signout i {
   border: 1px solid #dadada;
 }
 
-.radio-container:hover input ~ .checkmark,
-.checkbox-container:hover input ~ .checkmark {
+.radio-container:hover input~.checkmark,
+.checkbox-container:hover input~.checkmark {
   background-color: #f5f5f5;
 }
 
-.radio-container input:checked ~ .checkmark,
-.checkbox-container input:checked ~ .checkmark {
+.radio-container input:checked~.checkmark,
+.checkbox-container input:checked~.checkmark {
   background-color: #3a38a7;
   border: 1px solid #3a38a7;
 }
@@ -1773,8 +1773,8 @@ header .header-right .header-user .signout i {
   display: none;
 }
 
-.radio-container input:checked ~ .checkmark:after,
-.checkbox-container input:checked ~ .checkmark:after {
+.radio-container input:checked~.checkmark:after,
+.checkbox-container input:checked~.checkmark:after {
   display: block;
 }
 
@@ -1814,6 +1814,7 @@ header .header-right .header-user .signout i {
 }
 
 @media (max-width: 1020px) {
+
   html,
   body {
     font-size: 0.9em;

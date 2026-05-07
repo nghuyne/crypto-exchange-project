@@ -10,6 +10,9 @@ import { useWallet } from '../../../hooks/useWallet';
 import Box from '../../Common/Box';
 import MyAssetsRow from './MyAssetsRow';
 
+// config
+import { getAssetIcon } from '../../../config/assets';
+
 // interfaces
 interface ICrypto {
   id: number;
@@ -25,13 +28,6 @@ interface ICrypto {
   lineChartData: number[];
 }
 
-// Crypto icons mapping
-const cryptoIcons: Record<string, string> = {
-  BTC: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Bitcoin-BTC-icon.png',
-  ETH: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Ethereum-ETH-icon.png',
-  USDT: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Tether-USDT-icon.png',
-};
-
 const MyAssets: React.FC = () => {
   const ref = useRef<any>(null);
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
@@ -44,7 +40,7 @@ const MyAssets: React.FC = () => {
     id: wallet.id,
     name: wallet.asset,
     symbol: wallet.asset,
-    icon: cryptoIcons[wallet.asset] || `https://via.placeholder.com/256?text=${wallet.asset}`,
+    icon: getAssetIcon(wallet.asset),
     amount: Number(wallet.balance ?? 0).toFixed(8),
     change: '0%',
     status: 1,
@@ -76,20 +72,20 @@ const MyAssets: React.FC = () => {
                 <ul>
                   <li>
                     <button type='button'>
-                      <i className='material-icons'>settings</i>
-                      Button 1
+                      <i className='material-icons'>visibility</i>
+                      View Details
                     </button>
                   </li>
                   <li>
                     <button type='button'>
-                      <i className='material-icons'>favorite</i>
-                      Button 2
+                      <i className='material-icons'>download</i>
+                      Export
                     </button>
                   </li>
                   <li>
                     <button type='button'>
-                      <i className='material-icons'>info</i>
-                      Button 3
+                      <i className='material-icons'>refresh</i>
+                      Refresh
                     </button>
                   </li>
                 </ul>

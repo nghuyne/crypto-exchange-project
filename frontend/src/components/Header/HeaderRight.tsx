@@ -1,10 +1,32 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { notificationService } from '../../api/services/appService';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      try {
+        const token = localStorage.getItem('auth_token');
+        if (token) {
+          const count = await notificationService.getNotificationCount(token);
+          setNotificationCount(count);
+        }
+      } catch (error) {
+        console.error('Lỗi lấy số thông báo:', error);
+      }
+    };
+
+    fetchNotificationCount();
+    // Cập nhật mỗi 30 giây
+    const interval = setInterval(fetchNotificationCount, 30000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -68,7 +90,7 @@ const HeaderRight: React.FC = () => {
           </li>
           <li>
             <Link to='/members/notifications'>
-              <span className='notification-badge'>0</span>
+              <span className='notification-badge'>{notificationCount}</span>
               <i className='material-icons'>notifications</i>
             </Link>
           </li>

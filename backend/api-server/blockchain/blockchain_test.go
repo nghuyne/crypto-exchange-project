@@ -66,7 +66,7 @@ func TestBlockStructure(t *testing.T) {
 		t.Error("Genesis block should have hash")
 	}
 
-	if genesisBlock.PrevBlockHash != nil && len(genesisBlock.PrevBlockHash) > 0 {
+	if len(genesisBlock.PrevBlockHash) > 0 {
 		t.Error("Genesis block should have empty PrevBlockHash")
 	}
 }

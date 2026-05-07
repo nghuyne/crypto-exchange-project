@@ -142,6 +142,10 @@ func SeedInitialData() error {
 		return err
 	}
 
+	if err := seedDemoNotifications(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -287,4 +291,68 @@ func EnsureAuditChainInitialized() *blockchain.Blockchain {
 		AuditChain = blockchain.NewBlockchain()
 	}
 	return AuditChain
+}
+
+// seedDemoNotifications tao sample thong bao cho demo users
+func seedDemoNotifications() error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		var users []models.User
+		if err := tx.Find(&users).Error; err != nil {
+			return err
+		}
+
+		now := time.Now()
+
+		for _, user := range users {
+			notifications := []models.Notification{
+				{
+					UserID:    user.ID,
+					Type:      "success",
+					Title:     "Giao dịch hoàn thành",
+					Message:   "Lệnh mua BTC của bạn đã hoàn thành thành công.",
+					Read:      false,
+					CreatedAt: now.Add(-5 * time.Minute),
+				},
+				{
+					UserID:    user.ID,
+					Type:      "info",
+					Title:     "Cảnh báo giá",
+					Message:   "BTC đã đạt giá mục tiêu là $42.000",
+					Read:      false,
+					CreatedAt: now.Add(-1 * time.Hour),
+				},
+				{
+					UserID:    user.ID,
+					Type:      "warning",
+					Title:     "Số dư thấp",
+					Message:   "Số dư USD của bạn dưới $100. Hãy nạp thêm tiền.",
+					Read:      true,
+					CreatedAt: now.Add(-2 * time.Hour),
+				},
+				{
+					UserID:    user.ID,
+					Type:      "info",
+					Title:     "Xác minh Cấp độ 2",
+					Message:   "Xác minh Cấp độ 2 của bạn đã được phê duyệt.",
+					Read:      true,
+					CreatedAt: now.Add(-24 * time.Hour),
+				},
+			}
+
+			for _, notif := range notifications {
+				var count int64
+				tx.Model(&models.Notification{}).
+					Where("user_id = ? AND title = ?", user.ID, notif.Title).
+					Count(&count)
+
+				if count == 0 {
+					if err := tx.Create(&notif).Error; err != nil {
+						return err
+					}
+				}
+			}
+		}
+
+		return nil
+	})
 }

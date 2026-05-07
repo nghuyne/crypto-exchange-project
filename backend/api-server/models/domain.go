@@ -54,7 +54,18 @@ type Trade struct {
 	CreatedAt   time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
-// 5. BANG GHI LOG ADMIN
+// 5. BANG THONG BAO (NOTIFICATION)
+type Notification struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	UserID    uint      `gorm:"index;not null" json:"user_id"`
+	Type      string    `gorm:"type:enum('success','warning','error','info');not null" json:"type"`
+	Title     string    `gorm:"type:varchar(100);not null" json:"title"`
+	Message   string    `gorm:"type:text;not null" json:"message"`
+	Read      bool      `gorm:"default:false" json:"read"`
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+}
+
+// 6. BANG GHI LOG ADMIN
 type AdminLog struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	AdminID   uint      `gorm:"index;not null" json:"admin_id"`
@@ -64,11 +75,22 @@ type AdminLog struct {
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
-// 6. CAU HINH HE THONG (FEE, LIMITS, ETC)
+// 7. CAU HINH HE THONG (FEE, LIMITS, ETC)
 type SystemConfig struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	ConfigKey string    `gorm:"type:varchar(100);uniqueIndex;not null" json:"config_key"` // TAKER_FEE, MAKER_FEE, WITHDRAWAL_FEE
 	Value     string    `gorm:"type:varchar(255);not null" json:"value"`                  // "0.001" or "100000"
 	UpdatedBy uint      `gorm:"index" json:"updated_by"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+}
+
+// 8. BANG DIA CHI BLOCKCHAIN (ADDRESS)
+type Address struct {
+	ID         uint      `gorm:"primaryKey" json:"id"`
+	UserID     uint      `gorm:"index;not null" json:"user_id"`
+	Label      string    `gorm:"type:varchar(100);not null" json:"label"`     // VD: "Main Wallet", "Trading Account"
+	Address    string    `gorm:"type:varchar(255);not null" json:"address"`   // Blockchain address
+	Blockchain string    `gorm:"type:varchar(50);not null" json:"blockchain"` // VD: "Bitcoin", "Ethereum"
+	CreatedAt  time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }

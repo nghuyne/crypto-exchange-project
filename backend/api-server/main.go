@@ -26,7 +26,7 @@ func main() {
 	config.InitAIBlockchain()
 
 	// 3. Dong bo hoa bang
-	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.AdminLog{}, &models.SystemConfig{})
+	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.Notification{}, &models.AdminLog{}, &models.SystemConfig{}, &models.Address{})
 	if err != nil {
 		log.Printf("Loi ky thuat tao bang: %v", err)
 	}
@@ -84,6 +84,11 @@ func main() {
 		auth.POST("/orders", controllers.CreateOrder)
 		auth.GET("/orders", controllers.GetOrders)
 		auth.DELETE("/orders/:id", controllers.CancelOrder)
+
+		// Notifications
+		auth.GET("/notifications", controllers.GetNotifications)
+		auth.GET("/notifications/count", controllers.GetNotificationCount)
+		auth.PUT("/notifications/:id/read", controllers.MarkNotificationAsRead)
 	}
 
 	// ADMIN ROUTES — Yeu cau quyen admin (token + role check)

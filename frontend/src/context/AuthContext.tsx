@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Kiểm tra token khi ứng dụng khởi chạy
   useEffect(() => {
     const checkAuth = async () => {
-      const storedToken = localStorage.getItem('token');
+      const storedToken = localStorage.getItem('auth_token');
 
       if (storedToken) {
         setToken(storedToken);
@@ -56,13 +56,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setIsAuthenticated(true);
           } else {
             // Token không hợp lệ, xóa nó
-            localStorage.removeItem('token');
+            localStorage.removeItem('auth_token');
             setToken(null);
             setIsAuthenticated(false);
           }
         } catch (error) {
           console.error('Lỗi kiểm tra token:', error);
-          localStorage.removeItem('token');
+          localStorage.removeItem('auth_token');
           setToken(null);
           setIsAuthenticated(false);
         }
@@ -95,7 +95,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Lưu token vào localStorage và state
       const newToken = data.data.token;
       console.log('[AuthContext] token received, calling /api/v1/me');
-      localStorage.setItem('token', newToken);
+      localStorage.setItem('auth_token', newToken);
       setToken(newToken);
 
       // Gọi /api/v1/me để lấy user info
@@ -144,7 +144,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Hàm logout
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
     setUser(null);
     setToken(null);
     setIsAuthenticated(false);
