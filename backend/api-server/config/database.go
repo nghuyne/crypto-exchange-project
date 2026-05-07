@@ -20,7 +20,7 @@ var (
 
 func ConnectDB() {
 	mysqlHost := getEnv("MYSQL_HOST", "127.0.0.1")
-	mysqlPort := getEnv("MYSQL_PORT", "3306")
+	mysqlPort := getEnv("MYSQL_PORT", "3310")
 	mysqlUser := getEnv("MYSQL_USER", "root")
 	mysqlPassword := getEnv("MYSQL_PASSWORD", "root")
 	mysqlDatabase := getEnv("MYSQL_DB", "cryptoex")

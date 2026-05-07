@@ -58,8 +58,31 @@ func Register(c *gin.Context) {
 	}
 	config.DB.Create(&wallets)
 
-	// Tra loi tuyet doi thao tac hoan tat
-	c.JSON(http.StatusOK, gin.H{"status": "success", "message": "Dang ky tai khoan thanh cong!"})
+	// Buoc 4: Tao phieu JWT giong nhu Login
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Khong the tao quyen dang nhap!"})
+		return
+	}
+
+	// Tra loi voi token de frontend se dang nhap ngay
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "Dang ky tai khoan thanh cong!",
+		"data": map[string]interface{}{
+			"token": tokenString,
+			"user": map[string]interface{}{
+				"id":        user.ID,
+				"email":     user.Email,
+				"full_name": user.FullName,
+			},
+		},
+	})
 }
 
 // API Dang Nhap
@@ -122,11 +145,10 @@ func GetMe(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"data": map[string]interface{}{
-			"id":        user.ID,
-			"email":     user.Email,
-			"full_name": user.FullName,
+			"id":         user.ID,
+			"email":      user.Email,
+			"full_name":  user.FullName,
 			"created_at": user.CreatedAt,
 		},
 	})
 }
-
