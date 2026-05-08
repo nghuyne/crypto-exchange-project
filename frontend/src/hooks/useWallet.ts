@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
+import { useNavigate } from 'react-router-dom';
 import { Wallet } from '../types/wallet';
 
 interface UseWalletReturn {
@@ -11,6 +12,8 @@ interface UseWalletReturn {
 
 export const useWallet = (): UseWalletReturn => {
   const { token, isAuthenticated } = useAuth();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +40,13 @@ export const useWallet = (): UseWalletReturn => {
       console.log('[useWallet] Response status:', response.status);
 
       if (!response.ok) {
+        // If unauthorized -> session expired or invalid token
+        if (response.status === 401) {
+          // clear session and prompt re-login
+          logout();
+          navigate('/', { replace: true });
+          throw new Error('Session expired. Please sign in again.');
+        }
         throw new Error(`HTTP ${response.status}`);
       }
 

@@ -1,9 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthLogout } from '../../hooks/useAuthLogout';
+import { useAuth } from '../../hooks/useAuth';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
   const { logout } = useAuthLogout();
+  const { user } = useAuth();
+
+  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
+  const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -71,8 +76,8 @@ const HeaderRight: React.FC = () => {
         <ul className='header-user nowrap'>
           <li>
             <Link to='/members'>
-              <span>Cenk SARI</span>
-              <span>@cenksari</span>
+              <span>{displayName}</span>
+              <span>{displayHandle}</span>
             </Link>
           </li>
           <li>

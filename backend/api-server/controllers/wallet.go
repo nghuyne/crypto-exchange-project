@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -8,6 +9,7 @@ import (
 	"crypto-exchange-backend/models"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // GetWallet returns wallet list of the logged-in user
@@ -61,6 +63,87 @@ func Deposit(c *gin.Context) {
 		"status":  "success",
 		"message": "Deposit successful",
 		"data":    wallet,
+	})
+}
+
+// Faucet grants demo funds once to the logged-in user.
+func Faucet(c *gin.Context) {
+	userID := c.MustGet("user_id").(uint)
+
+	tx := config.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		}
+	}()
+
+	var user models.User
+	if err := tx.First(&user, userID).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "User not found"})
+		return
+	}
+
+	if user.FaucetClaimed {
+		tx.Rollback()
+		c.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Faucet already claimed"})
+		return
+	}
+
+	grants := map[string]float64{
+		"USDT": 10000,
+		"BTC":  10,
+		"ETH":  100,
+	}
+
+	wallets := make([]models.Wallet, 0, len(grants))
+	for asset, amount := range grants {
+		var wallet models.Wallet
+		err := tx.Where("user_id = ? AND asset = ?", userID, asset).First(&wallet).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				wallet = models.Wallet{UserID: userID, Asset: asset}
+				if err := tx.Create(&wallet).Error; err != nil {
+					tx.Rollback()
+					c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to create wallet"})
+					return
+				}
+			} else {
+				tx.Rollback()
+				c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to load wallet"})
+				return
+			}
+		}
+
+		wallet.Balance += amount
+		if err := tx.Save(&wallet).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to credit wallet"})
+			return
+		}
+		wallets = append(wallets, wallet)
+	}
+
+	user.FaucetClaimed = true
+	if err := tx.Save(&user).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to mark faucet claim"})
+		return
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to commit faucet claim"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "Demo funds granted successfully",
+		"data": gin.H{
+			"faucet_claimed": true,
+			"wallets":        wallets,
+		},
 	})
 }
 
@@ -119,11 +202,10 @@ func GetRiskAssessment(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"data": gin.H{
-			"risk_score": riskScore,
-			"risk_level": riskLevel,
-			"insights":  insights,
+			"risk_score":     riskScore,
+			"risk_level":     riskLevel,
+			"insights":       insights,
 			"trade_count_7d": tradeCount,
 		},
 	})
 }
-

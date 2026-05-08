@@ -43,6 +43,14 @@ type demoSeedTrade struct {
 
 var demoSeedUsers = []demoSeedUser{
 	{
+		Email:    "admin@cryptoex.com",
+		Password: "admin123",
+		FullName: "Admin Master",
+		Wallets: []models.Wallet{
+			{Asset: "USDT", Balance: 999999, LockedBalance: 0},
+		},
+	},
+	{
 		Email:    "alice.demo@cryptoex.com",
 		Password: "123456",
 		FullName: "Alice Nguyen",
@@ -145,9 +153,25 @@ func seedDemoAccounts() error {
 				return err
 			}
 
+			// Determine role based on email
+			role := "USER"
+			kycStatus := "PENDING"
+			if seedUser.Email == "admin@cryptoex.com" {
+				role = "ADMIN"
+				kycStatus = "VERIFIED"
+			}
+
 			user := models.User{}
 			if err := tx.Where("email = ?", seedUser.Email).
-				Attrs(models.User{Email: seedUser.Email, Password: string(hashedPassword), FullName: seedUser.FullName}).
+				Attrs(models.User{
+					Email:     seedUser.Email,
+					Password:  string(hashedPassword),
+					FullName:  seedUser.FullName,
+					Role:      role,
+					Status:    "ACTIVE",
+					KYCStatus: kycStatus,
+					Tier:      3,
+				}).
 				FirstOrCreate(&user).Error; err != nil {
 				return err
 			}

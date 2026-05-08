@@ -26,7 +26,7 @@ func main() {
 	config.InitAIBlockchain()
 
 	// 3. Dong bo hoa bang
-	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{})
+	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.AdminLog{}, &models.SystemConfig{})
 	if err != nil {
 		log.Printf("Loi ky thuat tao bang: %v", err)
 	}
@@ -78,11 +78,37 @@ func main() {
 		auth.GET("/wallet/user-trades", controllers.GetUserTrades)
 		auth.GET("/wallet/risk-assessment", controllers.GetRiskAssessment)
 		auth.POST("/deposit", controllers.Deposit)
+		auth.POST("/faucet", controllers.Faucet)
 
 		// Quan ly lenh (orders)
 		auth.POST("/orders", controllers.CreateOrder)
 		auth.GET("/orders", controllers.GetOrders)
 		auth.DELETE("/orders/:id", controllers.CancelOrder)
+	}
+
+	// ADMIN ROUTES — Yeu cau quyen admin (token + role check)
+	admin := r.Group("/api/v1/admin")
+	admin.Use(controllers.AuthRequired()).Use(controllers.AdminRequired())
+	{
+		// Dashboard
+		admin.GET("/dashboard", controllers.GetAdminDashboard)
+
+		// User management
+		admin.GET("/users", controllers.GetAllUsers)
+		admin.POST("/users/suspend", controllers.SuspendUser)
+		admin.POST("/users/resume", controllers.ResumeUser)
+		admin.POST("/users/verify-kyc", controllers.VerifyUserKYC)
+
+		// Order management
+		admin.GET("/orders", controllers.GetAllOrders)
+		admin.POST("/orders/cancel", controllers.CancelOrderAdmin)
+
+		// System configuration
+		admin.GET("/config", controllers.GetSystemConfig)
+		admin.POST("/config/update", controllers.UpdateSystemConfig)
+
+		// Admin logs
+		admin.GET("/logs", controllers.GetAdminLogs)
 	}
 
 	// 5. Bat dau chay may chu
