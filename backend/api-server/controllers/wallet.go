@@ -173,14 +173,14 @@ func GetRiskAssessment(c *gin.Context) {
 
 	if len(orders) == 0 {
 		riskScore = 95
-		insights = append(insights, "New account: No trading activity in the last 24 hours.")
+		insights = append(insights, "Tài khoản mới: chưa có hoạt động giao dịch nào trong 24h.")
 	} else if len(orders) > 10 {
 		riskScore = 50
 		riskLevel = "MEDIUM"
-		insights = append(insights, fmt.Sprintf("Detected %d orders in 24h - Monitor your trading frequency.", len(orders)))
+		insights = append(insights, fmt.Sprintf("Đã phát hiện %d lệnh trong 24h - Theo dõi tần suất giao dịch của bạn.", len(orders)))
 	} else {
 		riskScore = 85
-		insights = append(insights, fmt.Sprintf("Normal activity: %d orders in 24h.", len(orders)))
+		insights = append(insights, fmt.Sprintf("Hoạt động bình thường: %d lệnh trong 24h.", len(orders)))
 	}
 
 	// Add fee recommendations based on asset patterns
@@ -190,13 +190,13 @@ func GetRiskAssessment(c *gin.Context) {
 	// Check for high holdings suggesting need for yield
 	for _, w := range wallets {
 		if w.Balance > 1000 && w.Asset == "USDT" {
-			insights = append(insights, "💰 You're holding 1000+ USDT - Consider trading for yield.")
+			insights = append(insights, "Bạn có số dư USDT lớn - Xem xét sử dụng các sản phẩm tiết kiệm để tối ưu hóa lợi nhuận.")
 		}
 	}
 
 	// Check for volatile patterns (simplified)
 	if tradeCount > 5 {
-		insights = append(insights, "📊 ETH fees are at lowest this week - Execute now if planned.")
+		insights = append(insights, "Phí ETH đang ở mức thấp nhất trong tuần này - Thực hiện ngay nếu đã lên kế hoạch.")
 	}
 
 	c.JSON(http.StatusOK, gin.H{

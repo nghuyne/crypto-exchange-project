@@ -49,7 +49,7 @@ const WalletFooter: React.FC = () => {
         }
       })
       .catch(() => {
-        console.log('Failed to fetch user trades');
+        console.log('Lỗi lấy lịch sử giao dịch');
       })
       .finally(() => {
         setLoading(false);
@@ -74,7 +74,7 @@ const WalletFooter: React.FC = () => {
         }
       })
       .catch(() => {
-        console.log('Failed to fetch risk assessment');
+        console.log('Lỗi lấy đánh giá rủi ro');
       });
   }, [token]);
 
@@ -94,7 +94,7 @@ const WalletFooter: React.FC = () => {
             onClick={() => setActiveTab('history')}
           >
             <i className='material-icons'>history</i>
-            Transaction History
+            Lịch sử giao dịch
           </button>
           <button
             type='button'
@@ -113,7 +113,7 @@ const WalletFooter: React.FC = () => {
           <div className='tab-content'>
             {loading ? (
               <div style={{ textAlign: 'center', padding: '20px' }}>
-                <p>Loading transaction history...</p>
+                <p>Đang tải lịch sử giao dịch...</p>
               </div>
             ) : trades.length > 0 ? (
               <table className='transaction-table'>
@@ -136,7 +136,7 @@ const WalletFooter: React.FC = () => {
                       </td>
                       <td className='center'>
                         <span className={`badge badge-${trade.user_side.toLowerCase()}`}>
-                          {trade.user_side === 'BUY' ? '🟢 Buy' : '🔴 Sell'}
+                          {trade.user_side === 'BUY' ? 'Mua' : 'Bán'}
                         </span>
                       </td>
                       <td className='center'>
@@ -174,7 +174,7 @@ const WalletFooter: React.FC = () => {
               </table>
             ) : (
               <div style={{ textAlign: 'center', padding: '20px' }}>
-                <p>No trades yet</p>
+                <p>Chưa có giao dịch nào</p>
               </div>
             )}
           </div>
@@ -201,13 +201,13 @@ const WalletFooter: React.FC = () => {
                   ))
                 ) : (
                   <div style={{ textAlign: 'center', padding: '20px' }}>
-                    <p>No notifications</p>
+                    <p>Không có gợi ý nào</p>
                   </div>
                 )}
               </div>
             ) : (
               <div style={{ textAlign: 'center', padding: '20px' }}>
-                <p>Loading AI Insights...</p>
+                <p>Đang tải AI gợi ý...</p>
               </div>
             )}
           </div>

@@ -1,12 +1,12 @@
 /**
- * Global constants and configuration values
+ * Các hằng số và giá trị cấu hình toàn cục
  */
 
-// API Configuration
+// Cấu hình API
 export const API_BASE_URL = 'http://localhost:8080/api/v1';
 export const WS_URL = 'ws://localhost:8080/ws';
 
-// User Level Configuration
+// Cấu hình Cấp độ Người Dùng
 export const USER_LEVELS = {
     LEVEL_1: 1,
     LEVEL_2: 2,
@@ -23,7 +23,7 @@ export const USER_LEVEL_NAMES: Record<number, string> = {
     5: 'Cấp độ 5 - Platinum',
 };
 
-// Trading Limits (in USD)
+// Giới hạn Giao dịch (tính bằng USD)
 export const TRADING_LIMITS: Record<number, { daily: number; monthly: number }> = {
     1: { daily: 500, monthly: 5000 },
     2: { daily: 5000, monthly: 50000 },
@@ -32,32 +32,32 @@ export const TRADING_LIMITS: Record<number, { daily: number; monthly: number }> 
     5: { daily: 10000000, monthly: 100000000 },
 };
 
-// Notification Defaults
+// Cấu hình Thông báo Mặc định
 export const NOTIFICATION_DEFAULTS = {
     LIMIT: 20,
-    REFRESH_INTERVAL: 30000, // 30 seconds
+    REFRESH_INTERVAL: 30000, // 30 giây
 } as const;
 
-// Pagination
+// Phân trang
 export const PAGINATION = {
     DEFAULT_PAGE_SIZE: 10,
     MAX_PAGE_SIZE: 100,
 } as const;
 
-// Format Configurations
+// Cấu hình Định dạng
 export const NUMBER_FORMAT = {
     DECIMAL_PLACES: 2,
     CURRENCY_SYMBOL: '$',
 } as const;
 
-// Market Configuration
+// Cấu hình Thị trường
 export const MARKET_CONFIG = {
     DEFAULT_PAIR: 'BTCUSDT',
     CHART_PERIODS: ['1m', '5m', '15m', '1h', '4h', '1d'] as const,
-    REFRESH_INTERVAL: 5000, // 5 seconds
+    REFRESH_INTERVAL: 5000, // 5 giây
 } as const;
 
-// Error Messages - Vietnamese
+// Tin nhắn Lỗi - Tiếng Việt
 export const ERROR_MESSAGES = {
     NETWORK_ERROR: 'Lỗi mạng. Vui lòng kiểm tra kết nối.',
     UNAUTHORIZED: 'Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại.',
@@ -67,7 +67,7 @@ export const ERROR_MESSAGES = {
     SERVER_ERROR: 'Lỗi máy chủ. Vui lòng thử lại sau.',
 } as const;
 
-// Success Messages - Vietnamese
+// Tin nhắn Thành công - Tiếng Việt
 export const SUCCESS_MESSAGES = {
     LOGIN_SUCCESS: 'Đăng nhập thành công. Chào mừng bạn quay lại!',
     LOGOUT_SUCCESS: 'Đăng xuất thành công. Hẹn gặp lại bạn!',
@@ -77,7 +77,7 @@ export const SUCCESS_MESSAGES = {
     ORDER_CANCELLED: 'Lệnh đã bị hủy thành công.',
 } as const;
 
-// Button Texts - Vietnamese
+// Văn bản Nút - Tiếng Việt
 export const BUTTON_TEXT = {
     LOGIN: 'Đăng nhập',
     LOGOUT: 'Đăng xuất',
@@ -92,7 +92,7 @@ export const BUTTON_TEXT = {
     BACK: 'Quay lại',
 } as const;
 
-// Route Paths
+// Đường dẫn Route
 export const ROUTES = {
     HOME: '/',
     LOGIN: '/login',
@@ -113,7 +113,7 @@ export const ROUTES = {
     API: '/api',
 } as const;
 
-// Local Storage Keys
+// Khóa Bộ nhớ Cục bộ
 export const STORAGE_KEYS = {
     AUTH_TOKEN: 'auth_token',
     USER_DATA: 'user_data',

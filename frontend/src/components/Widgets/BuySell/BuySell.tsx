@@ -153,13 +153,13 @@ const BuySell: React.FC = () => {
 
   const isBuy = primaryTab === 0;
   const btnClass = `button ${isBuy ? 'button-green' : 'button-red'} button-medium button-block`;
-  const btnLabel = isSubmitting ? 'Dang xu ly...' : `Place a ${isBuy ? 'buy' : 'sell'} order`;
+  const btnLabel = isSubmitting ? '\u0110ang xử lý...' : `\u0110ặt lệnh ${isBuy ? 'mua' : 'bán'}`;
 
   return (
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div className='flex flex-center flex-space-between'>
-          <p>Buy-sell</p>
+          <p>Mua-bán</p>
           <span style={{ fontSize: '11px', opacity: 0.5, textTransform: 'uppercase', letterSpacing: 1 }}>
             {DEFAULT_SYMBOL.replace('_', '/')}
           </span>
@@ -181,14 +181,14 @@ const BuySell: React.FC = () => {
           <div className='flex flex-center flex-space-between'>
             <strong>USDT</strong>
             <span>
-              Available: {(usdtWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })} | Locked:{' '}
+              C\u00f3 sẵn: {(usdtWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })} | Bị khóa:{' '}
               {(usdtWallet?.locked_balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })}
             </span>
           </div>
           <div className='flex flex-center flex-space-between' style={{ marginTop: 4 }}>
             <strong>BTC</strong>
             <span>
-              Available: {(btcWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })} | Locked:{' '}
+              C\u00f3 sẵn: {(btcWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })} | Bị khóa:{' '}
               {(btcWallet?.locked_balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })}
             </span>
           </div>
@@ -201,14 +201,14 @@ const BuySell: React.FC = () => {
             onClick={() => handlePrimaryTab(0)}
             className={primaryTab === 0 ? 'active' : 'passive'}
           >
-            BUY
+            MUA
           </button>
           <button
             type='button'
             onClick={() => handlePrimaryTab(1)}
             className={primaryTab === 1 ? 'active' : 'passive'}
           >
-            SELL
+            BÁN
           </button>
         </div>
 
@@ -219,21 +219,21 @@ const BuySell: React.FC = () => {
             onClick={() => handleSecondaryTab(0)}
             className={secondaryTab === 0 ? 'active' : 'passive'}
           >
-            Market
+            Thị trường
           </button>
           <button
             type='button'
             onClick={() => handleSecondaryTab(1)}
             className={secondaryTab === 1 ? 'active' : 'passive'}
           >
-            Limit
+            Giới hạn
           </button>
         </div>
 
         {/* Input: Price */}
         <div className='buy-sell-line flex flex-center flex-space-between no-select'>
           <div>
-            <strong>{secondaryTab === 0 ? 'Price' : 'Limit Price'}</strong>
+            <strong>{secondaryTab === 0 ? 'Giá' : 'Giá giới hạn'}</strong>
             <i
               className='material-icons'
               title={
@@ -262,7 +262,7 @@ const BuySell: React.FC = () => {
         {/* Input: Quantity */}
         <div className='buy-sell-line flex flex-center flex-space-between no-select'>
           <div>
-            <strong>Amount</strong>
+            <strong>Số lượng</strong>
             <i className='material-icons' title='So luong BTC muon mua hoac ban'>
               info
             </i>
@@ -287,7 +287,7 @@ const BuySell: React.FC = () => {
             className='flex flex-center flex-space-between no-select'
             style={{ fontSize: '12px', opacity: 0.65, margin: '6px 0' }}
           >
-            <span>Total</span>
+            <span>Tổng cộng</span>
             <span>
               {(parseFloat(price) * parseFloat(quantity)).toLocaleString('en-US', {
                 maximumFractionDigits: 2,
@@ -344,7 +344,7 @@ const BuySell: React.FC = () => {
             )}
             {feedback.type === 'blocked' && (
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                ⛔ AI Risk Engine blocked your order
+                AI Risk Engine đã chặn đơn hàng của bạn
               </div>
             )}
 
@@ -361,8 +361,8 @@ const BuySell: React.FC = () => {
                       feedback.riskLevel === 'HIGH'
                         ? '#dc3545'
                         : feedback.riskLevel === 'MEDIUM'
-                        ? '#fd7e14'
-                        : '#28a745',
+                          ? '#fd7e14'
+                          : '#28a745',
                   }}
                 >
                   {feedback.riskLevel}

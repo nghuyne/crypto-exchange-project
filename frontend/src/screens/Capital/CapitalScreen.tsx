@@ -134,7 +134,7 @@ const CapitalScreen: React.FC = () => {
 
   useEffect(() => {
     if (!isAuthenticated || !token) {
-      setError('Not authenticated');
+      setError('Chưa xác thực');
       setIsLoading(false);
       return;
     }
@@ -165,7 +165,7 @@ const CapitalScreen: React.FC = () => {
         setData(tableData);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to load wallets');
+      setError(err.message || 'Không thể tải ví');
     } finally {
       setIsLoading(false);
     }
@@ -183,8 +183,8 @@ const CapitalScreen: React.FC = () => {
   if (isLoading) {
     return (
       <SiteLayout>
-        <Header icon='sort' title='My Wallets' />
-        <div style={{ padding: '20px', textAlign: 'center' }}>Loading wallets...</div>
+        <Header icon='sort' title='Ví của tôi' />
+        <div style={{ padding: '20px', textAlign: 'center' }}>Đang tải ví...</div>
       </SiteLayout>
     );
   }
@@ -192,9 +192,9 @@ const CapitalScreen: React.FC = () => {
   if (error) {
     return (
       <SiteLayout>
-        <Header icon='sort' title='My Wallets' />
+        <Header icon='sort' title='Ví của tôi' />
         <div style={{ padding: '20px', textAlign: 'center', color: 'red' }}>
-          Error: {error}
+          Lỗi: {error}
         </div>
       </SiteLayout>
     );
@@ -202,7 +202,7 @@ const CapitalScreen: React.FC = () => {
 
   return (
     <SiteLayout>
-      <Header icon='sort' title='My Wallets' />
+      <Header icon='sort' title='Ví của tôi' />
       <TopBar
         searchValue={keyword}
         searchSubmit={handleSearchSubmit}

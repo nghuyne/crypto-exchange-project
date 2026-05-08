@@ -53,7 +53,7 @@ const CoinVertical: React.FC<IProps> = ({ item }) => {
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div ref={ref} className='flex flex-center flex-space-between'>
-          <p>About</p>
+          <p>Thông tin</p>
           <button type='button' className='box-icon pointer' onClick={() => handleMenuOpen()}>
             <i className='material-icons'>more_vert</i>
           </button>
@@ -108,7 +108,7 @@ const CoinVertical: React.FC<IProps> = ({ item }) => {
               <p>{handleSliceDescription(item.description)}</p>
             )}
             <button type='button' className='pointer' onClick={() => handleShowMore()}>
-              {showMore ? 'See less...' : 'See more...'}
+              {showMore ? 'Ẩn bớt...' : 'Xem thêm...'}
             </button>
           </div>
         </div>

@@ -12,7 +12,7 @@ export const authService = {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Login failed');
+            throw new Error(error.message || 'Đăng nhập thất bại');
         }
 
         return response.json();
@@ -27,7 +27,7 @@ export const authService = {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Registration failed');
+            throw new Error(error.message || 'Đăng ký thất bại');
         }
 
         return response.json();
@@ -44,7 +44,7 @@ export const authService = {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Failed to fetch profile');
+            throw new Error(error.message || 'Không thể lấy hồ sơ');
         }
 
         return response.json();

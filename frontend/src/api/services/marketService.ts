@@ -16,7 +16,7 @@ export const marketService = {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Failed to fetch orderbook');
+            throw new Error(error.message || 'Không thể lấy sổ lệnh');
         }
 
         return response.json();
@@ -30,7 +30,7 @@ export const marketService = {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Failed to fetch trades');
+            throw new Error(error.message || 'Không thể lấy giao dịch');
         }
 
         return response.json();

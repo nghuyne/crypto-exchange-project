@@ -64,7 +64,7 @@ const TradeHistory: React.FC = () => {
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div ref={ref} className='flex flex-center flex-space-between'>
-          <p>Market History</p>
+          <p>Lịch sử thị trường</p>
           <button type='button' className='box-icon pointer' onClick={() => handleMenuOpen()}>
             <i className='material-icons'>more_vert</i>
           </button>
@@ -74,19 +74,19 @@ const TradeHistory: React.FC = () => {
                 <li>
                   <button type='button'>
                     <i className='material-icons'>download</i>
-                    Download
+                    Tải xuống
                   </button>
                 </li>
                 <li>
                   <button type='button'>
                     <i className='material-icons'>refresh</i>
-                    Refresh
+                    Làm mới
                   </button>
                 </li>
                 <li>
                   <button type='button'>
                     <i className='material-icons'>filter_list</i>
-                    Filter
+                    Lọc
                   </button>
                 </li>
               </ul>
@@ -98,16 +98,16 @@ const TradeHistory: React.FC = () => {
         <div className='trade-history-row'>
           {loading ? (
             <div style={{ textAlign: 'center', padding: '30px', color: '#999' }}>
-              Loading trades...
+              Đang tải giao dịch...
             </div>
           ) : data && data.length > 0 ? (
             <table>
               <thead>
                 <tr>
-                  <th className='left no-select'>Price</th>
-                  <th className='center no-select'>Amount</th>
-                  <th className='center no-select'>Order / Counterpart</th>
-                  <th className='right no-select'>Time</th>
+                  <th className='left no-select'>Đơn giá</th>
+                  <th className='center no-select'>Số lượng</th>
+                  <th className='center no-select'>Lệnh / Đối tác</th>
+                  <th className='right no-select'>Thời gian</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +128,7 @@ const TradeHistory: React.FC = () => {
             </table>
           ) : (
             <div style={{ textAlign: 'center', padding: '30px', color: '#999' }}>
-              No trade history
+              Không có lịch sử giao dịch
             </div>
           )}
         </div>

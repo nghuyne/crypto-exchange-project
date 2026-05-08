@@ -62,41 +62,40 @@ const ForgotScreen: React.FC = () => {
                     src={`${process.env.PUBLIC_URL}/images/logo.png`}
                   />
                 </div>
-                <h1 className='form-title center'>Password reset</h1>
+                <h1 className='form-title center'>Đặt lại mật khẩu</h1>
                 <p className='form-desc center'>
-                  Please enter your registered phone number. We will send you the password reset
-                  information.
+                  Vui lòng nhập số điện thoại đã đăng ký. Chúng tôi sẽ gửi cho bạn thông tin đặt lại mật khẩu.
                 </p>
                 <form className='form' onSubmit={handleSubmit} noValidate>
                   <div className='form-elements'>
                     <div className='form-line'>
                       <div className='full-width'>
-                        <label htmlFor='phone'>Phone number</label>
+                        <label htmlFor='phone'>Số điện thoại</label>
                         <FormInput
                           type='text'
                           name='phone'
                           onKeyDown={onlyNumbers}
                           onChange={handleChange}
                           value={formValues.phone}
-                          placeholder='Enter your phone number'
+                          placeholder='Nhập số điện thoại của bạn'
                         />
                       </div>
                     </div>
                     <div className='form-line'>
                       <div className='full-width right'>
-                        <Link to='/'>Sign in</Link>
+                        <Link to='/'>Đăng nhập</Link>
                       </div>
                     </div>
                     <div className='form-line'>
                       <div className='buttons'>
-                        <FormButton text='Send' />
+                        <FormButton text='Gửi' />
                       </div>
                     </div>
                     <div className='form-line'>
                       <div className='center'>
                         <p>
-                          If you don't have an account, create a{' '}
-                          <Link to='/members/signup'>new account</Link>.
+                          Nếu bạn chưa có tài khoản, {' '}
+                          <Link to='/members/signup'>tạo tài khoản mới</Link>.
                         </p>
                       </div>
                     </div>

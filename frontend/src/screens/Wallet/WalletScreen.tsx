@@ -8,7 +8,7 @@ import './WalletScreen.css';
 const WalletScreen: React.FC = () => {
   return (
     <SiteLayout>
-      <Header icon='account_balance_wallet' title='My Wallet' />
+      <Header icon='account_balance_wallet' title='Ví của tôi' />
       <div className='wallet-container'>
         <WalletHeader />
         <WalletAssets />

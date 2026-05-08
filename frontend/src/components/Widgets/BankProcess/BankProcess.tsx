@@ -118,7 +118,7 @@ const BankProcess: React.FC = () => {
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div className='flex flex-center flex-space-between'>
           <div>
-            <p>Deposit / Withdraw</p>
+            <p>Nạp / Rút tiền</p>
           </div>
           <ul>
             <li>
@@ -127,7 +127,7 @@ const BankProcess: React.FC = () => {
                 onClick={() => setTab(0)}
                 className={tab === 0 ? 'active' : 'passive'}
               >
-                Deposit
+                Nạp tiền
               </button>
             </li>
             <li>
@@ -136,7 +136,7 @@ const BankProcess: React.FC = () => {
                 onClick={() => setTab(1)}
                 className={tab === 1 ? 'active' : 'passive'}
               >
-                Withdraw
+                Rút tiền
               </button>
             </li>
           </ul>
@@ -148,7 +148,7 @@ const BankProcess: React.FC = () => {
             <div className='form-elements'>
               <div className='form-line'>
                 <div className='full-width'>
-                  <label htmlFor='view'>View bank details</label>
+                  <label htmlFor='view'>Chi tiết ngân hàng</label>
                   <select name='view' id='view' onChange={handleViewOnChange}>
                     {bankDetails &&
                       bankDetails.map((item: IBankDetails) => (
@@ -209,8 +209,8 @@ const BankProcess: React.FC = () => {
             <div className='form-elements'>
               <div className='form-line'>
                 <div className='full-width'>
-                  <label htmlFor='iban'>Add IBAN</label>
-                  <input type='text' name='iban' id='iban' placeholder='Enter IBAN number' />
+                  <label htmlFor='iban'>Thêm IBAN</label>
+                  <input type='text' name='iban' id='iban' placeholder='Nhập số IBAN' />
                 </div>
               </div>
             </div>
@@ -220,7 +220,7 @@ const BankProcess: React.FC = () => {
             <div className='form-elements'>
               <div className='form-line'>
                 <div className='full-width'>
-                  <label htmlFor='view'>Saved IBANs</label>
+                  <label htmlFor='view'>IBAN đã lưu</label>
                   <select name='view' id='view'>
                     <option value='ZB'>Ziraat Bank</option>
                   </select>
@@ -234,13 +234,13 @@ const BankProcess: React.FC = () => {
               <strong>TR00 0000 0000 0000 0000 0000 00</strong>
             </p>
             <p>
-              <span>Withdrawal amount : </span>
+              <span>Số tiền rút : </span>
               <strong>2376.00 TL</strong>
             </p>
           </div>
 
           <button type='button' className='button button-purple button-medium button-block'>
-            Withdraw money
+            Rút tiền
           </button>
         </div>
       )}

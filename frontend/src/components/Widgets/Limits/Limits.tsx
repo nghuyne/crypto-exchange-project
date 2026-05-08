@@ -70,16 +70,16 @@ const Limits: React.FC = () => {
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div className='flex flex-center flex-space-between'>
           <div>
-            <p>Limits</p>
+            <p>Giới hạn</p>
           </div>
           <ul>
             <li>
               <button type='button' className='active'>
-                Deposit
+                Nạp tiền
               </button>
             </li>
             <li>
-              <button type='button'>Withdrawal</button>
+              <button type='button'>Rút tiền</button>
             </li>
           </ul>
         </div>
@@ -88,13 +88,13 @@ const Limits: React.FC = () => {
         <div className='limits-header-row flex flex-center flex-space-between no-select'>
           <div>&nbsp;</div>
           <div className='center'>
-            <span className='gray'>24h limit</span>
+            <span className='gray'>Giới hạn 24h</span>
           </div>
           <div className='center'>
-            <span className='gray'>30d limit</span>
+            <span className='gray'>Giới hạn 30 ngày</span>
           </div>
           <div className='center'>
-            <span className='gray'>Status</span>
+            <span className='gray'>Trạng thái</span>
           </div>
         </div>
 

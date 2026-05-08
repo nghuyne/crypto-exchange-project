@@ -22,7 +22,7 @@ const CoinHorizontal: React.FC<IProps> = ({ item, searchValue, searchOnChange, s
         </div>
         <div className='divider' />
         <div>
-          <label className='gray'>Price</label>
+          <label className='gray'>Giá</label>
           <strong>
             {item.amount} {item.currency}
             <em className='red'>{item.change}</em>
@@ -30,12 +30,12 @@ const CoinHorizontal: React.FC<IProps> = ({ item, searchValue, searchOnChange, s
         </div>
         <div className='divider responsive-hide2' />
         <div className='responsive-hide2'>
-          <label className='gray'>Financing rate</label>
+          <label className='gray'>Lãi suất tài chính</label>
           <strong>{item.financialRate}</strong>
         </div>
         <div className='divider responsive-hide2' />
         <div className='responsive-hide2'>
-          <label className='gray'>Weight</label>
+          <label className='gray'>Trọng lượng</label>
           <strong>{item.weight}</strong>
         </div>
         <div className='divider responsive-hide' />
@@ -47,7 +47,7 @@ const CoinHorizontal: React.FC<IProps> = ({ item, searchValue, searchOnChange, s
               name='keyword'
               autoComplete='off'
               value={searchValue}
-              placeholder='Search'
+              placeholder='Tìm kiếm'
               onChange={searchOnChange}
             />
             <button type='button' className='pointer'>

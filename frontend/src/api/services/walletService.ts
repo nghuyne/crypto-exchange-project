@@ -14,7 +14,7 @@ export const walletService = {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Failed to fetch wallets');
+            throw new Error(error.message || 'Không thể lấy ví');
         }
 
         return response.json();
@@ -32,7 +32,7 @@ export const walletService = {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || 'Deposit failed');
+            throw new Error(error.message || 'Nạp tiền thất bại');
         }
 
         return response.json();

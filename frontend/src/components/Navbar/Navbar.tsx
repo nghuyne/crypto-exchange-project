@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-// components
+// Các components
 import NavbarButton from './NavbarButton';
 
 const Navbar: React.FC = () => (
@@ -9,55 +9,55 @@ const Navbar: React.FC = () => (
       <Link to='/market'>
         <img
           draggable='false'
-          alt='Crypto Exchange'
+          alt='Trao đổi tiền mã hóa'
           src={`${process.env.PUBLIC_URL}/images/logo.png`}
         />
       </Link>
     </div>
-    <h3>Main menu</h3>
+    <h3>Menu chính</h3>
     <ul>
       <li>
-        <NavbarButton url='/capital' icon='equalizer' title='Capital' />
+        <NavbarButton url='/capital' icon='equalizer' title='Vốn' />
       </li>
       <li>
-        <NavbarButton url='/wallet' icon='account_balance_wallet' title='My wallet' />
+        <NavbarButton url='/wallet' icon='account_balance_wallet' title='Ví của tôi' />
       </li>
       <li>
-        <NavbarButton url='/transactions' icon='sync' title='Transactions' />
+        <NavbarButton url='/transactions' icon='sync' title='Giao dịch' />
       </li>
       <li>
         <NavbarButton
           url='/blockchain-explorer'
           icon='hub'
-          title='Blockchain Explorer'
+          title='Trình khám phá Blockchain'
         />
       </li>
       <li>
-        <NavbarButton url='/dashboard' icon='dashboard' title='Deposit / Withdraw' />
+        <NavbarButton url='/dashboard' icon='dashboard' title='Nạp / Rút tiền' />
       </li>
     </ul>
-    <h3>Others</h3>
+    <h3>Khác</h3>
     <ul>
       <li>
-        <NavbarButton url='/members' icon='account_circle' title='My profile' />
+        <NavbarButton url='/members' icon='account_circle' title='Hồ sơ của tôi' />
       </li>
       <li>
-        <NavbarButton url='/contacts' icon='contacts' title='Addresses' />
+        <NavbarButton url='/contacts' icon='contacts' title='Địa chỉ' />
       </li>
       <li>
-        <NavbarButton url='/messages' icon='chat' title='Messages' />
+        <NavbarButton url='/messages' icon='chat' title='Tin nhắn' />
       </li>
       <li>
-        <NavbarButton url='/settings' icon='settings' title='Settings' />
+        <NavbarButton url='/settings' icon='settings' title='Cài đặt' />
       </li>
     </ul>
     <div className='copyright'>
-      <strong>Crypto Exchange</strong>
+      <strong>Trao đổi Tiền mã hóa</strong>
       <p>
-        {new Date().getFullYear()} &copy; All rights reserved.
+        {new Date().getFullYear()} &copy; Tất cả các quyền được bảo lưu.
         <br />
         <br />
-        Professional Crypto Trading Platform
+        Nền tảng giao dịch tiền mã hóa chuyên nghiệp
       </p>
     </div>
   </nav>

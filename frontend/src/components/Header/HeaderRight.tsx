@@ -46,7 +46,7 @@ const HeaderRight: React.FC = () => {
               to='/market'
               className={location.pathname.toLowerCase().includes('/market') ? 'active' : 'passive'}
             >
-              Market
+              Thị trường
             </Link>
           </li>
           <li>
@@ -54,7 +54,7 @@ const HeaderRight: React.FC = () => {
               to='/data'
               className={location.pathname.toLowerCase().includes('/data') ? 'active' : 'passive'}
             >
-              Data
+              Dữ liệu
             </Link>
           </li>
           <li>
@@ -62,7 +62,7 @@ const HeaderRight: React.FC = () => {
               to='/blockchain-explorer'
               className={location.pathname.toLowerCase().includes('/blockchain-explorer') ? 'active' : 'passive'}
             >
-              Blockchain Explorer
+              Trình khám phá Blockchain
             </Link>
           </li>
           <li>
@@ -70,7 +70,7 @@ const HeaderRight: React.FC = () => {
               to='/docs'
               className={location.pathname.toLowerCase().includes('/docs') ? 'active' : 'passive'}
             >
-              Docs
+              Tài liệu
             </Link>
           </li>
           <li>
@@ -123,7 +123,7 @@ const HeaderRight: React.FC = () => {
           ) : (
             <li>
               <Link to='/'>
-                <span>Sign In</span>
+                <span>Đăng nhập</span>
               </Link>
             </li>
           )}

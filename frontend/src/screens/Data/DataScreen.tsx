@@ -263,11 +263,11 @@ export default function DataScreen() {
   return (
     <SiteLayout>
       <div className='content data-screen'>
-        <Header icon='insights' title='Data Overview' />
+        <Header icon='insights' title='Tổng quan dữ liệu' />
 
         <div className='data-hero'>
           <div className='data-hero-copy'>
-            <div className='data-kicker'>MARKET INTELLIGENCE & SYSTEM DATA</div>
+            <div className='data-kicker'>TRUYỀN THÔNG THÔNG MINH & DỮ LIỆU HỆ THỐNG</div>
             <h1>Toàn cảnh thị trường, dữ liệu khớp lệnh và tín hiệu AI.</h1>
             <p>
               Trang Data được thiết kế như một lớp quan sát tổng hợp. Nội dung hiển thị lấy trực
@@ -280,7 +280,7 @@ export default function DataScreen() {
             <span className='data-badge'>API: /api/v1/blockchain/blocks</span>
             <button type='button' className='button button-purple button-large' onClick={loadData}>
               <i className='material-icons button-icon-left'>refresh</i>
-              Refresh
+              Làm mới
             </button>
           </div>
         </div>
@@ -290,24 +290,24 @@ export default function DataScreen() {
 
         <div className='data-stats-grid'>
           <div className='data-stat-card'>
-            <div className='data-stat-label'>Trading Pairs</div>
+            <div className='data-stat-label'>Cặp giao dịch</div>
             <div className='data-stat-value'>{numberFormat.format(safeOverview.total_pairs)}</div>
-            <div className='data-stat-foot'>24h window</div>
+            <div className='data-stat-foot'>Cửa sổ 24h</div>
           </div>
           <div className='data-stat-card'>
-            <div className='data-stat-label'>24h Volume</div>
+            <div className='data-stat-label'>Khối lượng 24h</div>
             <div className='data-stat-value'>{formatCompact(safeOverview.total_volume)}</div>
-            <div className='data-stat-foot'>Notional trade volume</div>
+            <div className='data-stat-foot'>Khối lượng giao dịch danh nghĩa</div>
           </div>
           <div className='data-stat-card'>
-            <div className='data-stat-label'>Open Orders</div>
+            <div className='data-stat-label'>Lệnh mở</div>
             <div className='data-stat-value'>{numberFormat.format(safeOverview.open_orders)}</div>
-            <div className='data-stat-foot'>Pending / partial orders</div>
+            <div className='data-stat-foot'>Lệnh chờ / lệnh một phần</div>
           </div>
           <div className='data-stat-card'>
-            <div className='data-stat-label'>Fear & Greed</div>
+            <div className='data-stat-label'>Sợ hãi & Tham lam</div>
             <div className='data-stat-value'>{numberFormat.format(safeSentiment.fear_greed_index)}</div>
-            <div className='data-stat-foot'>{safeSentiment.market_mood} sentiment</div>
+            <div className='data-stat-foot'>{safeSentiment.market_mood === 'GREED' ? 'THAM LAM' : safeSentiment.market_mood === 'FEAR' ? 'SỢ HÃI' : 'TRUNG LẬP'} tâm lý</div>
           </div>
         </div>
 
@@ -317,8 +317,8 @@ export default function DataScreen() {
               <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
                 <div className='data-panel-head'>
                   <div>
-                    <div className='data-panel-kicker'>Market Data</div>
-                    <div className='data-panel-title'>Cryptocurrency Details</div>
+                    <div className='data-panel-kicker'>Dữ liệu thị trường</div>
+                    <div className='data-panel-title'>Chi tiết tiền mã hóa</div>
                     <div className='data-panel-subtitle'>Source: GET /api/v1/data/coins</div>
                   </div>
                   <div className='data-toolbar'>
@@ -326,12 +326,12 @@ export default function DataScreen() {
                       className='data-search'
                       type='text'
                       value={keyword}
-                      placeholder='Search symbol...'
+                      placeholder='Tìm kiếm ký hiệu...'
                       onChange={(e) => setKeyword(e.target.value)}
                     />
                     <button type='button' className='button button-white button-large' onClick={downloadCsv}>
                       <i className='material-icons button-icon-left'>download</i>
-                      Export CSV
+                      Xuất CSV
                     </button>
                   </div>
                 </div>
@@ -341,12 +341,12 @@ export default function DataScreen() {
                   <table className='data-table'>
                     <thead>
                       <tr>
-                        <th>Pair</th>
-                        <th>Last Price</th>
-                        <th>24h Change</th>
-                        <th>24h Volume</th>
-                        <th>Trades</th>
-                        <th>Trend</th>
+                        <th>Cặp</th>
+                        <th>Giá cuối cùng</th>
+                        <th>Thay đổi 24h</th>
+                        <th>Khối lượng 24h</th>
+                        <th>Giao dịch</th>
+                        <th>Xu hướng</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -368,7 +368,7 @@ export default function DataScreen() {
                           <td>{numberFormat.format(item.trade_count_24h)}</td>
                           <td>
                             <div className='data-trend-cell'>
-                              <span className={`data-direction ${item.direction.toLowerCase()}`}>{item.direction}</span>
+                              <span className={`data-direction ${item.direction.toLowerCase()}`}>{item.direction === 'BULLISH' ? 'TĂNG' : item.direction === 'BEARISH' ? 'GIẢM' : 'TRUNG LẬP'}</span>
                               <div className='data-bar'>
                                 <span
                                   style={{
@@ -377,8 +377,8 @@ export default function DataScreen() {
                                       item.direction === 'BULLISH'
                                         ? 'linear-gradient(90deg, #10b981, #34d399)'
                                         : item.direction === 'BEARISH'
-                                        ? 'linear-gradient(90deg, #ef4444, #f97316)'
-                                        : 'linear-gradient(90deg, #94a3b8, #cbd5e1)',
+                                          ? 'linear-gradient(90deg, #ef4444, #f97316)'
+                                          : 'linear-gradient(90deg, #94a3b8, #cbd5e1)',
                                   }}
                                 />
                               </div>
@@ -402,8 +402,8 @@ export default function DataScreen() {
             <div className='data-inline-grid'>
               <Box>
                 <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-                  <div className='data-panel-kicker'>Top Movers</div>
-                  <div className='data-panel-title'>Gainers / Losers</div>
+                  <div className='data-panel-kicker'>Những người di chuyển hàng đầu</div>
+                  <div className='data-panel-title'>Những người kiếm được / Thua lỗ</div>
                   <div className='data-panel-subtitle'>Source: GET /api/v1/data/overview</div>
                 </div>
                 <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
@@ -412,7 +412,7 @@ export default function DataScreen() {
                       <div key={`gain-${item.symbol}`} className='data-list-item positive'>
                         <div>
                           <strong>{item.symbol.toUpperCase()}</strong>
-                          <div className='data-mini'>Top gainers</div>
+                          <div className='data-mini'>Những người kiếm được hàng đầu</div>
                         </div>
                         <span className='data-change up'>{formatChange(item.change_24h)}</span>
                       </div>
@@ -421,7 +421,7 @@ export default function DataScreen() {
                       <div key={`loss-${item.symbol}`} className='data-list-item negative'>
                         <div>
                           <strong>{item.symbol.toUpperCase()}</strong>
-                          <div className='data-mini'>Top losers</div>
+                          <div className='data-mini'>Những người thua lỗ hàng đầu</div>
                         </div>
                         <span className='data-change down'>{formatChange(item.change_24h)}</span>
                       </div>
@@ -432,26 +432,26 @@ export default function DataScreen() {
 
               <Box>
                 <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-                  <div className='data-panel-kicker'>System View</div>
-                  <div className='data-panel-title'>System Snapshot</div>
-                  <div className='data-panel-subtitle'>Orders, trades, active users and audit blocks</div>
+                  <div className='data-panel-kicker'>Chế độ xem hệ thống</div>
+                  <div className='data-panel-title'>Ảnh chụp nhanh hệ thống</div>
+                  <div className='data-panel-subtitle'>Lệnh, giao dịch, người dùng hoạt động và khối audit</div>
                 </div>
                 <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
                   <div className='data-snapshot-grid'>
                     <div>
-                      <span>Total orders</span>
+                      <span>Tổng số lệnh</span>
                       <strong>{numberFormat.format(safeOverview.total_orders)}</strong>
                     </div>
                     <div>
-                      <span>Total trades</span>
+                      <span>Tổng số giao dịch</span>
                       <strong>{numberFormat.format(safeOverview.total_trades)}</strong>
                     </div>
                     <div>
-                      <span>Active users</span>
+                      <span>Người dùng hoạt động</span>
                       <strong>{numberFormat.format(safeOverview.active_users)}</strong>
                     </div>
                     <div>
-                      <span>Audit records</span>
+                      <span>Hồ sơ audit</span>
                       <strong>{numberFormat.format(safeOverview.audit_records)}</strong>
                     </div>
                   </div>
@@ -463,8 +463,8 @@ export default function DataScreen() {
           <div className='data-side'>
             <Box>
               <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-                <div className='data-panel-kicker'>AI Signal</div>
-                <div className='data-panel-title'>Market Sentiment</div>
+                <div className='data-panel-kicker'>Tín hiệu AI</div>
+                <div className='data-panel-title'>Tâm lý thị trường</div>
                 <div className='data-panel-subtitle'>Source: GET /api/v1/data/sentiment</div>
               </div>
               <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
@@ -478,37 +478,37 @@ export default function DataScreen() {
                     <span>{numberFormat.format(safeSentiment.fear_greed_index)}</span>
                   </div>
                   <div className='data-sentiment-copy'>
-                    <strong>{safeSentiment.market_mood}</strong>
+                    <strong>{safeSentiment.market_mood === 'GREED' ? 'THAM LAM' : safeSentiment.market_mood === 'FEAR' ? 'SỢ HÃI' : 'TRUNG LẬP'}</strong>
                     <p>AI suy ra tâm lý thị trường từ biến động 24h và audit risk score.</p>
                   </div>
                 </div>
 
                 <div className='data-progress-list'>
                   <div>
-                    <div className='data-progress-label'>Bullish {numberFormat.format(safeSentiment.bullish_percent)}%</div>
+                    <div className='data-progress-label'>Tăng {numberFormat.format(safeSentiment.bullish_percent)}%</div>
                     <div className='data-bar'><span style={{ width: `${safeSentiment.bullish_percent}%`, background: 'linear-gradient(90deg, #10b981, #34d399)' }} /></div>
                   </div>
                   <div>
-                    <div className='data-progress-label'>Bearish {numberFormat.format(safeSentiment.bearish_percent)}%</div>
+                    <div className='data-progress-label'>Giảm {numberFormat.format(safeSentiment.bearish_percent)}%</div>
                     <div className='data-bar'><span style={{ width: `${safeSentiment.bearish_percent}%`, background: 'linear-gradient(90deg, #ef4444, #f97316)' }} /></div>
                   </div>
                   <div>
-                    <div className='data-progress-label'>Neutral {numberFormat.format(safeSentiment.neutral_percent)}%</div>
+                    <div className='data-progress-label'>Trung lập {numberFormat.format(safeSentiment.neutral_percent)}%</div>
                     <div className='data-bar'><span style={{ width: `${safeSentiment.neutral_percent}%`, background: 'linear-gradient(90deg, #94a3b8, #cbd5e1)' }} /></div>
                   </div>
                 </div>
 
                 <div className='data-mini-grid'>
                   <div>
-                    <span>Avg Risk</span>
+                    <span>Rủi ro trung bình</span>
                     <strong>{numberFormat.format(safeSentiment.average_risk_score)}</strong>
                   </div>
                   <div>
-                    <span>High Risk</span>
+                    <span>Rủi ro cao</span>
                     <strong>{numberFormat.format(safeSentiment.high_risk_records)}</strong>
                   </div>
                   <div>
-                    <span>Audit Blocks</span>
+                    <span>Khối Audit</span>
                     <strong>{numberFormat.format(safeSentiment.audit_blocks)}</strong>
                   </div>
                 </div>
@@ -517,8 +517,8 @@ export default function DataScreen() {
 
             <Box>
               <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-                <div className='data-panel-kicker'>Heatmap</div>
-                <div className='data-panel-title'>Trading Heatmap</div>
+                <div className='data-panel-kicker'>Bản đồ nhiệt</div>
+                <div className='data-panel-title'>Bản đồ nhiệt giao dịch</div>
                 <div className='data-panel-subtitle'>Source: GET /api/v1/data/heatmap</div>
               </div>
               <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
@@ -528,7 +528,7 @@ export default function DataScreen() {
                       <div className='data-list-head'>
                         <div>
                           <strong>{item.symbol.toUpperCase()}</strong>
-                          <div className='data-mini'>Volume {formatCompact(item.volume_24h)}</div>
+                          <div className='data-mini'>Khối lượng {formatCompact(item.volume_24h)}</div>
                         </div>
                         <span className={item.change_24h >= 0 ? 'data-change up' : 'data-change down'}>
                           {formatChange(item.change_24h)}
@@ -550,8 +550,8 @@ export default function DataScreen() {
 
             <Box>
               <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-                <div className='data-panel-kicker'>Blockchain</div>
-                <div className='data-panel-title'>Audit Trail</div>
+                <div className='data-panel-kicker'>Chuỗi khối</div>
+                <div className='data-panel-title'>Dấu vết Audit</div>
                 <div className='data-panel-subtitle'>Source: GET /api/v1/blockchain/blocks</div>
               </div>
               <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
@@ -563,13 +563,13 @@ export default function DataScreen() {
                       <div key={block.Hash} className='data-list-item audit-item'>
                         <div className='data-list-head'>
                           <div>
-                            <strong>Block #{block.Index}</strong>
+                            <strong>Khối #{block.Index}</strong>
                             <div className='data-mini'>{formatTimestamp(block.Timestamp)}</div>
                           </div>
-                          <span className='data-chip muted'>{block.Transactions?.length ?? 0} tx</span>
+                          <span className='data-chip muted'>{block.Transactions?.length ?? 0} giao dịch</span>
                         </div>
-                        <div className='data-mini'>Hash: {shortenHash(block.Hash)}</div>
-                        <div className='data-mini'>Risk score: {riskScore}</div>
+                        <div className='data-mini'>Băm: {shortenHash(block.Hash)}</div>
+                        <div className='data-mini'>Điểm rủi ro: {riskScore}</div>
                       </div>
                     );
                   })}

@@ -45,7 +45,7 @@ const MyAssets: React.FC = () => {
     change: '0%',
     status: 1,
     currency: wallet.asset,
-    changePeriod: 'This week',
+    changePeriod: 'Tuần này',
     barChartData: [30, 20, 25, 35, 30],
     lineChartData: [5, 10, 5, 20, 8, 15, 22, 8, 12, 8, 32, 16, 29, 20, 16, 30, 42, 45],
   }));
@@ -58,10 +58,10 @@ const MyAssets: React.FC = () => {
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div className='flex flex-center flex-space-between'>
-          <p>My assets</p>
+          <p>Tài sản của tôi</p>
           <div ref={ref}>
             <Link to='/buy-crypto' type='button' className='button button-purple button-small'>
-              Buy crypto
+              Mua tiền mã hóa
             </Link>
             <button type='button' className='box-icon pointer' onClick={() => handleMenuOpen()}>
               <i className='material-icons'>more_vert</i>
@@ -73,19 +73,19 @@ const MyAssets: React.FC = () => {
                   <li>
                     <button type='button'>
                       <i className='material-icons'>visibility</i>
-                      View Details
+                      Xem chi tiết
                     </button>
                   </li>
                   <li>
                     <button type='button'>
                       <i className='material-icons'>download</i>
-                      Export
+                      Xuất
                     </button>
                   </li>
                   <li>
                     <button type='button'>
                       <i className='material-icons'>refresh</i>
-                      Refresh
+                      Làm mới
                     </button>
                   </li>
                 </ul>

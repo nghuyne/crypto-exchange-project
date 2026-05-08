@@ -27,18 +27,18 @@ const WalletAssets: React.FC = () => {
   return (
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-        <p>Asset List</p>
+        <p>Danh sách tài sản</p>
       </div>
       <div className='box-content'>
         {isLoading && (
           <div style={{ textAlign: 'center', padding: '20px' }}>
-            <p>Loading wallet...</p>
+            <p>Đang tải ví...</p>
           </div>
         )}
 
         {error && (
           <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
-            <p>Error: {error}</p>
+            <p>Lỗi: {error}</p>
           </div>
         )}
 
@@ -46,11 +46,11 @@ const WalletAssets: React.FC = () => {
           <table className='asset-table'>
             <thead>
               <tr>
-                <th className='left'>Asset</th>
-                <th className='center'>Total Balance</th>
-                <th className='center'>Available</th>
-                <th className='center'>Value (USDT)</th>
-                <th className='right'>Action</th>
+                <th className='left'>Tài sản</th>
+                <th className='center'>Tổng số dư</th>
+                <th className='center'>Có sẵn</th>
+                <th className='center'>Giá trị (USDT)</th>
+                <th className='right'>Đào hàng</th>
               </tr>
             </thead>
             <tbody>
@@ -104,7 +104,7 @@ const WalletAssets: React.FC = () => {
                         className='button button-purple button-small'
                         onClick={() => handleTrade(wallet.asset)}
                       >
-                        Trade
+                        Giao dịch
                       </button>
                     </td>
                   </tr>
@@ -116,7 +116,7 @@ const WalletAssets: React.FC = () => {
 
         {!isLoading && !error && wallets.length === 0 && (
           <div style={{ textAlign: 'center', padding: '20px' }}>
-            <p>No assets yet</p>
+            <p>Chưa có tài sản nào</p>
           </div>
         )}
       </div>

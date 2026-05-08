@@ -24,7 +24,7 @@ const BuyOrders: React.FC = () => {
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div ref={ref} className='flex flex-center flex-space-between'>
-          <p>Buy orders</p>
+          <p>Lệnh mua</p>
           <button type='button' className='box-icon pointer' onClick={() => handleMenuOpen()}>
             <i className='material-icons'>more_vert</i>
           </button>
@@ -35,19 +35,19 @@ const BuyOrders: React.FC = () => {
                 <li>
                   <button type='button'>
                     <i className='material-icons'>settings</i>
-                    Button 1
+                    Tùy chọn 1
                   </button>
                 </li>
                 <li>
                   <button type='button'>
                     <i className='material-icons'>favorite</i>
-                    Button 2
+                    Tùy chọn 2
                   </button>
                 </li>
                 <li>
                   <button type='button'>
                     <i className='material-icons'>info</i>
-                    Button 3
+                    Tùy chọn 3
                   </button>
                 </li>
               </ul>
@@ -61,9 +61,9 @@ const BuyOrders: React.FC = () => {
             <table>
               <thead>
                 <tr>
-                  <th className='left no-select'>Price</th>
-                  <th className='center no-select'>Amount</th>
-                  <th className='right no-select'>Total</th>
+                  <th className='left no-select'>Giá</th>
+                  <th className='center no-select'>Số lượng</th>
+                  <th className='right no-select'>Tổng cộng</th>
                 </tr>
               </thead>
               <tbody>
@@ -80,7 +80,7 @@ const BuyOrders: React.FC = () => {
               </tbody>
             </table>
           )}
-          {!isLoading && bids.length === 0 && <div className='box-horizontal-padding'>Chua co lenh mua.</div>}
+          {!isLoading && bids.length === 0 && <div className='box-horizontal-padding'>Chưa có lệnh mua.</div>}
         </div>
       </div>
     </Box>

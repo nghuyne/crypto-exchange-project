@@ -86,52 +86,51 @@ const SigninScreen: React.FC = () => {
                     src={`${process.env.PUBLIC_URL}/images/logo.png`}
                   />
                 </div>
-                <h1 className='form-title center'>Sign in</h1>
+                <h1 className='form-title center'>Đăng nhập</h1>
                 <p className='form-desc center'>
-                  Please make sure that <strong>https://pro.cryptoexchange.com</strong> is written
-                  in your browser's address bar.
+                  Vui lòng chắc chắn rằng <strong>https://pro.cryptoexchange.com</strong> được hiện thị
+                  trong thanh địa chỉ của trình duyệt của bạn.
                 </p>
                 <form noValidate className='form' onSubmit={handleSubmit}>
                   <div className='form-elements'>
                     <div className='form-line'>
                       <div className='full-width'>
-                        <label htmlFor='email'>Email address</label>
+                        <label htmlFor='email'>\u0110ịa chỉ email</label>
                         <FormInput
                           type='email'
                           name='email'
                           onChange={handleChange}
                           value={formValues.email}
-                          placeholder='Enter your email address'
+                          placeholder='Nhập địa chỉ email của bạn'
                         />
                       </div>
                     </div>
                     <div className='form-line'>
                       <div className='full-width'>
-                        <label htmlFor='password'>Password</label>
+                        <label htmlFor='password'>Mật khẩu</label>
                         <FormInput
                           type='password'
                           name='password'
                           onChange={handleChange}
                           value={formValues.password}
-                          placeholder='Enter your password'
+                          placeholder='Nhập mật khẩu của bạn'
                         />
                       </div>
                     </div>
                     <div className='form-line'>
                       <div className='full-width right'>
-                        <Link to='/members/forgot-password'>Forgot password</Link>
+                        <Link to='/members/forgot-password'>Quên mật khẩu</Link>
                       </div>
                     </div>
                     <div className='form-line'>
                       <div className='buttons'>
-                        <FormButton text='Sign in' />
+                        <FormButton text='\u0110ăng nhập' />
                       </div>
                     </div>
                     <div className='form-line'>
                       <div className='center'>
                         <p>
-                          If you don't have an account, create a{' '}
-                          <Link to='/members/signup'>new account</Link>.
+                          Nếu bạn chưa có tài khoản, vui lòng tạo <Link to='/members/signup'>tài khoản mới</Link>.
                         </p>
                       </div>
                     </div>

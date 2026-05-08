@@ -109,13 +109,13 @@ const Market: React.FC = () => {
 
   return (
     <Box>
-      <div className='box-title box-vertical-padding box-horizontal-padding no-select'>Markets</div>
+      <div className='box-title box-vertical-padding box-horizontal-padding no-select'>Thị trường</div>
       <div className='box-content box-content-height'>
         {data && data.map((item) => <MarketRow key={item.id.toString()} item={item} />)}
       </div>
       <div className='box-button box-vertical-padding box-horizontal-padding'>
         <Link to='/capital' className='button button-purple button-medium button-block'>
-          See more
+          Xem thêm
           <i className='material-icons button-icon-right'>chevron_right</i>
         </Link>
       </div>

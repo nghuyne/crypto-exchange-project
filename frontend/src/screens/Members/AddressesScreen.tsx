@@ -12,9 +12,9 @@ interface SavedAddress {
 
 const AddressesScreen: React.FC = () => {
     const [addresses, setAddresses] = useState<SavedAddress[]>([
-        { id: 1, label: 'My BTC Wallet', address: '1A1z7agoat5NYX...', blockchain: 'Bitcoin' },
-        { id: 2, label: 'My ETH Wallet', address: '0x742d35Cc6634C0532925a3b844Bc9e7595f...', blockchain: 'Ethereum' },
-        { id: 3, label: 'Cold Storage', address: '3J98t1WpEZ73CNm...', blockchain: 'Bitcoin' },
+        { id: 1, label: 'Ví BTC của tôi', address: '1A1z7agoat5NYX...', blockchain: 'Bitcoin' },
+        { id: 2, label: 'Ví ETH của tôi', address: '0x742d35Cc6634C0532925a3b844Bc9e7595f...', blockchain: 'Ethereum' },
+        { id: 3, label: 'Kho lạnh', address: '3J98t1WpEZ73CNm...', blockchain: 'Bitcoin' },
     ]);
     const [showForm, setShowForm] = useState(false);
     const [newLabel, setNewLabel] = useState('');

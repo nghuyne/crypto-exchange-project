@@ -40,7 +40,7 @@ const coinData: ICrypto = {
   icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Bitcoin-BTC-icon.png',
   amount: '18.783,33',
   description:
-    'Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group using the name Satoshi Nakamoto. It was released as open-source software in 2009',
+    'Bitcoin là một loại tiền mã hóa được phát minh năm 2008 bởi một người hoặc nhóm người không rõ tên, dùng bút danh Satoshi Nakamoto. Nó được phát hành dưới dạng phần mềm mã nguồn mở vào năm 2009',
 };
 
 const MarketScreen: React.FC = () => {
@@ -76,7 +76,7 @@ const MarketScreen: React.FC = () => {
   return (
     <MainLayout>
       <div className='content'>
-        <Header title='Market' />
+        <Header title='Thị trường' />
         <div className='flex flex-destroy'>
           <div className='content-30 box-right-padding'>
             <Market />

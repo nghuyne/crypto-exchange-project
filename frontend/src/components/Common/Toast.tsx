@@ -1,11 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 
-// ============================================================
-// TOAST NOTIFICATION SYSTEM
-// Tai sao khong dung alert()? alert() la blocking call —
-// no freeze toan bo JS thread va khong the custom style.
-// Toast hien thi overlay, tu dong bien mat, va co the stack nhieu thong bao.
-// ============================================================
+// Hệ thống thông báo Toast
+// Tại sao không dùng alert()? alert() là blocking call —
+// nó sẽ đóng băng toàn bộ JS thread và không thể tự định kiểu.
+// Toast hiển thị overlay, tự động biến mất, và có thể xếp nhiều thông báo.
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -14,26 +12,26 @@ export interface ToastMessage {
   type: ToastType;
   title: string;
   message?: string;
-  duration?: number; // ms, mac dinh 4000
+  duration?: number; // ms, mặc định 4000
 }
 
-// --- ICONS ---
+// Biểu tượng
 const icons: Record<ToastType, string> = {
   success: '✅',
-  error:   '❌',
+  error: '❌',
   warning: '⚠️',
-  info:    'ℹ️',
+  info: 'ℹ️',
 };
 
-// --- MAU SAC THEO LOAI ---
+// Màu sắc theo loại
 const colors: Record<ToastType, { bg: string; border: string; title: string }> = {
   success: { bg: 'rgba(16, 185, 129, 0.12)', border: '#10b981', title: '#34d399' },
-  error:   { bg: 'rgba(239, 68, 68, 0.12)',  border: '#ef4444', title: '#f87171' },
+  error: { bg: 'rgba(239, 68, 68, 0.12)', border: '#ef4444', title: '#f87171' },
   warning: { bg: 'rgba(245, 158, 11, 0.12)', border: '#f59e0b', title: '#fbbf24' },
-  info:    { bg: 'rgba(59, 130, 246, 0.12)', border: '#3b82f6', title: '#60a5fa' },
+  info: { bg: 'rgba(59, 130, 246, 0.12)', border: '#3b82f6', title: '#60a5fa' },
 };
 
-// --- SINGLE TOAST ITEM ---
+// Mục Toast đơn
 interface ToastItemProps {
   toast: ToastMessage;
   onRemove: (id: number) => void;
@@ -46,7 +44,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
   const duration = toast.duration ?? 4000;
 
   useEffect(() => {
-    // Trigger slide-in sau 1 tick de CSS transition hoat dong
+    // Kích hoạt trượt vào sau 1 tick để CSS transition hoạt động
     const showTimer = setTimeout(() => setVisible(true), 10);
 
     // Bat dau slide-out truoc khi xoa khoi DOM

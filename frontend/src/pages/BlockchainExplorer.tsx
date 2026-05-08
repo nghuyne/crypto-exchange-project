@@ -66,7 +66,7 @@ function renderProgressBar(score: number) {
 function BlockCard({ block }: { block: Block }) {
   const [expanded, setExpanded] = useState(false);
   const [expandedTx, setExpandedTx] = useState<number | null>(null);
-  
+
   const highRiskCount = block.Transactions ? block.Transactions.filter(t => (t.RiskScore || 0) >= 75).length : 0;
 
   return (
@@ -101,12 +101,12 @@ function BlockCard({ block }: { block: Block }) {
             <table className="tx-table">
               <thead>
                 <tr>
-                  <th>Order ID</th>
-                  <th>User</th>
-                  <th>Symbol</th>
-                  <th>Amount</th>
-                  <th>Action</th>
-                  <th>Risk Score</th>
+                  <th>ID Lệnh</th>
+                  <th>Người dùng</th>
+                  <th>Ký hiệu</th>
+                  <th>Số lượng</th>
+                  <th>Đào hàng</th>
+                  <th>Điểm Rủi ro</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,39 +170,39 @@ function BlockCard({ block }: { block: Block }) {
                       {isTxExpanded && (
                         <tr>
                           <td colSpan={6} style={{ padding: '0', backgroundColor: '#fdfdfd' }}>
-                            <div className="ai-breakdown-panel" style={{ 
-                              padding: '15px 20px', 
+                            <div className="ai-breakdown-panel" style={{
+                              padding: '15px 20px',
                               borderBottom: '2px solid #edf2f7',
                               display: 'flex',
                               justifyContent: 'space-between',
                               alignItems: 'center'
                             }}>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <div style={{ fontSize: '11px', color: '#718096', fontWeight: 'bold', marginBottom: '4px' }}>AI JUDGMENT DETAILS:</div>
+                                <div style={{ fontSize: '11px', color: '#718096', fontWeight: 'bold', marginBottom: '4px' }}>CHI TIẾT ĐÁNH GIÁ AI:</div>
                                 <div>
-                                  <div style={{ fontSize: '11px', color: '#4a5568', width: '120px', display: 'inline-block' }}>Rule_Amount:</div>
+                                  <div style={{ fontSize: '11px', color: '#4a5568', width: '120px', display: 'inline-block' }}>Quy_Tắc_Số_Tiền:</div>
                                   {renderProgressBar(rAmount)}
                                 </div>
                                 <div>
-                                  <div style={{ fontSize: '11px', color: '#4a5568', width: '120px', display: 'inline-block' }}>Rule_Frequency:</div>
+                                  <div style={{ fontSize: '11px', color: '#4a5568', width: '120px', display: 'inline-block' }}>Quy_Tắc_Tần_Suất:</div>
                                   {renderProgressBar(rFreq)}
                                 </div>
                                 <div>
-                                  <div style={{ fontSize: '11px', color: '#4a5568', width: '120px', display: 'inline-block' }}>Rule_Repetitive:</div>
+                                  <div style={{ fontSize: '11px', color: '#4a5568', width: '120px', display: 'inline-block' }}>Quy_Tắc_Lặp_Lại:</div>
                                   {renderProgressBar(rRep)}
                                 </div>
                               </div>
-                              <div style={{ 
-                                padding: '15px', 
-                                borderRadius: '8px', 
+                              <div style={{
+                                padding: '15px',
+                                borderRadius: '8px',
                                 minWidth: '150px',
                                 textAlign: 'center',
                                 backgroundColor: riskStyle.bg,
                                 border: `1px solid ${riskStyle.color}`
                               }}>
-                                <div style={{ fontSize: '10px', color: '#718096', marginBottom: '5px' }}>FINAL VERDICT</div>
+                                <div style={{ fontSize: '10px', color: '#718096', marginBottom: '5px' }}>PHÁN TRIỂN CHỈ CUỐI</div>
                                 <div style={{ fontSize: '18px', fontWeight: 'bold', color: riskStyle.color }}>{riskStyle.label}</div>
-                                <div style={{ fontSize: '10px', color: riskStyle.color, marginTop: '2px' }}>AI Safety Engine v2.0</div>
+                                <div style={{ fontSize: '10px', color: riskStyle.color, marginTop: '2px' }}>Công cụ An toàn AI v2.0</div>
                               </div>
                             </div>
                           </td>
@@ -252,7 +252,7 @@ export default function BlockchainExplorer() {
 
   // Data processing for charts
   const sortedBlocks = [...blocks].sort((a, b) => a.Index - b.Index);
-  
+
   // Line Chart Data
   const lineChartData = sortedBlocks
     .filter(b => b.Transactions && b.Transactions.length > 0)
@@ -276,10 +276,10 @@ export default function BlockchainExplorer() {
   // Logic xac minh tinh toan ven cua chuoi (Blockchain Integrity Check)
   const verifyChainIntegrity = (blocksToVerify: Block[]): { valid: boolean; count: number } => {
     if (blocksToVerify.length <= 1) return { valid: true, count: blocksToVerify.length };
-    
+
     // Sap xep theo Index tang dan de kiem tra noi tang
     const sorted = [...blocksToVerify].sort((a, b) => a.Index - b.Index);
-    
+
     for (let i = 1; i < sorted.length; i++) {
       if (sorted[i].PrevHash !== sorted[i - 1].Hash) {
         return { valid: false, count: i };
@@ -294,10 +294,10 @@ export default function BlockchainExplorer() {
     <MainLayout>
       <div className="explorer-root">
         {/* Integrity Badge */}
-        <div style={{ 
-          position: 'fixed', 
-          top: '85px', 
-          right: '30px', 
+        <div style={{
+          position: 'fixed',
+          top: '85px',
+          right: '30px',
           zIndex: 100,
           padding: '6px 14px',
           borderRadius: '20px',
@@ -312,15 +312,15 @@ export default function BlockchainExplorer() {
           color: integrity.valid ? '#38a169' : '#e53e3e'
         }}>
           {integrity.valid ? (
-            <><span>✓</span> Chain Integrity: VALID — {integrity.count} blocks verified</>
+            <><span>✓</span> Tính toàn Chuỗi: HỢP LỆ — {integrity.count} khối được xác minh</>
           ) : (
-            <><span>✗</span> Chain Integrity: COMPROMISED (at block #{integrity.count})</>
+            <><span>✗</span> Tính toàn Chuỗi: VI PHẠM (tại khối #{integrity.count})</>
           )}
         </div>
 
         <div className="explorer-header">
           <div>
-            <h1 className="explorer-title">⛓ Blockchain Audit Explorer</h1>
+            <h1 className="explorer-title">⛓ Trình Khám Phá Audit Blockchain</h1>
             <p className="explorer-subtitle">
               Dữ liệu bằng chứng rủi ro được AI ghi vĩnh viễn lên chuỗi khối (Audit Trail).
             </p>
@@ -343,7 +343,7 @@ export default function BlockchainExplorer() {
         <div className="stats-bar">
           <div className="stat-item">
             <span className="stat-value">{blocks.length}</span>
-            <span className="stat-label">Blocks</span>
+            <span className="stat-label">Khối</span>
           </div>
           <div className="stat-item">
             <span className="stat-value">{totalTx}</span>
@@ -370,7 +370,7 @@ export default function BlockchainExplorer() {
             <Chart
               type="line"
               height={250}
-              series={[{ name: 'Risk Score Avg', data: lineChartData.map(d => d.y) }]}
+              series={[{ name: 'Điểm Rủi ro Trung bình', data: lineChartData.map(d => d.y) }]}
               options={{
                 chart: { toolbar: { show: false }, zoom: { enabled: false } },
                 colors: ['#e53e3e'],
@@ -391,7 +391,7 @@ export default function BlockchainExplorer() {
                 chart: { toolbar: { show: false } },
                 colors: ['#38a169', '#d69e2e', '#e53e3e'],
                 plotOptions: { bar: { distributed: true, borderRadius: 4, columnWidth: '60%' } },
-                xaxis: { categories: ['LOW', 'MEDIUM', 'HIGH'], labels: { style: { fontSize: '10px', fontWeight: 'bold' } } },
+                xaxis: { categories: ['THẤP', 'TRUNG BÌNH', 'CAO'], labels: { style: { fontSize: '10px', fontWeight: 'bold' } } },
                 legend: { show: false },
                 dataLabels: { enabled: true }
               }}

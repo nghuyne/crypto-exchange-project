@@ -96,7 +96,7 @@ const TransactionsScreen: React.FC = () => {
 
   return (
     <SiteLayout>
-      <Header icon='sort' title='Transactions' />
+      <Header icon='sort' title='Giao dịch' />
       <TopBar
         searchValue={keyword}
         searchSubmit={handleSearchSubmit}
@@ -110,13 +110,13 @@ const TransactionsScreen: React.FC = () => {
               <th aria-label='empty' className='left'>
                 &nbsp;
               </th>
-              <th className='left responsive-hide'>Order</th>
-              <th className='left responsive-hide'>Date</th>
-              <th className='left'>From</th>
-              <th className='left'>To</th>
-              <th className='left'>Coin</th>
-              <th className='center'>Amount</th>
-              <th className='center'>Status</th>
+              <th className='left responsive-hide'>Lệnh</th>
+              <th className='left responsive-hide'>Ngày</th>
+              <th className='left'>Từ</th>
+              <th className='left'>Đến</th>
+              <th className='left'>Tiền mã hóa</th>
+              <th className='center'>Số lượng</th>
+              <th className='center'>Trạng thái</th>
             </tr>
           </thead>
           <tbody>

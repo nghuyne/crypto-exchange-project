@@ -17,7 +17,7 @@ const TopBar: React.FC<IProps> = ({ searchValue, searchOnChange, searchSubmit })
             autoComplete='off'
             value={searchValue}
             onChange={searchOnChange}
-            placeholder='Search keyword'
+            placeholder='Tìm kiếm...'
           />
           <button type='submit' className='pointer'>
             <i className='material-icons'>search</i>
@@ -28,12 +28,12 @@ const TopBar: React.FC<IProps> = ({ searchValue, searchOnChange, searchSubmit })
     <div>
       <button type='button' className='button button-white button-large'>
         <i className='material-icons button-icon-left'>event</i>
-        Period
+        Kỳ hạn
         <i className='material-icons button-icon-right'>keyboard_arrow_down</i>
       </button>
       <button type='button' className='button button-purple button-large'>
         <i className='material-icons button-icon-left'>download</i>
-        Download CSV
+        Tải xuống
       </button>
     </div>
   </div>

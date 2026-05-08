@@ -78,15 +78,15 @@ const RecentActivity: React.FC = () => {
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div className='flex flex-center flex-space-between'>
           <div>
-            <p>History</p>
+            <p>Lịch sử hoạt động</p>
           </div>
           <ul>
             <li>
-              <button type='button'>Yesterday</button>
+              <button type='button'>Hôm qua</button>
             </li>
             <li>
               <button type='button' className='active'>
-                Today
+                Hôm nay
               </button>
             </li>
           </ul>

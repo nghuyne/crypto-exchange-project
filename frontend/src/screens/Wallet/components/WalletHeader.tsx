@@ -29,7 +29,7 @@ const WalletHeader: React.FC = () => {
   // Fetch risk assessment
   useEffect(() => {
     if (!token) return;
-    
+
     setRiskLoading(true);
     fetch('/api/v1/wallet/risk-assessment', {
       method: 'GET',
@@ -45,7 +45,7 @@ const WalletHeader: React.FC = () => {
         }
       })
       .catch(() => {
-        console.log('Failed to fetch risk assessment');
+        console.log('Không thể lấy đánh giá rủi ro');
       })
       .finally(() => {
         setRiskLoading(false);
@@ -67,9 +67,9 @@ const WalletHeader: React.FC = () => {
   };
 
   const getRiskLabel = (score: number): string => {
-    if (score >= 80) return 'Safe';
-    if (score >= 50) return 'Warning';
-    return 'Risky';
+    if (score >= 80) return 'An toàn';
+    if (score >= 50) return 'Cảnh báo';
+    return 'Rủi ro';
   };
 
   return (
@@ -78,11 +78,11 @@ const WalletHeader: React.FC = () => {
         {/* Total Balance Card */}
         <Box>
           <div className='box-title box-vertical-padding box-horizontal-padding'>
-            <p>Total Balance</p>
+            <p>Tổng số dư</p>
           </div>
           <div className='box-content box-horizontal-padding'>
             {isLoading ? (
-              <p className='loading-text'>Loading...</p>
+              <p className='loading-text'>Đang tải...</p>
             ) : (
               <div className='balance-display'>
                 <div className='balance-main'>
@@ -107,11 +107,11 @@ const WalletHeader: React.FC = () => {
         {/* AI Risk Score Card */}
         <Box>
           <div className='box-title box-vertical-padding box-horizontal-padding'>
-            <p>AI Risk Score</p>
+            <p>Điểm rủi ro AI</p>
           </div>
           <div className='box-content box-horizontal-padding'>
             {riskLoading ? (
-              <p className='loading-text'>Assessing...</p>
+              <p className='loading-text'>Đang đánh giá...</p>
             ) : riskAssessment ? (
               <div className='risk-score-display'>
                 <div className='risk-bar-container'>
@@ -128,7 +128,7 @@ const WalletHeader: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <p className='loading-text'>No data</p>
+              <p className='loading-text'>Không có dữ liệu</p>
             )}
           </div>
         </Box>
@@ -138,15 +138,15 @@ const WalletHeader: React.FC = () => {
       <div className='wallet-actions'>
         <button type='button' className='button button-primary button-action'>
           <i className='material-icons button-icon-left'>add_circle</i>
-          Deposit
+          Nạp tiền
         </button>
         <button type='button' className='button button-secondary button-action'>
           <i className='material-icons button-icon-left'>remove_circle</i>
-          Withdraw
+          Rút tiền
         </button>
         <button type='button' className='button button-purple button-action'>
           <i className='material-icons button-icon-left'>send</i>
-          Transfer
+          Chuyển
         </button>
       </div>
     </div>
