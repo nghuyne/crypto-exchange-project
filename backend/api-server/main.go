@@ -26,7 +26,15 @@ func main() {
 	config.InitAIBlockchain()
 
 	// 3. Dong bo hoa bang
+<<<<<<< HEAD
 	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.Notification{}, &models.AdminLog{}, &models.SystemConfig{}, &models.Address{})
+=======
+<<<<<<< HEAD
+	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.Notification{})
+=======
+	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.AdminLog{}, &models.SystemConfig{})
+>>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
+>>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)
 	if err != nil {
 		log.Printf("Loi ky thuat tao bang: %v", err)
 	}

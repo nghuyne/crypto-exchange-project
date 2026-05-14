@@ -54,6 +54,7 @@ type Trade struct {
 	CreatedAt   time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
+<<<<<<< HEAD
 // 5. BANG THONG BAO (NOTIFICATION)
 type Notification struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
@@ -64,8 +65,13 @@ type Notification struct {
 	Read      bool      `gorm:"default:false" json:"read"`
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
+<<<<<<< HEAD
 
 // 6. BANG GHI LOG ADMIN
+=======
+=======
+// 5. BANG GHI LOG ADMIN
+>>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)
 type AdminLog struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	AdminID   uint      `gorm:"index;not null" json:"admin_id"`
@@ -75,7 +81,11 @@ type AdminLog struct {
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
+<<<<<<< HEAD
 // 7. CAU HINH HE THONG (FEE, LIMITS, ETC)
+=======
+// 6. CAU HINH HE THONG (FEE, LIMITS, ETC)
+>>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)
 type SystemConfig struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	ConfigKey string    `gorm:"type:varchar(100);uniqueIndex;not null" json:"config_key"` // TAKER_FEE, MAKER_FEE, WITHDRAWAL_FEE
@@ -83,6 +93,7 @@ type SystemConfig struct {
 	UpdatedBy uint      `gorm:"index" json:"updated_by"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }
+<<<<<<< HEAD
 
 // 8. BANG DIA CHI BLOCKCHAIN (ADDRESS)
 type Address struct {
@@ -94,3 +105,6 @@ type Address struct {
 	CreatedAt  time.Time `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt  time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }
+=======
+>>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
+>>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)

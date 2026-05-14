@@ -18,9 +18,15 @@ import { userService } from '../../../api/services/appService';
 const Profile: React.FC = () => {
   const ref = useRef<any>(null);
   const { user } = useAuth();
+<<<<<<< HEAD
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const [userLevel, setUserLevel] = useState(1);
   const [loading, setLoading] = useState(true);
+=======
+
+  const [menuOpened, setMenuOpened] = useState<boolean>(false);
+  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest User');
+>>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
 
   useClickOutside(ref, () => setMenuOpened(false));
 
@@ -111,6 +117,7 @@ const Profile: React.FC = () => {
         <div className='box-horizontal-padding'>
           <div className='center'>
             <h3>{displayName}</h3>
+<<<<<<< HEAD
             <strong>{levelName}</strong>
             {loading ? <p>Đang tải...</p> :
               <>
@@ -120,6 +127,11 @@ const Profile: React.FC = () => {
                 {userLevel >= 2 && <p>Cấp độ {userLevel} Đã xác minh ✓</p>}
               </>
             }
+=======
+            <strong>Level 1</strong>
+            <p>You must be Level 2 to increase your limits.</p>
+            <Link to='/members/application'>Level 2 application</Link>
+>>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
           </div>
         </div>
       </div>
