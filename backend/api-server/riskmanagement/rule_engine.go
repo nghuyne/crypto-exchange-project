@@ -54,13 +54,19 @@ type RiskEvaluator struct {
 }
 
 // NewRiskEvaluator tao instance moi voi nguong hop ly hon cho san crypto
+// DEMO THRESHOLDS: Lowered for easier triggering during product demonstration
+// Production should use higher thresholds to reduce false positives
 func NewRiskEvaluator() *RiskEvaluator {
 	re := &RiskEvaluator{
-		AmountThreshold:     50000,  // $50,000 moi bi canh bao (hop ly cho crypto)
-		FrequencyThreshold:  20,     // 20 lenh trong 5 phut = spam
-		RepetitiveThreshold: 5,      // 5 lenh giong nhau = bot
+		AmountThreshold:     10000,  // DEMO: $10,000 triggers large order warning (was $50,000)
+		                             // Allows testing AI blocking with realistic order sizes
+		FrequencyThreshold:  5,      // DEMO: 5 orders in 5 min = spam (was 20)
+		                             // Makes bot/spam detection easier: 6+ orders = triggered
+		RepetitiveThreshold: 3,      // DEMO: 3 same orders = bot pattern (was 5)
+		                             // Easier to demonstrate bot detection
 		TimeWindowSeconds:   300,    // Cua so 5 phut
-		VelocityThreshold:   10.0,   // Lenh lon hon 10x trung binh = bat thuong
+		VelocityThreshold:   3.0,    // DEMO: 3x average = suspicious spike (was 10.0)
+		                             // Sensitive to sudden order size changes
 		TransactionHistory:  make(map[string][]Transaction),
 	}
 	// Chay goroutine don dep lich su cu de tranh memory leak
