@@ -59,17 +59,17 @@ const SearchScreen: React.FC = () => {
                                     width: '100%',
                                     padding: '12px',
                                     fontSize: '16px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '4px',
+                                    border: '1px solid var(--color-glass-border)',
+                                    borderRadius: '8px',
                                     boxSizing: 'border-box',
                                 }}
                             />
                         </div>
 
-                        {isSearching && <p style={{ textAlign: 'center', color: '#999' }}>Đang tìm kiếm...</p>}
+                        {isSearching && <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>Đang tìm kiếm...</p>}
 
                         {!isSearching && results.length === 0 && searchQuery && (
-                            <p style={{ textAlign: 'center', color: '#999' }}>Không tìm thấy kết quả</p>
+                            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>Không tìm thấy kết quả</p>
                         )}
 
                         {!isSearching && results.length > 0 && (
@@ -79,19 +79,19 @@ const SearchScreen: React.FC = () => {
                                         key={result.id}
                                         style={{
                                             padding: '12px',
-                                            borderBottom: '1px solid #eee',
+                                            borderBottom: '1px solid var(--color-glass-border)',
                                             cursor: 'pointer',
                                             transition: 'background 0.2s',
                                         }}
-                                        onMouseEnter={(e) => (e.currentTarget.style.background = '#f5f5f5')}
+                                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(148, 163, 184, 0.05)')}
                                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                                     >
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div>
                                                 <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{result.title}</div>
-                                                <div style={{ fontSize: '12px', color: '#999' }}>{result.description}</div>
+                                                <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>{result.description}</div>
                                             </div>
-                                            <span style={{ fontSize: '12px', color: '#999' }}>{result.timestamp}</span>
+                                            <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>{result.timestamp}</span>
                                         </div>
                                     </div>
                                 ))}

@@ -19,6 +19,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -39,7 +40,7 @@
 .balance-card-label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: rgba(226, 232, 240, 0.7);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-bottom: 12px;
@@ -49,7 +50,7 @@
 .balance-card-amount {
   font-size: 2.8rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+  background: linear-gradient(135deg, var(--color-accent-blue) 0%, var(--color-accent-purple) 50%, var(--color-accent-pink) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -62,6 +63,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -86,7 +88,7 @@
 .balance-card-item-label {
   font-size: 0.85rem;
   font-weight: 500;
-  color: rgba(226, 232, 240, 0.6);
+  color: var(--color-text-secondary);
   letter-spacing: 0.3px;
 }
 
@@ -97,17 +99,17 @@
 }
 
 .balance-card-item-value.fiat {
-  color: #60a5fa;
+  color: var(--color-accent-blue);
 }
 
 .balance-card-item-value.crypto {
-  color: #a78bfa;
+  color: var(--color-accent-purple);
 }
 
 .balance-card-divider {
   width: 1px;
   height: 50px;
-  background: linear-gradient(180deg, transparent 0%, rgba(148, 163, 184, 0.3) 50%, transparent 100%);
+  background: linear-gradient(180deg, transparent 0%, var(--color-glass-border) 50%, transparent 100%);
 }
 
 .balance-card-accent {
@@ -117,22 +119,27 @@
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
   filter: blur(40px);
   pointer-events: none;
   animation: float 8s ease-in-out infinite;
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0);
   }
+
   25% {
     transform: translate(-20px, -20px);
   }
+
   50% {
     transform: translate(-10px, 20px);
   }
+
   75% {
     transform: translate(20px, -10px);
   }
@@ -152,9 +159,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }

@@ -12,6 +12,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -30,7 +31,7 @@
   border-radius: 16px;
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  color: var(--color-accent-red);
   backdrop-filter: blur(10px);
   animation: slide-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -40,6 +41,7 @@
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -58,19 +60,19 @@
 .dashboard-error-banner p {
   margin: 0 0 4px 0;
   font-weight: 600;
-  color: #fecaca;
+  color: var(--color-accent-red);
 }
 
 .dashboard-error-banner span {
   font-size: 0.85rem;
-  color: #fca5a5;
+  color: var(--color-accent-red);
 }
 
 .dashboard-error-action {
   padding: 8px 16px;
   border-radius: 8px;
-  background: rgba(239, 68, 68, 0.2);
-  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-accent-red);
   border: 1px solid rgba(239, 68, 68, 0.3);
   font-weight: 600;
   cursor: pointer;
@@ -79,8 +81,8 @@
 }
 
 .dashboard-error-action:hover {
-  background: rgba(239, 68, 68, 0.3);
-  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
 }
 
 .dashboard-demo-notice {
@@ -92,7 +94,7 @@
   border-radius: 12px;
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #a7f3d0;
+  color: var(--color-accent-green);
   font-size: 0.9rem;
   animation: slide-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

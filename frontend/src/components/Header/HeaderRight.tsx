@@ -1,11 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthLogout } from '../../hooks/useAuthLogout';
 import { useAuth } from '../../hooks/useAuth';
+import { useTheme } from '../../hooks/useTheme';
+import { useNotificationCount } from '../../hooks/useNotificationCount';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
   const { logout } = useAuthLogout();
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const { count: notificationCount } = useNotificationCount();
 
   const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
   const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
@@ -68,9 +72,25 @@ const HeaderRight: React.FC = () => {
           </li>
           <li>
             <Link to='/members/notifications'>
-              <span className='notification-badge'>23</span>
+              {notificationCount > 0 && <span className='notification-badge'>{notificationCount}</span>}
               <i className='material-icons'>notifications</i>
             </Link>
+          </li>
+          <li>
+            <button
+              onClick={toggleTheme}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'inherit',
+                fontSize: 'inherit',
+                padding: '0 8px',
+              }}
+            >
+              <i className='material-icons'>{theme === 'dark' ? 'light_mode' : 'dark_mode'}</i>
+            </button>
           </li>
         </ul>
         <ul className='header-user nowrap'>
