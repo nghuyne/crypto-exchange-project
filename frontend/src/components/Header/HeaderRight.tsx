@@ -1,41 +1,19 @@
-import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthLogout } from '../../hooks/useAuthLogout';
 import { useAuth } from '../../hooks/useAuth';
-import { notificationService } from '../../api/services/appService';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
   const { logout } = useAuthLogout();
-  const { user, isAuthenticated } = useAuth();
-  const [notificationCount, setNotificationCount] = useState(0);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchNotificationCount = async () => {
-      try {
-        const token = localStorage.getItem('auth_token');
-        if (token) {
-          const count = await notificationService.getNotificationCount(token);
-          setNotificationCount(count);
-        }
-      } catch (error) {
-        console.error('Lỗi lấy số thông báo:', error);
-      }
-    };
-
-    fetchNotificationCount();
-    // Cập nhật mỗi 30 giây
-    const interval = setInterval(fetchNotificationCount, 30000);
-    return () => clearInterval(interval);
-  }, [isAuthenticated]);
+  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
+  const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     logout();
   };
-
-  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
-  const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
 
   return (
     <div className='header-right no-select'>
@@ -46,7 +24,7 @@ const HeaderRight: React.FC = () => {
               to='/market'
               className={location.pathname.toLowerCase().includes('/market') ? 'active' : 'passive'}
             >
-              Thị trường
+              Market
             </Link>
           </li>
           <li>
@@ -54,7 +32,7 @@ const HeaderRight: React.FC = () => {
               to='/data'
               className={location.pathname.toLowerCase().includes('/data') ? 'active' : 'passive'}
             >
-              Dữ liệu
+              Data
             </Link>
           </li>
           <li>
@@ -62,7 +40,7 @@ const HeaderRight: React.FC = () => {
               to='/blockchain-explorer'
               className={location.pathname.toLowerCase().includes('/blockchain-explorer') ? 'active' : 'passive'}
             >
-              Trình khám phá Blockchain
+              Blockchain Explorer
             </Link>
           </li>
           <li>
@@ -70,7 +48,7 @@ const HeaderRight: React.FC = () => {
               to='/docs'
               className={location.pathname.toLowerCase().includes('/docs') ? 'active' : 'passive'}
             >
-              Tài liệu
+              Docs
             </Link>
           </li>
           <li>
@@ -90,43 +68,33 @@ const HeaderRight: React.FC = () => {
           </li>
           <li>
             <Link to='/members/notifications'>
-              <span className='notification-badge'>{notificationCount}</span>
+              <span className='notification-badge'>23</span>
               <i className='material-icons'>notifications</i>
             </Link>
           </li>
         </ul>
         <ul className='header-user nowrap'>
-          {isAuthenticated && user ? (
-            <>
-              <li>
-                <Link to='/members'>
-                  <span>{displayName}</span>
-                  <span>{displayHandle}</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='/members'>
-                  <div
-                    className='profile-picture cover'
-                    style={{
-                      backgroundImage: `url('https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}')`,
-                    }}
-                  />
-                </Link>
-              </li>
-              <li className='responsive-hide'>
-                <button onClick={handleLogout} className='signout' style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                  <i className='material-icons'>power_settings_new</i>
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link to='/'>
-                <span>Đăng nhập</span>
-              </Link>
-            </li>
-          )}
+          <li>
+            <Link to='/members'>
+              <span>{displayName}</span>
+              <span>{displayHandle}</span>
+            </Link>
+          </li>
+          <li>
+            <Link to='/members'>
+              <div
+                className='profile-picture cover'
+                style={{
+                  backgroundImage: `url('https://www.cenksari.com/content/profile.jpg')`,
+                }}
+              />
+            </Link>
+          </li>
+          <li className='responsive-hide'>
+            <button onClick={handleLogout} className='signout' style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+              <i className='material-icons'>power_settings_new</i>
+            </button>
+          </li>
         </ul>
       </div>
     </div>

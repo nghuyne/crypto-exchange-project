@@ -26,19 +26,7 @@ func main() {
 	config.InitAIBlockchain()
 
 	// 3. Dong bo hoa bang
-<<<<<<< HEAD
-<<<<<<< HEAD
-	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.Notification{}, &models.AdminLog{}, &models.SystemConfig{}, &models.Address{})
-=======
-<<<<<<< HEAD
-	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.Notification{})
-=======
 	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.AdminLog{}, &models.SystemConfig{})
->>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
->>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)
-=======
-	err := config.DB.AutoMigrate(&models.User{}, &models.Wallet{}, &models.Order{}, &models.Trade{}, &models.Notification{}, &models.AdminLog{}, &models.SystemConfig{}, &models.Address{})
->>>>>>> f2b61cc (feat: add Address model and endpoints with fallback to mock data)
 	if err != nil {
 		log.Printf("Loi ky thuat tao bang: %v", err)
 	}
@@ -96,16 +84,6 @@ func main() {
 		auth.POST("/orders", controllers.CreateOrder)
 		auth.GET("/orders", controllers.GetOrders)
 		auth.DELETE("/orders/:id", controllers.CancelOrder)
-
-		// Notifications
-		auth.GET("/notifications", controllers.GetNotifications)
-		auth.GET("/notifications/count", controllers.GetNotificationCount)
-		auth.PUT("/notifications/:id/read", controllers.MarkNotificationAsRead)
-
-		// Addresses
-		auth.GET("/addresses", controllers.GetAddresses)
-		auth.POST("/addresses", controllers.CreateAddress)
-		auth.DELETE("/addresses/:id", controllers.DeleteAddress)
 	}
 
 	// ADMIN ROUTES — Yeu cau quyen admin (token + role check)

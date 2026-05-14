@@ -54,28 +54,7 @@ type Trade struct {
 	CreatedAt   time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
-// 5. BANG THONG BAO (NOTIFICATION)
-type Notification struct {
-	ID        uint      `gorm:"primaryKey" json:"id"`
-	UserID    uint      `gorm:"index;not null" json:"user_id"`
-	Type      string    `gorm:"type:enum('success','warning','error','info');not null" json:"type"`
-	Title     string    `gorm:"type:varchar(100);not null" json:"title"`
-	Message   string    `gorm:"type:text;not null" json:"message"`
-	Read      bool      `gorm:"default:false" json:"read"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
-}
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-// 6. BANG GHI LOG ADMIN
-=======
-=======
 // 5. BANG GHI LOG ADMIN
->>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)
-=======
-
-// 6. BANG GHI LOG ADMIN
->>>>>>> f2b61cc (feat: add Address model and endpoints with fallback to mock data)
 type AdminLog struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	AdminID   uint      `gorm:"index;not null" json:"admin_id"`
@@ -85,15 +64,7 @@ type AdminLog struct {
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-// 7. CAU HINH HE THONG (FEE, LIMITS, ETC)
-=======
 // 6. CAU HINH HE THONG (FEE, LIMITS, ETC)
->>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)
-=======
-// 7. CAU HINH HE THONG (FEE, LIMITS, ETC)
->>>>>>> f2b61cc (feat: add Address model and endpoints with fallback to mock data)
 type SystemConfig struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	ConfigKey string    `gorm:"type:varchar(100);uniqueIndex;not null" json:"config_key"` // TAKER_FEE, MAKER_FEE, WITHDRAWAL_FEE
@@ -101,36 +72,3 @@ type SystemConfig struct {
 	UpdatedBy uint      `gorm:"index" json:"updated_by"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f2b61cc (feat: add Address model and endpoints with fallback to mock data)
-
-// 8. BANG DIA CHI BLOCKCHAIN (ADDRESS)
-type Address struct {
-	ID         uint      `gorm:"primaryKey" json:"id"`
-	UserID     uint      `gorm:"index;not null" json:"user_id"`
-<<<<<<< HEAD
-<<<<<<< HEAD
-	Label      string    `gorm:"type:varchar(100);not null" json:"label"`     // VD: "Main Wallet", "Trading Account"
-	Address    string    `gorm:"type:varchar(255);not null" json:"address"`   // Blockchain address
-	Blockchain string    `gorm:"type:varchar(50);not null" json:"blockchain"` // VD: "Bitcoin", "Ethereum"
-	CreatedAt  time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt  time.Time `gorm:"autoUpdateTime" json:"updated_at"`
-}
-=======
->>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
->>>>>>> d025493 (feat: implement admin API, faucet feature, user profile display, and project documentation)
-=======
-	Label      string    `gorm:"type:varchar(100);not null" json:"label"`       // VD: "Main Wallet", "Trading Account"
-	Address    string    `gorm:"type:varchar(255);not null" json:"address"`     // Blockchain address
-	Blockchain string    `gorm:"type:varchar(50);not null" json:"blockchain"`   // VD: "Bitcoin", "Ethereum"
-=======
-	Label      string    `gorm:"type:varchar(100);not null" json:"label"`     // VD: "Main Wallet", "Trading Account"
-	Address    string    `gorm:"type:varchar(255);not null" json:"address"`   // Blockchain address
-	Blockchain string    `gorm:"type:varchar(50);not null" json:"blockchain"` // VD: "Bitcoin", "Ethereum"
->>>>>>> b06e4ab (fix: resolve merge conflicts in HeaderRight and Profile components)
-	CreatedAt  time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt  time.Time `gorm:"autoUpdateTime" json:"updated_at"`
-}
->>>>>>> f2b61cc (feat: add Address model and endpoints with fallback to mock data)
