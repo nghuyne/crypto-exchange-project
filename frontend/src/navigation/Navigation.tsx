@@ -2,9 +2,17 @@ import { Routes, Route } from 'react-router-dom';
 
 // components
 import { ProtectedRoute } from '../components/ProtectedRoute';
+import AdminRoute from '../components/AdminRoute';
+
+// layouts
+import AdminLayout from '../layouts/AdminLayout';
 
 // pages
 import MarketScreen from '../screens/Market/MarketScreen';
+import AdminDashboard from '../screens/Admin/AdminDashboard';
+import AdminOrders from '../screens/Admin/AdminOrders';
+import AdminRisk from '../screens/Admin/AdminRisk';
+import AdminUsers from '../screens/Admin/AdminUsers';
 import SigninScreen from '../screens/Members/SigninScreen';
 import SignupScreen from '../screens/Members/SignupScreen';
 import ForgotScreen from '../screens/Members/ForgotScreen';
@@ -98,6 +106,21 @@ const Navigation: React.FC = () => (
         </ProtectedRoute>
       }
     />
+
+    {/* Admin Routes */}
+    <Route
+      path='/admin'
+      element={
+        <AdminRoute>
+          <AdminLayout />
+        </AdminRoute>
+      }
+    >
+      <Route index element={<AdminDashboard />} />
+      <Route path='orders' element={<AdminOrders />} />
+      <Route path='risk' element={<AdminRisk />} />
+      <Route path='users' element={<AdminUsers />} />
+    </Route>
 
     {/* 404 */}
     <Route path='*' element={<NotFoundScreen />} />
