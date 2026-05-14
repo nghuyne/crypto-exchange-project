@@ -153,7 +153,7 @@ const BuySell: React.FC = () => {
 
   const isBuy = primaryTab === 0;
   const btnClass = `button ${isBuy ? 'button-green' : 'button-red'} button-medium button-block`;
-  const btnLabel = isSubmitting ? '\u0110ang xử lý...' : `\u0110ặt lệnh ${isBuy ? 'mua' : 'bán'}`;
+  const btnLabel = isSubmitting ? 'Đang xử lý...' : `Đặt lệnh ${isBuy ? 'mua' : 'bán'}`;
 
   return (
     <Box>
@@ -181,14 +181,14 @@ const BuySell: React.FC = () => {
           <div className='flex flex-center flex-space-between'>
             <strong>USDT</strong>
             <span>
-              C\u00f3 sẵn: {(usdtWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })} | Bị khóa:{' '}
+              Có sẵn: {(usdtWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })} | Bị khóa:{' '}
               {(usdtWallet?.locked_balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 })}
             </span>
           </div>
           <div className='flex flex-center flex-space-between' style={{ marginTop: 4 }}>
             <strong>BTC</strong>
             <span>
-              C\u00f3 sẵn: {(btcWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })} | Bị khóa:{' '}
+              Có sẵn: {(btcWallet?.balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })} | Bị khóa:{' '}
               {(btcWallet?.locked_balance ?? 0).toLocaleString('en-US', { maximumFractionDigits: 8 })}
             </span>
           </div>
