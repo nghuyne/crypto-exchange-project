@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import SiteLayout from '../../layouts/SiteLayout';
 import Header from '../../components/Header/Header';
-import Box from '../../components/Common/Box';
+import { AuthContext } from '../../context/AuthContext';
 import './DataScreen.css';
 
 interface PairSummary {
@@ -19,6 +19,30 @@ interface PairSummary {
   direction: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
   intensity: number;
   updated_at: string;
+}
+
+interface Order {
+  id: number;
+  user_id: number;
+  symbol: string;
+  side: 'BUY' | 'SELL';
+  type: string;
+  price: number;
+  quantity: number;
+  filled: number;
+  status: 'OPEN' | 'PARTIAL' | 'FILLED' | 'CANCELLED';
+  created_at: string;
+  updated_at: string;
+}
+
+interface OrderBook {
+  bids: Order[];
+  asks: Order[];
+}
+
+interface OrderBookData {
+  status: string;
+  data: OrderBook;
 }
 
 interface OverviewData {
@@ -78,6 +102,8 @@ const API = {
   heatmap: '/api/v1/data/heatmap',
   sentiment: '/api/v1/data/sentiment',
   blocks: '/api/v1/blockchain/blocks',
+  orders: '/api/v1/orders',
+  orderbook: (symbol: string) => `/api/v1/market/orderbook?symbol=${symbol}`,
 };
 
 const numberFormat = new Intl.NumberFormat('vi-VN', {
@@ -124,12 +150,16 @@ function formatTimestamp(value: string): string {
 }
 
 export default function DataScreen() {
+  const authContext = useContext(AuthContext);
   const [overview, setOverview] = useState<OverviewData | null>(null);
   const [coins, setCoins] = useState<PairSummary[]>([]);
   const [heatmap, setHeatmap] = useState<PairSummary[]>([]);
   const [sentiment, setSentiment] = useState<SentimentData | null>(null);
   const [blocks, setBlocks] = useState<AuditBlock[]>([]);
+  const [myOrders, setMyOrders] = useState<Order[]>([]);
+  const [orderBook, setOrderBook] = useState<OrderBook>({ bids: [], asks: [] });
   const [keyword, setKeyword] = useState('');
+  const [selectedSymbol, setSelectedSymbol] = useState('btc_usdt');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -168,9 +198,48 @@ export default function DataScreen() {
     }
   }, []);
 
+  const loadMyOrders = useCallback(async () => {
+    if (!authContext?.token) return;
+    try {
+      const res = await fetch(API.orders, {
+        headers: { Authorization: `Bearer ${authContext.token}` },
+      });
+      if (res.ok) {
+        const json = await res.json();
+        setMyOrders((json.data ?? []) as Order[]);
+      }
+    } catch (err) {
+      console.error('Error loading orders:', err);
+    }
+  }, [authContext?.token]);
+
+  const loadOrderBook = useCallback(async () => {
+    try {
+      const res = await fetch(API.orderbook(selectedSymbol));
+      if (res.ok) {
+        const json = (await res.json()) as OrderBookData;
+        setOrderBook(json.data ?? { bids: [], asks: [] });
+      }
+    } catch (err) {
+      console.error('Error loading order book:', err);
+    }
+  }, [selectedSymbol]);
+
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    loadMyOrders();
+    const interval = setInterval(loadMyOrders, 5000);
+    return () => clearInterval(interval);
+  }, [loadMyOrders]);
+
+  useEffect(() => {
+    loadOrderBook();
+    const interval = setInterval(loadOrderBook, 3000);
+    return () => clearInterval(interval);
+  }, [loadOrderBook]);
 
   const filteredCoins = useMemo(() => {
     const normalized = keyword.trim().toLowerCase();
@@ -313,8 +382,8 @@ export default function DataScreen() {
 
         <div className='data-layout'>
           <div className='data-main'>
-            <Box>
-              <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
+            <div className='data-card'>
+              <div className='data-card-header'>
                 <div className='data-panel-head'>
                   <div>
                     <div className='data-panel-kicker'>Market Data</div>
@@ -336,7 +405,7 @@ export default function DataScreen() {
                   </div>
                 </div>
               </div>
-              <div className='box-content box-horizontal-padding data-box-content data-box-content-tall'>
+              <div className='data-card-content'>
                 <div className='data-table-wrap'>
                   <table className='data-table'>
                     <thead>
@@ -397,16 +466,16 @@ export default function DataScreen() {
                   </table>
                 </div>
               </div>
-            </Box>
+            </div>
 
             <div className='data-inline-grid'>
-              <Box>
-                <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
+              <div className='data-card'>
+                <div className='data-card-header'>
                   <div className='data-panel-kicker'>Top Movers</div>
                   <div className='data-panel-title'>Gainers / Losers</div>
                   <div className='data-panel-subtitle'>Source: GET /api/v1/data/overview</div>
                 </div>
-                <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
+                <div className='data-card-content'>
                   <div className='data-list'>
                     {safeOverview.top_gainers.slice(0, 3).map((item) => (
                       <div key={`gain-${item.symbol}`} className='data-list-item positive'>
@@ -428,15 +497,15 @@ export default function DataScreen() {
                     ))}
                   </div>
                 </div>
-              </Box>
+              </div>
 
-              <Box>
-                <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
+              <div className='data-card'>
+                <div className='data-card-header'>
                   <div className='data-panel-kicker'>System View</div>
                   <div className='data-panel-title'>System Snapshot</div>
                   <div className='data-panel-subtitle'>Orders, trades, active users and audit blocks</div>
                 </div>
-                <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
+                <div className='data-card-content'>
                   <div className='data-snapshot-grid'>
                     <div>
                       <span>Total orders</span>
@@ -456,18 +525,18 @@ export default function DataScreen() {
                     </div>
                   </div>
                 </div>
-              </Box>
+              </div>
             </div>
           </div>
 
           <div className='data-side'>
-            <Box>
-              <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
+            <div className='data-card'>
+              <div className='data-card-header'>
                 <div className='data-panel-kicker'>AI Signal</div>
                 <div className='data-panel-title'>Market Sentiment</div>
                 <div className='data-panel-subtitle'>Source: GET /api/v1/data/sentiment</div>
               </div>
-              <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
+              <div className='data-card-content'>
                 <div className='data-sentiment-meter'>
                   <div
                     className='data-ring'
@@ -513,15 +582,15 @@ export default function DataScreen() {
                   </div>
                 </div>
               </div>
-            </Box>
+            </div>
 
-            <Box>
-              <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
+            <div className='data-card'>
+              <div className='data-card-header'>
                 <div className='data-panel-kicker'>Heatmap</div>
                 <div className='data-panel-title'>Trading Heatmap</div>
                 <div className='data-panel-subtitle'>Source: GET /api/v1/data/heatmap</div>
               </div>
-              <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
+              <div className='data-card-content'>
                 <div className='data-list compact'>
                   {heatmap.slice(0, 6).map((item) => (
                     <div key={`heat-${item.symbol}`} className='data-list-item heat-item'>
@@ -546,15 +615,15 @@ export default function DataScreen() {
                   ))}
                 </div>
               </div>
-            </Box>
+            </div>
 
-            <Box>
-              <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
+            <div className='data-card'>
+              <div className='data-card-header'>
                 <div className='data-panel-kicker'>Blockchain</div>
                 <div className='data-panel-title'>Audit Trail</div>
                 <div className='data-panel-subtitle'>Source: GET /api/v1/blockchain/blocks</div>
               </div>
-              <div className='box-content box-horizontal-padding data-box-content data-box-content-medium'>
+              <div className='data-card-content'>
                 <div className='data-list compact'>
                   {latestBlocks.map((block) => {
                     const latestTx = block.Transactions?.[block.Transactions.length - 1];
@@ -576,7 +645,107 @@ export default function DataScreen() {
                   {latestBlocks.length === 0 && <div className='data-empty compact'>Chưa có audit block nào.</div>}
                 </div>
               </div>
-            </Box>
+            </div>
+
+            {authContext?.token && (
+              <>
+                <div className='data-card'>
+                  <div className='data-card-header'>
+                    <div className='data-panel-kicker'>My Orders</div>
+                    <div className='data-panel-title'>Your Active Orders</div>
+                    <div className='data-panel-subtitle'>Auto-refresh every 5 seconds</div>
+                  </div>
+                  <div className='data-card-content'>
+                    {myOrders.length === 0 ? (
+                      <div className='data-empty'>No active orders</div>
+                    ) : (
+                      <div className='data-orders-list'>
+                        {myOrders.slice(0, 8).map((order) => (
+                          <div key={order.id} className='data-order-item'>
+                            <div className='data-order-header'>
+                              <div>
+                                <strong>{order.symbol.toUpperCase()}</strong>
+                                <span className={`data-order-side ${order.side.toLowerCase()}`}>{order.side}</span>
+                              </div>
+                              <span className={`data-order-status ${order.status.toLowerCase()}`}>{order.status}</span>
+                            </div>
+                            <div className='data-order-grid'>
+                              <div>
+                                <div className='data-order-label'>Price</div>
+                                <div className='data-order-value'>${numberFormat.format(order.price)}</div>
+                              </div>
+                              <div>
+                                <div className='data-order-label'>Qty</div>
+                                <div className='data-order-value'>{currencyFormat.format(order.quantity)}</div>
+                              </div>
+                              <div>
+                                <div className='data-order-label'>Filled</div>
+                                <div className='data-order-value'>{currencyFormat.format(order.filled)} / {currencyFormat.format(order.quantity)}</div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className='data-card'>
+                  <div className='data-card-header'>
+                    <div className='data-panel-kicker'>Order Book</div>
+                    <div className='data-panel-title'>Market Depth</div>
+                    <div className='data-panel-subtitle'>Auto-refresh every 3 seconds</div>
+                    <select
+                      className='data-symbol-select'
+                      value={selectedSymbol}
+                      onChange={(e) => setSelectedSymbol(e.target.value)}
+                    >
+                      <option value='btc_usdt'>BTC/USDT</option>
+                      <option value='eth_usdt'>ETH/USDT</option>
+                      <option value='sol_usdt'>SOL/USDT</option>
+                      <option value='xrp_usdt'>XRP/USDT</option>
+                    </select>
+                  </div>
+                  <div className='data-card-content'>
+                    <div className='data-orderbook-side'>
+                      <div className='data-orderbook-title'>Bids (BUY)</div>
+                      {orderBook.bids.length === 0 ? (
+                        <div className='data-empty'>No buy orders</div>
+                      ) : (
+                        <div className='data-orderbook-rows'>
+                          {orderBook.bids.slice(0, 5).map((order) => (
+                            <div key={`bid-${order.id}`} className='data-orderbook-row bid'>
+                              <span className='data-ob-price'>${numberFormat.format(order.price)}</span>
+                              <span className='data-ob-qty'>{currencyFormat.format(order.quantity)}</span>
+                              <span className='data-ob-total'>${numberFormat.format(order.price * order.quantity)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className='data-orderbook-divider' />
+
+                    <div className='data-orderbook-side'>
+                      <div className='data-orderbook-title'>Asks (SELL)</div>
+                      {orderBook.asks.length === 0 ? (
+                        <div className='data-empty'>No sell orders</div>
+                      ) : (
+                        <div className='data-orderbook-rows'>
+                          {orderBook.asks.slice(0, 5).map((order) => (
+                            <div key={`ask-${order.id}`} className='data-orderbook-row ask'>
+                              <span className='data-ob-price'>${numberFormat.format(order.price)}</span>
+                              <span className='data-ob-qty'>{currencyFormat.format(order.quantity)}</span>
+                              <span className='data-ob-total'>${numberFormat.format(order.price * order.quantity)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
