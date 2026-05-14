@@ -50,11 +50,14 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// Buoc 3: Tu dong trang bi 3c Vi tien ranh rong (so du 0) cho nguoi dung nay
+	// Buoc 3: Tu dong trang bi 3c Vi tien ranh rong voi seed balance cho demo testing
+	// USDT: 1,000,000 - enough for large high-risk orders to test AI blocking
+	// BTC: 10 - for testing BTC trading pairs
+	// ETH: 100 - for testing ETH trading pairs
 	wallets := []models.Wallet{
-		{UserID: user.ID, Asset: "USDT", Balance: 0, LockedBalance: 0},
-		{UserID: user.ID, Asset: "BTC", Balance: 0, LockedBalance: 0},
-		{UserID: user.ID, Asset: "ETH", Balance: 0, LockedBalance: 0},
+		{UserID: user.ID, Asset: "USDT", Balance: 1000000, LockedBalance: 0},
+		{UserID: user.ID, Asset: "BTC", Balance: 10, LockedBalance: 0},
+		{UserID: user.ID, Asset: "ETH", Balance: 100, LockedBalance: 0},
 	}
 	config.DB.Create(&wallets)
 
