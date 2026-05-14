@@ -23,6 +23,8 @@ const Profile: React.FC = () => {
    */
   const handleMenuOpen = (): void => setMenuOpened(!menuOpened);
 
+  const displayName = user?.full_name || 'User';
+
   return (
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
@@ -38,19 +40,19 @@ const Profile: React.FC = () => {
                 <li>
                   <button type='button'>
                     <i className='material-icons'>settings</i>
-                    Button 1
+                    Settings
                   </button>
                 </li>
                 <li>
                   <button type='button'>
-                    <i className='material-icons'>favorite</i>
-                    Button 2
+                    <i className='material-icons'>security</i>
+                    Security
                   </button>
                 </li>
                 <li>
                   <button type='button'>
                     <i className='material-icons'>info</i>
-                    Button 3
+                    Information
                   </button>
                 </li>
               </ul>
@@ -66,7 +68,7 @@ const Profile: React.FC = () => {
               <div
                 className='icon cover pointer'
                 style={{
-                  backgroundImage: `url('https://www.cenksari.com/content/profile.jpg')`,
+                  backgroundImage: `url('https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email}')`,
                 }}
               />
               <div className='edit pointer'>
@@ -79,6 +81,7 @@ const Profile: React.FC = () => {
           <div className='center'>
             <h3>{displayName}</h3>
             <strong>Level 1</strong>
+            <p>Email: {user?.email || 'N/A'}</p>
             <p>You must be Level 2 to increase your limits.</p>
             <Link to='/members/application'>Level 2 application</Link>
           </div>

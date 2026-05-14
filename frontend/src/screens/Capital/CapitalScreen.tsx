@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
 
+// hooks
+import { useAuth } from '../../hooks/useAuth';
+
+// services
+import { walletService } from '../../api/services/walletService';
+
+// types
+import { IWallet } from '../../api/types';
+
 // components
 import SiteLayout from '../../layouts/SiteLayout';
 import Header from '../../components/Header/Header';
@@ -108,39 +117,92 @@ const dataArray: ICrypto[] = [
   },
 ];
 
+// Crypto icon mapping
+const cryptoIcons: { [key: string]: string } = {
+  BTC: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Bitcoin-BTC-icon.png',
+  ETH: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Ethereum-ETH-icon.png',
+  USDT: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Tether-USDT-icon.png',
+};
+
 const CapitalScreen: React.FC = () => {
+  const { token, isAuthenticated } = useAuth();
   const [data, setData] = useState<ICrypto[]>([]);
+  const [wallets, setWallets] = useState<IWallet[]>([]);
   const [keyword, setKeyword] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setData(dataArray);
-  }, []);
+    if (!isAuthenticated || !token) {
+      setError('Not authenticated');
+      setIsLoading(false);
+      return;
+    }
 
-  /**
-   * Handles the search input value change.
-   *
-   * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
-   * @returns {void}
-   */
+    loadWallets();
+  }, [isAuthenticated, token]);
+
+  const loadWallets = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await walletService.getWallets(token!);
+      if (response.data) {
+        setWallets(response.data);
+        // Convert wallets to table format
+        const tableData: ICrypto[] = response.data.map((wallet, index) => ({
+          id: index + 1,
+          name: wallet.asset,
+          icon: cryptoIcons[wallet.asset] || '',
+          symbol: wallet.asset,
+          amount: wallet.balance.toString(),
+          currency: 'USD',
+          change: '0%',
+          weight: `${wallet.balance}`,
+          lineChartData: [5, 10, 5, 20, 8, 15, 22, 8],
+          status: 1,
+        }));
+        setData(tableData);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to load wallets');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = e.target;
-
     setKeyword(value);
   };
 
-  /**
-   * Handles the search form submission.
-   *
-   * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
-   * @returns {void}
-   */
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
   };
 
+  if (isLoading) {
+    return (
+      <SiteLayout>
+        <Header icon='sort' title='My Wallets' />
+        <div style={{ padding: '20px', textAlign: 'center' }}>Loading wallets...</div>
+      </SiteLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <SiteLayout>
+        <Header icon='sort' title='My Wallets' />
+        <div style={{ padding: '20px', textAlign: 'center', color: 'red' }}>
+          Error: {error}
+        </div>
+      </SiteLayout>
+    );
+  }
+
   return (
     <SiteLayout>
-      <Header icon='sort' title='Market' />
+      <Header icon='sort' title='My Wallets' />
       <TopBar
         searchValue={keyword}
         searchSubmit={handleSearchSubmit}
@@ -152,10 +214,10 @@ const CapitalScreen: React.FC = () => {
           <thead>
             <tr>
               <th className='left'>#</th>
-              <th className='left'>Coin</th>
-              <th className='center'>Latest price</th>
+              <th className='left'>Asset</th>
+              <th className='center'>Balance</th>
               <th className='center'>Change (24h)</th>
-              <th className='center responsive-hide2'>Weight (24h)</th>
+              <th className='center responsive-hide2'>Total</th>
               <th className='left responsive-hide'>Graphic</th>
               <th aria-label='empty' className='right'>
                 &nbsp;
@@ -168,6 +230,10 @@ const CapitalScreen: React.FC = () => {
             ))}
           </tbody>
         </table>
+      )}
+
+      {data && data.length === 0 && (
+        <div style={{ padding: '20px', textAlign: 'center' }}>No wallets found</div>
       )}
     </SiteLayout>
   );

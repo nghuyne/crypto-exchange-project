@@ -1,19 +1,19 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useAuthLogout } from '../../hooks/useAuthLogout';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
-  const { logout } = useAuthLogout();
-  const { user } = useAuth();
-
-  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
-  const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
+  const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     logout();
+    navigate('/');
   };
+
+  const userName = user?.full_name || 'User';
+  const userHandle = user?.email?.split('@')[0] || 'user';
 
   return (
     <div className='header-right no-select'>
@@ -74,27 +74,37 @@ const HeaderRight: React.FC = () => {
           </li>
         </ul>
         <ul className='header-user nowrap'>
-          <li>
-            <Link to='/members'>
-              <span>{displayName}</span>
-              <span>{displayHandle}</span>
-            </Link>
-          </li>
-          <li>
-            <Link to='/members'>
-              <div
-                className='profile-picture cover'
-                style={{
-                  backgroundImage: `url('https://www.cenksari.com/content/profile.jpg')`,
-                }}
-              />
-            </Link>
-          </li>
-          <li className='responsive-hide'>
-            <button onClick={handleLogout} className='signout' style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-              <i className='material-icons'>power_settings_new</i>
-            </button>
-          </li>
+          {isAuthenticated && user ? (
+            <>
+              <li>
+                <Link to='/members'>
+                  <span>{userName}</span>
+                  <span>@{userHandle}</span>
+                </Link>
+              </li>
+              <li>
+                <Link to='/members'>
+                  <div
+                    className='profile-picture cover'
+                    style={{
+                      backgroundImage: `url('https://www.cenksari.com/content/profile.jpg')`,
+                    }}
+                  />
+                </Link>
+              </li>
+              <li className='responsive-hide'>
+                <button onClick={handleLogout} className='signout' style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                  <i className='material-icons'>power_settings_new</i>
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link to='/'>
+                <span>Sign In</span>
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </div>
