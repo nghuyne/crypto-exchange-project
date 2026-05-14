@@ -95,7 +95,7 @@ const SigninScreen: React.FC = () => {
                   <div className='form-elements'>
                     <div className='form-line'>
                       <div className='full-width'>
-                        <label htmlFor='email'>\u0110ịa chỉ email</label>
+                        <label htmlFor='email'>Địa chỉ email</label>
                         <FormInput
                           type='email'
                           name='email'
@@ -124,7 +124,7 @@ const SigninScreen: React.FC = () => {
                     </div>
                     <div className='form-line'>
                       <div className='buttons'>
-                        <FormButton text='\u0110ăng nhập' />
+                        <FormButton text='Đăng nhập' />
                       </div>
                     </div>
                     <div className='form-line'>
