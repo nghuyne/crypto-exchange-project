@@ -395,8 +395,7 @@ export default function DataScreen() {
                       placeholder='Search symbol...'
                       onChange={(e) => setKeyword(e.target.value)}
                     />
-                    <button type='button' className='button button-white button-large' onClick={downloadCsv}>
-                      <i className='material-icons button-icon-left'>download</i>
+                    <button type='button' className='button data-button-dark' onClick={downloadCsv}>
                       Export CSV
                     </button>
                   </div>
@@ -430,8 +429,8 @@ export default function DataScreen() {
                               {formatChange(item.change_24h)}
                             </span>
                           </td>
-                          <td>{formatCompact(item.volume_24h)}</td>
-                          <td>{numberFormat.format(item.trade_count_24h)}</td>
+                          <td>{item.volume_24h === 0 ? '--' : formatCompact(item.volume_24h)}</td>
+                          <td>{item.trade_count_24h === 0 ? '--' : numberFormat.format(item.trade_count_24h)}</td>
                           <td>
                             <div className='data-trend-cell'>
                               <span className={`data-direction ${item.direction.toLowerCase()}`}>{item.direction}</span>
@@ -545,7 +544,7 @@ export default function DataScreen() {
                   </div>
                   <div className='data-sentiment-copy'>
                     <strong>{safeSentiment.market_mood}</strong>
-                    <p>AI suy ra tâm lý thị trường từ biến động 24h và audit risk score.</p>
+                    <p>Derived from 24h price movement and audit risk score.</p>
                   </div>
                 </div>
 

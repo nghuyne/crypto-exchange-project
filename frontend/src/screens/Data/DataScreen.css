@@ -514,6 +514,24 @@
   border-color: rgba(148, 163, 184, 0.3);
 }
 
+/* === Dark Glasmorphism Button === */
+.data-button-dark {
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(99, 179, 237, 0.3) !important;
+  border-radius: 8px;
+  color: #ffffff !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.data-button-dark:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(99, 179, 237, 0.5) !important;
+}
+
 .data-toolbar {
   display: flex;
   gap: 12px;
