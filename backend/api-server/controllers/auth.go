@@ -129,6 +129,7 @@ func GetMe(c *gin.Context) {
 			"id":        user.ID,
 			"email":     user.Email,
 			"full_name": user.FullName,
+			"role":      user.Role,
 			"created_at": user.CreatedAt,
 		},
 	})
