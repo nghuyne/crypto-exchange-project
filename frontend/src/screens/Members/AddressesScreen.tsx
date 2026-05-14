@@ -1,39 +1,90 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SiteLayout from '../../layouts/SiteLayout';
 import Header from '../../components/Header/Header';
 import Box from '../../components/Common/Box';
-
-interface SavedAddress {
-    id: number;
-    label: string;
-    address: string;
-    blockchain: string;
-}
+import { addressService, IAddress } from '../../api/services/addressService';
+import { useAuth } from '../../hooks/useAuth';
 
 const AddressesScreen: React.FC = () => {
-    const [addresses, setAddresses] = useState<SavedAddress[]>([
-        { id: 1, label: 'Ví BTC của tôi', address: '1A1z7agoat5NYX...', blockchain: 'Bitcoin' },
-        { id: 2, label: 'Ví ETH của tôi', address: '0x742d35Cc6634C0532925a3b844Bc9e7595f...', blockchain: 'Ethereum' },
-        { id: 3, label: 'Kho lạnh', address: '3J98t1WpEZ73CNm...', blockchain: 'Bitcoin' },
-    ]);
+    const { token } = useAuth();
+    const [addresses, setAddresses] = useState<IAddress[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [showForm, setShowForm] = useState(false);
     const [newLabel, setNewLabel] = useState('');
     const [newAddress, setNewAddress] = useState('');
     const [newBlockchain, setNewBlockchain] = useState('Bitcoin');
 
-    const handleAdd = () => {
-        if (!newLabel.trim() || !newAddress.trim()) {
-            alert('Vui lòng điền vào tất cả các trường');
+    useEffect(() => {
+        fetchAddresses();
+    }, [token]);
+
+    const fetchAddresses = async () => {
+        if (!token) {
+            setError('Vui lòng đăng nhập');
+            setLoading(false);
             return;
         }
-        setAddresses([...addresses, { id: Date.now(), label: newLabel, address: newAddress, blockchain: newBlockchain }]);
-        setNewLabel('');
-        setNewAddress('');
-        setShowForm(false);
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await addressService.getAddresses(token);
+            if (response.status === 'success' && response.data) {
+                setAddresses(response.data);
+            } else {
+                setError(response.message || 'Không thể tải danh sách địa chỉ');
+            }
+        } catch (err: any) {
+            setError(err.message || 'Lỗi tải danh sách địa chỉ');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleDelete = (id: number) => {
-        setAddresses(addresses.filter(addr => addr.id !== id));
+    const handleAdd = async () => {
+        if (!newLabel.trim() || !newAddress.trim()) {
+            setError('Vui lòng điền vào tất cả các trường');
+            return;
+        }
+
+        if (!token) {
+            setError('Vui lòng đăng nhập');
+            return;
+        }
+
+        try {
+            const response = await addressService.createAddress(token, newLabel, newAddress, newBlockchain);
+            if (response.status === 'success') {
+                setNewLabel('');
+                setNewAddress('');
+                setShowForm(false);
+                await fetchAddresses();
+            } else {
+                setError(response.message || 'Thêm địa chỉ thất bại');
+            }
+        } catch (err: any) {
+            setError(err.message || 'Lỗi thêm địa chỉ');
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        if (!token) {
+            setError('Vui lòng đăng nhập');
+            return;
+        }
+
+        try {
+            const response = await addressService.deleteAddress(token, id);
+            if (response.status === 'success') {
+                await fetchAddresses();
+            } else {
+                setError(response.message || 'Xóa địa chỉ thất bại');
+            }
+        } catch (err: any) {
+            setError(err.message || 'Lỗi xóa địa chỉ');
+        }
     };
 
     return (

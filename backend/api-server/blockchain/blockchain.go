@@ -20,11 +20,11 @@ type Blockchain struct {
 func NewBlockchain() *Blockchain {
 	bc := &Blockchain{}
 	if bc.load() != nil {
-		fmt.Println("🚀 Khởi tạo Chuỗi Kiểm toán AI (Genesis)...")
+		fmt.Println("Khởi tạo Chuỗi Kiểm toán AI (Genesis)...")
 		bc.Blocks = []*Block{NewGenesisBlock()}
 		bc.save()
 	} else {
-		fmt.Printf("✅ Đã kết nối Chuỗi Kiểm toán AI (%d blocks)\n", len(bc.Blocks))
+		fmt.Printf("Đã kết nối Chuỗi Kiểm toán AI (%d blocks)\n", len(bc.Blocks))
 	}
 	return bc
 }

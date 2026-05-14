@@ -857,6 +857,24 @@ header .header-left h1 {
   font-weight: 600;
   display: inline-block;
   vertical-align: middle;
+  max-width: calc(100vw - 200px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  header .header-left h1 {
+    font-size: 1.2em;
+    max-width: calc(100vw - 160px);
+  }
+}
+
+@media (max-width: 480px) {
+  header .header-left h1 {
+    font-size: 0.95em;
+    max-width: calc(100vw - 120px);
+  }
 }
 
 header .header-right ul,
@@ -875,10 +893,35 @@ header .header-right .header-menu a {
   margin: 0 2px;
   color: #999999;
   font-weight: 600;
-  padding: 10px 15px;
+  padding: 8px 12px;
   border-radius: 25px;
   display: inline-block;
   text-decoration: none;
+  font-size: 0.95em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1024px) {
+  header .header-right .header-menu a {
+    padding: 6px 10px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 768px) {
+  header .header-right .header-menu a {
+    padding: 5px 8px;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 480px) {
+  header .header-right .header-menu a {
+    padding: 4px 6px;
+    font-size: 0.7em;
+  }
 }
 
 header .header-right .header-menu a:hover {

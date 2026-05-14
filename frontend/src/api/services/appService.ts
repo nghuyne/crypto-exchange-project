@@ -106,7 +106,7 @@ export const notificationService = {
 export const userService = {
     async getProfile(token: string): Promise<IApiResponse<IUserProfile>> {
         try {
-            const response = await fetch(`${API_BASE_URL}/users/profile`, {
+            const response = await fetch(`${API_BASE_URL}/me`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -118,7 +118,19 @@ export const userService = {
                 throw new Error('Không thể lấy hồ sơ người dùng');
             }
 
-            return response.json();
+            const data = await response.json();
+            // Transform /me response to match IUserProfile interface
+            return {
+                status: data.status,
+                message: data.message,
+                data: {
+                    id: data.data?.id || 0,
+                    full_name: data.data?.full_name || '',
+                    email: data.data?.email || '',
+                    level: 1, // /me endpoint doesn't return level, default to 1
+                    created_at: data.data?.created_at || '',
+                } as IUserProfile
+            };
         } catch (error) {
             console.error('Lỗi lấy hồ sơ:', error);
             return { status: 'error', message: 'Lỗi lấy hồ sơ', data: {} as IUserProfile };
@@ -127,20 +139,9 @@ export const userService = {
 
     async updateProfile(token: string, data: Partial<IUserProfile>): Promise<IApiResponse<IUserProfile>> {
         try {
-            const response = await fetch(`${API_BASE_URL}/users/profile`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error('Cập nhật hồ sơ thất bại');
-            }
-
-            return response.json();
+            // Backend doesn't support profile updates yet, return success with current data
+            console.warn('Profile update not supported by backend yet');
+            return { status: 'error', message: 'Chức năng cập nhật hồ sơ chưa được hỗ trợ', data: {} as IUserProfile };
         } catch (error) {
             console.error('Lỗi cập nhật hồ sơ:', error);
             return { status: 'error', message: 'Lỗi cập nhật hồ sơ', data: {} as IUserProfile };

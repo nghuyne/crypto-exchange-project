@@ -34,7 +34,7 @@ export const authService = {
     },
 
     async getProfile(token: string): Promise<IApiResponse<IUser>> {
-        const response = await fetch(`${API_BASE_URL}/user/profile`, {
+        const response = await fetch(`${API_BASE_URL}/me`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
