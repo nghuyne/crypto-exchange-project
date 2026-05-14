@@ -106,13 +106,18 @@ const API = {
   orderbook: (symbol: string) => `/api/v1/market/orderbook?symbol=${symbol}`,
 };
 
-const numberFormat = new Intl.NumberFormat('vi-VN', {
+const numberFormat = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 });
 
-const currencyFormat = new Intl.NumberFormat('vi-VN', {
+const currencyFormat = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 8,
+});
+
+const priceFormat = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
 });
 
 function shortenHash(value: string): string {
@@ -121,6 +126,7 @@ function shortenHash(value: string): string {
 }
 
 function formatChange(change: number): string {
+  if (Math.abs(change) > 50) return '--';
   const sign = change > 0 ? '+' : '';
   return `${sign}${numberFormat.format(change)}%`;
 }
@@ -141,7 +147,7 @@ function formatCompact(value: number): string {
 function formatTimestamp(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString('vi-VN', {
+  return date.toLocaleString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
     day: '2-digit',
@@ -336,17 +342,10 @@ export default function DataScreen() {
 
         <div className='data-hero'>
           <div className='data-hero-copy'>
-            <div className='data-kicker'>MARKET INTELLIGENCE & SYSTEM DATA</div>
-            <h1>Toàn cảnh thị trường, dữ liệu khớp lệnh và tín hiệu AI.</h1>
-            <p>
-              Trang Data được thiết kế như một lớp quan sát tổng hợp. Nội dung hiển thị lấy trực
-              tiếp từ API backend Go, gồm market summary, danh sách cặp giao dịch, heatmap, sentiment
-              và audit chain.
-            </p>
+            <h1>Market Data & Trading Overview</h1>
+            <p>Real-time market data, order book, and AI risk assessment.</p>
           </div>
           <div className='data-hero-actions'>
-            <span className='data-badge'>API: /api/v1/data/overview</span>
-            <span className='data-badge'>API: /api/v1/blockchain/blocks</span>
             <button type='button' className='button button-purple button-large' onClick={loadData}>
               <i className='material-icons button-icon-left'>refresh</i>
               Refresh
@@ -375,7 +374,7 @@ export default function DataScreen() {
           </div>
           <div className='data-stat-card'>
             <div className='data-stat-label'>Fear & Greed</div>
-            <div className='data-stat-value'>{numberFormat.format(safeSentiment.fear_greed_index)}</div>
+            <div className='data-stat-value'>{safeSentiment.fear_greed_index === 0 ? 'N/A' : numberFormat.format(safeSentiment.fear_greed_index)}</div>
             <div className='data-stat-foot'>{safeSentiment.market_mood} sentiment</div>
           </div>
         </div>
@@ -386,9 +385,7 @@ export default function DataScreen() {
               <div className='data-card-header'>
                 <div className='data-panel-head'>
                   <div>
-                    <div className='data-panel-kicker'>Market Data</div>
                     <div className='data-panel-title'>Cryptocurrency Details</div>
-                    <div className='data-panel-subtitle'>Source: GET /api/v1/data/coins</div>
                   </div>
                   <div className='data-toolbar'>
                     <input
@@ -471,9 +468,9 @@ export default function DataScreen() {
             <div className='data-inline-grid'>
               <div className='data-card'>
                 <div className='data-card-header'>
-                  <div className='data-panel-kicker'>Top Movers</div>
-                  <div className='data-panel-title'>Gainers / Losers</div>
-                  <div className='data-panel-subtitle'>Source: GET /api/v1/data/overview</div>
+                  <div>
+                    <div className='data-panel-title'>Top Movers</div>
+                  </div>
                 </div>
                 <div className='data-card-content'>
                   <div className='data-list'>
@@ -501,9 +498,9 @@ export default function DataScreen() {
 
               <div className='data-card'>
                 <div className='data-card-header'>
-                  <div className='data-panel-kicker'>System View</div>
-                  <div className='data-panel-title'>System Snapshot</div>
-                  <div className='data-panel-subtitle'>Orders, trades, active users and audit blocks</div>
+                  <div>
+                    <div className='data-panel-title'>System Snapshot</div>
+                  </div>
                 </div>
                 <div className='data-card-content'>
                   <div className='data-snapshot-grid'>
@@ -532,9 +529,9 @@ export default function DataScreen() {
           <div className='data-side'>
             <div className='data-card'>
               <div className='data-card-header'>
-                <div className='data-panel-kicker'>AI Signal</div>
-                <div className='data-panel-title'>Market Sentiment</div>
-                <div className='data-panel-subtitle'>Source: GET /api/v1/data/sentiment</div>
+                <div>
+                  <div className='data-panel-title'>Market Sentiment</div>
+                </div>
               </div>
               <div className='data-card-content'>
                 <div className='data-sentiment-meter'>
@@ -544,7 +541,7 @@ export default function DataScreen() {
                       background: `conic-gradient(${safeSentiment.market_mood === 'GREED' ? '#10b981' : safeSentiment.market_mood === 'FEAR' ? '#ef4444' : '#f59e0b'} ${safeSentiment.fear_greed_index}%, #e2e8f0 0)`,
                     }}
                   >
-                    <span>{numberFormat.format(safeSentiment.fear_greed_index)}</span>
+                    <span>{safeSentiment.fear_greed_index === 0 ? 'N/A' : numberFormat.format(safeSentiment.fear_greed_index)}</span>
                   </div>
                   <div className='data-sentiment-copy'>
                     <strong>{safeSentiment.market_mood}</strong>
@@ -586,9 +583,9 @@ export default function DataScreen() {
 
             <div className='data-card'>
               <div className='data-card-header'>
-                <div className='data-panel-kicker'>Heatmap</div>
-                <div className='data-panel-title'>Trading Heatmap</div>
-                <div className='data-panel-subtitle'>Source: GET /api/v1/data/heatmap</div>
+                <div>
+                  <div className='data-panel-title'>Trading Heatmap</div>
+                </div>
               </div>
               <div className='data-card-content'>
                 <div className='data-list compact'>
@@ -619,9 +616,9 @@ export default function DataScreen() {
 
             <div className='data-card'>
               <div className='data-card-header'>
-                <div className='data-panel-kicker'>Blockchain</div>
-                <div className='data-panel-title'>Audit Trail</div>
-                <div className='data-panel-subtitle'>Source: GET /api/v1/blockchain/blocks</div>
+                <div>
+                  <div className='data-panel-title'>Audit Trail</div>
+                </div>
               </div>
               <div className='data-card-content'>
                 <div className='data-list compact'>
@@ -651,9 +648,9 @@ export default function DataScreen() {
               <>
                 <div className='data-card'>
                   <div className='data-card-header'>
-                    <div className='data-panel-kicker'>My Orders</div>
-                    <div className='data-panel-title'>Your Active Orders</div>
-                    <div className='data-panel-subtitle'>Auto-refresh every 5 seconds</div>
+                    <div>
+                      <div className='data-panel-title'>My Orders</div>
+                    </div>
                   </div>
                   <div className='data-card-content'>
                     {myOrders.length === 0 ? (
@@ -672,7 +669,7 @@ export default function DataScreen() {
                             <div className='data-order-grid'>
                               <div>
                                 <div className='data-order-label'>Price</div>
-                                <div className='data-order-value'>${numberFormat.format(order.price)}</div>
+                                <div className='data-order-value'>${priceFormat.format(order.price)}</div>
                               </div>
                               <div>
                                 <div className='data-order-label'>Qty</div>
@@ -692,9 +689,9 @@ export default function DataScreen() {
 
                 <div className='data-card'>
                   <div className='data-card-header'>
-                    <div className='data-panel-kicker'>Order Book</div>
-                    <div className='data-panel-title'>Market Depth</div>
-                    <div className='data-panel-subtitle'>Auto-refresh every 3 seconds</div>
+                    <div>
+                      <div className='data-panel-title'>Order Book</div>
+                    </div>
                     <select
                       className='data-symbol-select'
                       value={selectedSymbol}
@@ -715,9 +712,9 @@ export default function DataScreen() {
                         <div className='data-orderbook-rows'>
                           {orderBook.bids.slice(0, 5).map((order) => (
                             <div key={`bid-${order.id}`} className='data-orderbook-row bid'>
-                              <span className='data-ob-price'>${numberFormat.format(order.price)}</span>
+                              <span className='data-ob-price'>${priceFormat.format(order.price)}</span>
                               <span className='data-ob-qty'>{currencyFormat.format(order.quantity)}</span>
-                              <span className='data-ob-total'>${numberFormat.format(order.price * order.quantity)}</span>
+                              <span className='data-ob-total'>${priceFormat.format(order.price * order.quantity)}</span>
                             </div>
                           ))}
                         </div>
@@ -734,9 +731,9 @@ export default function DataScreen() {
                         <div className='data-orderbook-rows'>
                           {orderBook.asks.slice(0, 5).map((order) => (
                             <div key={`ask-${order.id}`} className='data-orderbook-row ask'>
-                              <span className='data-ob-price'>${numberFormat.format(order.price)}</span>
+                              <span className='data-ob-price'>${priceFormat.format(order.price)}</span>
                               <span className='data-ob-qty'>{currencyFormat.format(order.quantity)}</span>
-                              <span className='data-ob-total'>${numberFormat.format(order.price * order.quantity)}</span>
+                              <span className='data-ob-total'>${priceFormat.format(order.price * order.quantity)}</span>
                             </div>
                           ))}
                         </div>

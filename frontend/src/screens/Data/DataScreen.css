@@ -100,12 +100,11 @@
 }
 
 .data-kicker {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.5);
-  margin-bottom: 8px;
+  display: none;
+}
+
+.data-panel-kicker {
+  display: none;
 }
 
 .data-hero-actions {
@@ -538,15 +537,15 @@
 }
 
 .data-panel-title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #ffffff;
-  margin-bottom: 4px;
+  margin-bottom: 0;
+  letter-spacing: -0.3px;
 }
 
 .data-panel-subtitle {
-  font-size: 0.85rem;
-  color: rgba(226, 232, 240, 0.6);
+  display: none;
 }
 
 /* === Alerts === */
