@@ -1,0 +1,360 @@
+.coin-holdings-grid {
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.7) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: fade-slide-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.coin-holdings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 32px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.85) 100%);
+}
+
+.coin-holdings-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.coin-count {
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.6);
+  background: rgba(148, 163, 184, 0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+}
+
+.coin-holdings-table-wrapper {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.coin-holdings-table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.coin-holdings-table-wrapper::-webkit-scrollbar-track {
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.coin-holdings-table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 3px;
+}
+
+.coin-holdings-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.3);
+}
+
+.coin-holdings-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e2e8f0;
+}
+
+.coin-holdings-table thead {
+  background: rgba(15, 23, 42, 0.4);
+  border-bottom: 2px solid rgba(148, 163, 184, 0.15);
+}
+
+.coin-holdings-table th {
+  padding: 16px 24px;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.coin-holdings-table th:nth-child(2),
+.coin-holdings-table th:nth-child(3),
+.coin-holdings-table th:nth-child(4),
+.coin-holdings-table th:nth-child(5) {
+  text-align: right;
+}
+
+.coin-holdings-table tbody tr {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: row-fade-in 0.5s ease-out both;
+}
+
+@keyframes row-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.coin-holdings-table tbody tr:hover {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.coin-holdings-table td {
+  padding: 16px 24px;
+  font-size: 0.95rem;
+}
+
+.coin-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.coin-icon-container {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coin-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coin-icon-placeholder {
+  font-weight: 700;
+  color: #60a5fa;
+  font-size: 1.1rem;
+}
+
+.coin-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.coin-name {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.coin-symbol {
+  font-size: 0.8rem;
+  color: rgba(226, 232, 240, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coin-amount {
+  text-align: right;
+  color: #cbd5e1;
+}
+
+.coin-price {
+  text-align: right;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.coin-total {
+  text-align: right;
+}
+
+.total-value {
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.coin-change {
+  text-align: right;
+}
+
+.coin-change.positive .change-badge {
+  color: #10b981;
+}
+
+.coin-change.negative .change-badge {
+  color: #ef4444;
+}
+
+.change-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.change-badge i {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.skeleton-row {
+  animation: none !important;
+}
+
+.skeleton-cell {
+  height: 20px;
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 6px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.coin-error,
+.coin-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  text-align: center;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.coin-error i,
+.coin-empty i {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+  color: rgba(148, 163, 184, 0.4);
+}
+
+.coin-error p,
+.coin-empty p {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #cbd5e1;
+}
+
+.coin-error span,
+.coin-empty span {
+  font-size: 0.9rem;
+  color: rgba(226, 232, 240, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .coin-holdings-header {
+    padding: 20px 24px;
+  }
+
+  .coin-holdings-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .coin-holdings-table th {
+    padding: 12px 16px;
+    font-size: 0.75rem;
+  }
+
+  .coin-holdings-table td {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+  }
+
+  .coin-icon-container {
+    width: 32px;
+    height: 32px;
+  }
+
+  .coin-error,
+  .coin-empty {
+    padding: 40px 24px;
+  }
+
+  .coin-error i,
+  .coin-empty i {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .coin-holdings-header {
+    padding: 16px 16px;
+  }
+
+  .coin-holdings-header h2 {
+    font-size: 1rem;
+  }
+
+  .coin-count {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
+
+  .coin-holdings-table {
+    font-size: 0.8rem;
+  }
+
+  .coin-holdings-table th {
+    padding: 10px 8px;
+    font-size: 0.7rem;
+  }
+
+  .coin-holdings-table td {
+    padding: 10px 8px;
+    font-size: 0.75rem;
+  }
+
+  .coin-cell-name {
+    gap: 8px;
+  }
+
+  .coin-icon-container {
+    width: 28px;
+    height: 28px;
+  }
+
+  .coin-name {
+    font-size: 0.9rem;
+  }
+
+  .coin-symbol {
+    font-size: 0.65rem;
+  }
+
+  .change-badge i {
+    font-size: 0.9rem;
+  }
+}

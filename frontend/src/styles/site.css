@@ -1,4 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+/* Dark Mode & Glassmorphism Variables */
+:root {
+  --color-dark-bg: #0f172a;
+  --color-dark-bg-secondary: #1e293b;
+  --color-dark-card: rgba(15, 23, 42, 0.6);
+  --color-glass-border: rgba(148, 163, 184, 0.15);
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: rgba(226, 232, 240, 0.7);
+  --color-accent-blue: #60a5fa;
+  --color-accent-purple: #a78bfa;
+  --color-accent-pink: #f472b6;
+  --color-accent-green: #10b981;
+  --color-accent-red: #ef4444;
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-inset: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 * {
   outline: none;
@@ -148,7 +166,8 @@ button,
   vertical-align: middle;
   -webkit-appearance: none;
   transition: all 0.5s ease;
-  background-color: #ffffff;
+  background: rgba(30, 41, 59, 0.7);
+  color: var(--color-text-primary);
 }
 
 textarea {
@@ -198,7 +217,9 @@ a {
 }
 
 body {
-  background-color: #fbfbfb;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background-attachment: fixed;
+  color: #e2e8f0;
 }
 
 /* Common */
@@ -341,7 +362,9 @@ body {
 /* Site */
 
 .site {
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background-attachment: fixed;
+  color: var(--color-text-primary);
 }
 
 i,
@@ -357,8 +380,12 @@ a i {
   position: relative;
   border-radius: 20px;
   margin-bottom: 20px;
-  border: 1px solid #ebebeb;
-  background-color: #ffffff;
+  border: 1px solid var(--color-glass-border);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.6) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-soft), var(--shadow-inset);
+  color: var(--color-text-primary);
 }
 
 .box .box-content-height {
@@ -382,6 +409,7 @@ a i {
   font-size: 1.1em;
   font-weight: 600;
   overflow: hidden;
+  color: var(--color-text-primary);
 }
 
 .box .box-title a,

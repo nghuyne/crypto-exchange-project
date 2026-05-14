@@ -1,85 +1,131 @@
-// components
-import Box from '../../components/Common/Box';
+import { useState, useEffect } from 'react';
 import SiteLayout from '../../layouts/SiteLayout';
 import Header from '../../components/Header/Header';
-import BankProcess from '../../components/Widgets/BankProcess/BankProcess';
-import RecentActivity from '../../components/Widgets/RecentActivity/RecentActivity';
+import BalanceCard from '../../components/Widgets/BalanceCard/BalanceCard';
+import CoinHoldingsGrid from '../../components/Widgets/CoinHoldingsGrid/CoinHoldingsGrid';
+import { useUserBalance } from '../../hooks/useUserBalance';
 
-const DashboardScreen: React.FC = () => (
-  <SiteLayout>
-    <Header icon='sort' title='Deposit / Withdraw' />
-    <div className='flex flex-destroy flex-space-between'>
-      <div className='flex-1 box-right-padding'>
-        <BankProcess />
-      </div>
-      <div className='flex-1'>
-        <Box>
-          <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-            <div className='flex flex-center flex-space-between'>
-              <p>Important information</p>
+import './DashboardScreen.css';
+
+const DashboardScreen: React.FC = () => {
+  const { balance, isLoading, error } = useUserBalance({
+    refreshInterval: 30000,
+  });
+
+  const [showMockData, setShowMockData] = useState(false);
+
+  const mockBalance = {
+    fiatBalance: 15000,
+    currency: 'USD',
+    totalPortfolioValue: 45000,
+    coins: [
+      {
+        id: '1',
+        symbol: 'BTC',
+        name: 'Bitcoin',
+        amount: 0.5,
+        currentPrice: 42000,
+        totalValue: 21000,
+        icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Bitcoin-BTC-icon.png',
+        change24h: 3.5,
+      },
+      {
+        id: '2',
+        symbol: 'ETH',
+        name: 'Ethereum',
+        amount: 5,
+        currentPrice: 2200,
+        totalValue: 11000,
+        icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Ethereum-ETH-icon.png',
+        change24h: 2.8,
+      },
+      {
+        id: '3',
+        symbol: 'USDT',
+        name: 'Tether',
+        amount: 6000,
+        currentPrice: 1,
+        totalValue: 6000,
+        icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Tether-USDT-icon.png',
+        change24h: 0.1,
+      },
+      {
+        id: '4',
+        symbol: 'SOL',
+        name: 'Solana',
+        amount: 25,
+        currentPrice: 148,
+        totalValue: 3700,
+        icon: 'https://cryptologos.cc/logos/solana-sol-logo.png',
+        change24h: -1.2,
+      },
+      {
+        id: '5',
+        symbol: 'XRP',
+        name: 'Ripple',
+        amount: 1000,
+        currentPrice: 2.5,
+        totalValue: 2500,
+        icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Ripple-XRP-icon.png',
+        change24h: 5.4,
+      },
+    ],
+  };
+
+  const displayBalance = showMockData ? mockBalance : balance;
+
+  return (
+    <SiteLayout>
+      <Header icon='account_balance' title='Dashboard' />
+
+      <div className='dashboard-container'>
+        <div className='dashboard-balance-section'>
+          {displayBalance && (
+            <BalanceCard
+              fiatBalance={displayBalance.fiatBalance}
+              currency={displayBalance.currency}
+              totalPortfolioValue={displayBalance.totalPortfolioValue}
+              isLoading={isLoading}
+            />
+          )}
+        </div>
+
+        {error && !showMockData && (
+          <div className='dashboard-error-banner'>
+            <i className='material-icons'>warning</i>
+            <div>
+              <p>Unable to load balance data</p>
+              <span>{error}</span>
             </div>
+            <button
+              className='dashboard-error-action'
+              onClick={() => setShowMockData(true)}
+            >
+              Use Demo Data
+            </button>
           </div>
-          <div className='box-content box-text box-horizontal-padding box-content-height-nobutton'>
-            <p>
-              &bull; For EFT transfers, the recipient/beneficiary section must include "Crypto
-              Exchange."
-            </p>
-            <p>
-              &bull; You can make Transfer/EFT transactions from all your individual, non-term,
-              Turkish Lira accounts opened in your name to the listed accounts. Transfers from
-              accounts belonging to other individuals will not be accepted.
-            </p>
-            <p>
-              &bull; Transfers made using ATMs (with or without a card) will not be accepted as it
-              is not possible to verify the sender's information.
-            </p>
-            <p>
-              &bull; The amount you send will be automatically reflected in your account after
-              checks, and no additional notification is required.
-            </p>
-            <p>
-              &bull; Since you have completed your identity verification, you do not need to enter a
-              fixed deposit code in the description section.
-            </p>
+        )}
+
+        <div className='dashboard-holdings-section'>
+          {displayBalance && (
+            <CoinHoldingsGrid
+              coins={displayBalance.coins}
+              isLoading={isLoading}
+              error={error && !showMockData ? error : null}
+            />
+          )}
+        </div>
+
+        {showMockData && (
+          <div className='dashboard-demo-notice'>
+            <i className='material-icons'>info</i>
+            <span>Displaying demo data. Connect your wallet to see real holdings.</span>
+            <button onClick={() => setShowMockData(false)}>Dismiss</button>
           </div>
-        </Box>
+        )}
       </div>
-    </div>
-    <div className='flex flex-destroy flex-space-between'>
-      <div className='flex-1 box-right-padding'>
-        <RecentActivity />
-      </div>
-      <div className='flex-1'>
-        <Box>
-          <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
-            <div className='flex flex-center flex-space-between'>
-              <p>Important information</p>
-            </div>
-          </div>
-          <div className='box-content box-text box-horizontal-padding box-content-height-nobutton'>
-            <p>
-              &bull; You can make withdrawals from all the bank accounts opened in your name
-              (individual, non-term, TL). Transfers to another person will not be processed.
-            </p>
-            <p>&bull; The minimum withdrawal amount is 10 TL.</p>
-            <p>&bull; A processing fee of 3 TL will be charged for withdrawal transactions.</p>
-            <p>
-              &bull; When you issue a withdrawal instruction, the amount will be deducted from your
-              available balance.
-            </p>
-            <p>
-              &bull; You can cancel any instructions that have not been processed yet. In this case,
-              the instruction amount will be returned to your available balance.
-            </p>
-            <p>
-              &bull; Withdrawal instructions given outside of bank working hours will be processed
-              once the banks begin their working hours.
-            </p>
-          </div>
-        </Box>
-      </div>
-    </div>
-  </SiteLayout>
-);
+    </SiteLayout>
+  );
+};
 
 export default DashboardScreen;
