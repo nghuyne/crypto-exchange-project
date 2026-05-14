@@ -85,8 +85,10 @@ const HeaderRight: React.FC = () => {
                 border: 'none',
                 cursor: 'pointer',
                 color: 'inherit',
-                fontSize: 'inherit',
-                padding: '0 8px',
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <i className='material-icons'>{theme === 'dark' ? 'light_mode' : 'dark_mode'}</i>
