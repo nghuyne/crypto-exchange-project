@@ -54,8 +54,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           if (response.ok) {
             const data = await response.json();
-            // Thêm role từ localStorage nếu có
-            const userData = storedRole ? { ...data.data, role: storedRole } : data.data;
+            // Thêm role từ localStorage nếu có, hoặc từ response
+            const userData = { ...data.data, role: storedRole || data.data.role?.toUpperCase() };
             setUser(userData);
             setIsAuthenticated(true);
           } else {
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Lưu token vào localStorage và state
       const newToken = data.data.token;
-      const userRole = data.data.role;
+      const userRole = data.data.role?.toUpperCase();
       console.log('[AuthContext] token received, calling /api/v1/me');
       localStorage.setItem('token', newToken);
       localStorage.setItem('role', userRole);
@@ -120,7 +120,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const meData = await meResponse.json();
         console.log('[AuthContext] user data:', meData.data);
         // Thêm role vào user data nếu có từ login response
-        const userData = { ...meData.data, role: userRole };
+        const userData = { ...meData.data, role: meData.data.role?.toUpperCase() };
         setUser(userData);
         setIsAuthenticated(true);
       }

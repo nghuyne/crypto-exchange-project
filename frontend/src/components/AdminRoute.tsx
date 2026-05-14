@@ -1,20 +1,21 @@
-import { useContext } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 
 interface AdminRouteProps {
   children: React.ReactNode;
 }
 
 const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
-  const authContext = useContext(AuthContext);
+  const { user, isLoading } = useAuth();
+  const isAdmin = user?.role?.toUpperCase() === 'ADMIN';
 
-  if (!authContext?.token) {
-    return <Navigate to='/' replace />;
+  if (isLoading) {
+    return <div style={{ padding: '20px', color: '#e2e8f0' }}>Loading...</div>;
   }
 
-  // TODO: Add role checking - verify user is admin
-  // For now, just check authentication
+  if (!user || !isAdmin) {
+    return <Navigate to='/market' replace />;
+  }
 
   return <>{children}</>;
 };

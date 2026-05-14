@@ -7,7 +7,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const authContext = useContext(AuthContext);
-  const isAdmin = authContext?.user?.role === 'ADMIN';
+  const isAdmin = authContext?.user?.role?.toUpperCase() === 'ADMIN' || localStorage.getItem('role')?.toUpperCase() === 'ADMIN';
 
   return (
   <nav className='navbar-inner no-select'>
