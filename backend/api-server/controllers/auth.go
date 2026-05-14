@@ -107,6 +107,7 @@ func Login(c *gin.Context) {
 		"message": "Dang nhap thanh cong!",
 		"data": map[string]interface{}{
 			"token": tokenString,
+			"role":  user.Role,
 		},
 	})
 }

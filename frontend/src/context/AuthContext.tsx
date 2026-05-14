@@ -5,6 +5,7 @@ export interface User {
   id: number;
   email: string;
   full_name: string;
+  role?: string;
   created_at: string;
 }
 
@@ -36,6 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const storedToken = localStorage.getItem('token');
+      const storedRole = localStorage.getItem('role');
 
       if (storedToken) {
         setToken(storedToken);
@@ -52,17 +54,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           if (response.ok) {
             const data = await response.json();
-            setUser(data.data);
+            // Thêm role từ localStorage nếu có
+            const userData = storedRole ? { ...data.data, role: storedRole } : data.data;
+            setUser(userData);
             setIsAuthenticated(true);
           } else {
             // Token không hợp lệ, xóa nó
             localStorage.removeItem('token');
+            localStorage.removeItem('role');
             setToken(null);
             setIsAuthenticated(false);
           }
         } catch (error) {
           console.error('Lỗi kiểm tra token:', error);
           localStorage.removeItem('token');
+          localStorage.removeItem('role');
           setToken(null);
           setIsAuthenticated(false);
         }
@@ -94,8 +100,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Lưu token vào localStorage và state
       const newToken = data.data.token;
+      const userRole = data.data.role;
       console.log('[AuthContext] token received, calling /api/v1/me');
       localStorage.setItem('token', newToken);
+      localStorage.setItem('role', userRole);
       setToken(newToken);
 
       // Gọi /api/v1/me để lấy user info
@@ -111,7 +119,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (meResponse.ok) {
         const meData = await meResponse.json();
         console.log('[AuthContext] user data:', meData.data);
-        setUser(meData.data);
+        // Thêm role vào user data nếu có từ login response
+        const userData = { ...meData.data, role: userRole };
+        setUser(userData);
         setIsAuthenticated(true);
       }
     } catch (error) {
@@ -145,6 +155,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Hàm logout
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     setUser(null);
     setToken(null);
     setIsAuthenticated(false);
