@@ -17,6 +17,16 @@ const (
 	RiskLevel_HIGH   RiskLevel = "HIGH"
 )
 
+// Ngưỡng điểm rủi ro — ánh xạ tới switch-case trong EvaluateRisk()
+// Tại sao 75 cho HIGH? Vì một rule đơn lẻ cao nhất chỉ cho 60 điểm (Rule_Extreme_Amount).
+// Cần ít nhất 2 rule bị vi phạm đồng thời mới block → giảm false positive.
+// Tại sao 35 cho MEDIUM? Một rule lớn (vd: Velocity +30) là đủ để cảnh báo.
+// Mapping: score < 35 → LOW, 35 ≤ score < 75 → MEDIUM (warn), score ≥ 75 → HIGH (block).
+const (
+	RiskThresholdHigh   = 75 // >= 75: block order (RiskLevel_HIGH)
+	RiskThresholdMedium = 35 // >= 35: warn + audit (RiskLevel_MEDIUM)
+)
+
 // Transaction dai dien cho mot giao dich (anh xa tu Order cua san)
 type Transaction struct {
 	TxID      string

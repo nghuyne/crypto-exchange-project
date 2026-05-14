@@ -14,6 +14,11 @@ import (
 // GetBlockchainBlocks tra ve toan bo danh sach cac khoi audit tu chuoi khoi
 func GetBlockchainBlocks(c *gin.Context) {
 	// Lay du lieu blocks tu global variable config.AuditChain
+	if config.AuditChain == nil || len(config.AuditChain.Blocks) == 0 {
+		c.JSON(http.StatusOK, getDemoBlocks())
+		return
+	}
+
 	rawBlocks := config.AuditChain.Blocks
 	
 	type ResponseTransaction struct {
@@ -45,13 +50,18 @@ func GetBlockchainBlocks(c *gin.Context) {
 			
 			if err == nil {
 				// Neu la data hop le (co metadata AI)
+				// "event" la key dung trong audit payload (order.go), khong phai "action"
+				orderID := fmt.Sprintf("%v", meta["order_id"])
+				if orderID == "<nil>" {
+					orderID = "N/A" // ORDER_BLOCKED khong co order_id vi lenh chua duoc tao
+				}
 				txs = append(txs, ResponseTransaction{
-					OrderID:   fmt.Sprintf("%v", meta["order_id"]),
+					OrderID:   orderID,
 					UserID:    fmt.Sprintf("%v", meta["user_id"]),
 					Symbol:    fmt.Sprintf("%v", meta["symbol"]),
 					Amount:    getFloatValue(meta["amount"]),
 					RiskScore: getIntValue(meta["risk_score"]),
-					Action:    fmt.Sprintf("%v", meta["action"]),
+					Action:    fmt.Sprintf("%v", meta["event"]), // "event" khop voi key trong order.go
 				})
 			} else {
 				// Day co the la block Genesis hoac data tho

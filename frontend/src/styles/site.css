@@ -1115,23 +1115,85 @@ header .header-right .header-user .signout i {
 /* Trading history widget */
 
 .trade-history-row {
-  padding: 0 20px 0 20px;
+  padding: 0;
+  overflow-x: auto;
 }
 
 .trade-history-row table {
   width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
 }
 
 .trade-history-row table th {
-  font-size: 0.8em;
-  color: #333333;
-  font-weight: 400;
-  padding-bottom: 20px;
+  font-size: 0.75em;
+  color: #666666;
+  font-weight: 600;
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 2px solid #f0f0f0;
+  background-color: #fafafa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.trade-history-row table th.center {
+  text-align: center;
+}
+
+.trade-history-row table th.right {
+  text-align: right;
 }
 
 .trade-history-row table td {
-  font-size: 0.8em;
-  padding-bottom: 20px;
+  padding: 12px 15px;
+  font-size: 0.85em;
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+}
+
+.trade-history-row table td.center {
+  text-align: center;
+}
+
+.trade-history-row table td.right {
+  text-align: right;
+}
+
+.trade-history-row table tr {
+  transition: background-color 0.2s ease;
+}
+
+.trade-history-row table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.trade-history-row table tbody tr.green {
+  background-color: rgba(0, 151, 45, 0.05);
+  border-left: 3px solid #00972d;
+}
+
+.trade-history-row table tbody tr.green:hover {
+  background-color: rgba(0, 151, 45, 0.08);
+}
+
+.trade-history-row table tbody tr.green td {
+  color: #00972d;
+  font-weight: 500;
+}
+
+.trade-history-row table tbody tr.red {
+  background-color: rgba(218, 0, 0, 0.05);
+  border-left: 3px solid #da0000;
+}
+
+.trade-history-row table tbody tr.red:hover {
+  background-color: rgba(218, 0, 0, 0.08);
+}
+
+.trade-history-row table tbody tr.red td {
+  color: #da0000;
+  font-weight: 500;
 }
 
 /* Coin horizontal widget */

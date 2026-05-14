@@ -1,7 +1,19 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useAuthLogout } from '../../hooks/useAuthLogout';
+import { useAuth } from '../../hooks/useAuth';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
+  const { logout } = useAuthLogout();
+  const { user } = useAuth();
+
+  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
+  const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    logout();
+  };
 
   return (
     <div className='header-right no-select'>
@@ -21,6 +33,14 @@ const HeaderRight: React.FC = () => {
               className={location.pathname.toLowerCase().includes('/data') ? 'active' : 'passive'}
             >
               Data
+            </Link>
+          </li>
+          <li>
+            <Link
+              to='/blockchain-explorer'
+              className={location.pathname.toLowerCase().includes('/blockchain-explorer') ? 'active' : 'passive'}
+            >
+              Blockchain Explorer
             </Link>
           </li>
           <li>
@@ -56,8 +76,8 @@ const HeaderRight: React.FC = () => {
         <ul className='header-user nowrap'>
           <li>
             <Link to='/members'>
-              <span>Cenk SARI</span>
-              <span>@cenksari</span>
+              <span>{displayName}</span>
+              <span>{displayHandle}</span>
             </Link>
           </li>
           <li>
@@ -71,9 +91,9 @@ const HeaderRight: React.FC = () => {
             </Link>
           </li>
           <li className='responsive-hide'>
-            <Link to='/' className='signout'>
+            <button onClick={handleLogout} className='signout' style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
               <i className='material-icons'>power_settings_new</i>
-            </Link>
+            </button>
           </li>
         </ul>
       </div>

@@ -107,3 +107,26 @@ func Login(c *gin.Context) {
 		},
 	})
 }
+
+// API Lay Thong Tin User Hien Tai
+func GetMe(c *gin.Context) {
+	// AuthRequired() middleware da extract user_id tu JWT va luu vao context
+	userID := c.MustGet("user_id").(uint)
+
+	var user models.User
+	if result := config.DB.First(&user, userID); result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Khong tim thay user!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": map[string]interface{}{
+			"id":        user.ID,
+			"email":     user.Email,
+			"full_name": user.FullName,
+			"created_at": user.CreatedAt,
+		},
+	})
+}
+

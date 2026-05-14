@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/go-redis/redis/v8" // Chú ý: phải gõ lệnh: go get github.com/go-redis/redis/v8
 	"gorm.io/driver/mysql"         // Chú ý: phải gõ lệnh: go get gorm.io/driver/mysql
@@ -18,31 +19,59 @@ var (
 )
 
 func ConnectDB() {
-	// Móc vào thẳng con Docker ở cổng 3310. Database tên là cryptoex, pass là root
-	dsn := "root:root@tcp(127.0.0.1:3310)/cryptoex?charset=utf8mb4&parseTime=True&loc=Local"
+	mysqlHost := getEnv("MYSQL_HOST", "127.0.0.1")
+	mysqlPort := getEnv("MYSQL_PORT", "3306")
+	mysqlUser := getEnv("MYSQL_USER", "root")
+	mysqlPassword := getEnv("MYSQL_PASSWORD", "root")
+	mysqlDatabase := getEnv("MYSQL_DB", "cryptoex")
+	rootDSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/?charset=utf8mb4&parseTime=True&loc=Local", mysqlUser, mysqlPassword, mysqlHost, mysqlPort)
+	targetDSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", mysqlUser, mysqlPassword, mysqlHost, mysqlPort, mysqlDatabase)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	bootstrapDB, err := gorm.Open(mysql.Open(rootDSN), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
-		log.Fatalf(" Lỗi kết nối MySQL (Cổng 3310): %v", err)
+		log.Fatalf(" Lỗi kết nối MySQL (%s:%s): %v", mysqlHost, mysqlPort, err)
+	}
+
+	if err := bootstrapDB.Exec("CREATE DATABASE IF NOT EXISTS `" + mysqlDatabase + "` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci").Error; err != nil {
+		log.Fatalf(" Không thể tạo MySQL database %s: %v", mysqlDatabase, err)
+	}
+
+	db, err := gorm.Open(mysql.Open(targetDSN), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
+	if err != nil {
+		log.Fatalf(" Lỗi kết nối MySQL (%s:%s): %v", mysqlHost, mysqlPort, err)
 	}
 
 	DB = db
-	fmt.Println(" Đã kết nối thành công tới MySQL (Docker Cổng 3310)!")
+	fmt.Printf(" Đã kết nối thành công tới MySQL (%s:%s)!\n", mysqlHost, mysqlPort)
 }
 
 func ConnectRedis() {
-	// Móc vào con Redis trong Docker ở cổng 6379
+	redisHost := getEnv("REDIS_HOST", "127.0.0.1")
+	redisPort := getEnv("REDIS_PORT", "6379")
+	redisPassword := os.Getenv("REDIS_PASSWORD")
+
 	RedisClient = redis.NewClient(&redis.Options{
-		Addr:     "127.0.0.1:6379",
-		Password: "", // Docker không pass
+		Addr:     redisHost + ":" + redisPort,
+		Password: redisPassword,
 		DB:       0,
 	})
 
 	if _, err := RedisClient.Ping(Ctx).Result(); err != nil {
-		log.Fatalf(" Lỗi kết nối tới Redis: %v", err)
+		log.Printf(" Cảnh báo: không kết nối được Redis (%s:%s): %v", redisHost, redisPort, err)
+		RedisClient = nil
+		return
 	}
 
-	fmt.Println(" Đã kết nối TCP tới Redis Docker!")
+	fmt.Printf(" Đã kết nối thành công tới Redis (%s:%s)!\n", redisHost, redisPort)
+}
+
+func getEnv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
 }

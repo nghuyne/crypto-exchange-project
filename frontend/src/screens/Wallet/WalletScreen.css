@@ -1,0 +1,423 @@
+.wallet-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0;
+}
+
+/* ===== HEADER SECTION ===== */
+.wallet-header-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.wallet-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.balance-display {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.balance-main {
+  font-size: 32px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.balance-vnd {
+  font-size: 16px;
+  color: #888;
+  text-decoration: underline dotted;
+}
+
+.risk-score-display {
+  padding: 20px 0;
+}
+
+.risk-bar-container {
+  width: 100%;
+  height: 30px;
+  background: #1e1e1e;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  border: 1px solid #333;
+}
+
+.risk-bar {
+  height: 100%;
+  background: linear-gradient(to right, #e74c3c, #f39c12, #27ae60);
+  transition: width 0.3s ease;
+  border-radius: 15px;
+}
+
+.risk-label {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.wallet-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.button-action {
+  padding: 12px 16px !important;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.button-icon-left {
+  font-size: 18px;
+}
+
+/* ===== ASSET TABLE ===== */
+.asset-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.asset-table thead {
+  background: #1a1a1a;
+  border-bottom: 2px solid #333;
+}
+
+.asset-table th {
+  padding: 15px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.asset-table th.left,
+.asset-table th.right {
+  text-align: inherit;
+}
+
+.asset-table tbody tr {
+  border-bottom: 1px solid #222;
+  transition: background 0.2s ease;
+}
+
+.asset-table tbody tr:hover {
+  background: #0a0a0a;
+}
+
+.asset-table td {
+  padding: 15px;
+  text-align: center;
+  font-size: 14px;
+  color: #ddd;
+}
+
+.asset-table td.left,
+.asset-table td.right {
+  text-align: inherit;
+}
+
+.asset-cell {
+  text-align: left;
+}
+
+.asset-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.asset-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.asset-name {
+  text-align: left;
+}
+
+.symbol {
+  font-weight: bold;
+  color: #fff;
+  font-size: 14px;
+}
+
+.full-name {
+  font-size: 12px;
+  color: #666;
+}
+
+.asset-unit,
+.usdt {
+  font-size: 12px;
+  color: #666;
+  margin-left: 4px;
+}
+
+.available {
+  color: #27ae60;
+}
+
+.button-small {
+  padding: 6px 12px !important;
+  font-size: 12px;
+}
+
+/* ===== FOOTER SECTION ===== */
+.tab-navigation {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0;
+  margin: -15px -15px 0 -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  color: #666;
+  padding: 10px 0;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  color: #ddd;
+}
+
+.tab-button.active {
+  color: #fff;
+  border-bottom-color: #7c3aed;
+}
+
+.tab-button i {
+  font-size: 18px;
+}
+
+.tab-content {
+  padding: 10px 0;
+}
+
+/* ===== TRANSACTION HISTORY TABLE ===== */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.transaction-table thead {
+  background: #1a1a1a;
+  border-bottom: 2px solid #333;
+}
+
+.transaction-table th {
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.transaction-table th.left {
+  text-align: left;
+}
+
+.transaction-table tbody tr {
+  border-bottom: 1px solid #222;
+  transition: background 0.2s ease;
+}
+
+.transaction-table tbody tr:hover {
+  background: #0a0a0a;
+}
+
+.transaction-table td {
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #ddd;
+}
+
+.transaction-table td.left {
+  text-align: left;
+}
+
+.transaction-row .badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.badge-buy {
+  background: rgba(39, 174, 96, 0.2);
+  color: #27ae60;
+}
+
+.badge-sell {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.tx-link {
+  background: none;
+  border: none;
+  color: #7c3aed;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.tx-link:hover {
+  color: #9f7aea;
+}
+
+.tx-link i {
+  font-size: 14px;
+}
+
+.counterparty {
+  font-size: 12px;
+  color: #666;
+  font-family: monospace;
+}
+
+/* ===== AI INSIGHTS ===== */
+.insights-content {
+  padding: 15px 0;
+}
+
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.insight-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.insight-card:hover {
+  background: #111;
+  border-color: #7c3aed;
+}
+
+.insight-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #7c3aed;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.insight-icon i {
+  font-size: 20px;
+}
+
+.insight-text {
+  flex: 1;
+  font-size: 14px;
+  color: #ddd;
+  line-height: 1.5;
+}
+
+.insight-action {
+  flex-shrink: 0;
+  color: #7c3aed;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.insight-card:hover .insight-action {
+  opacity: 1;
+}
+
+.insight-action i {
+  font-size: 18px;
+}
+
+.loading-text {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  font-size: 14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .wallet-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wallet-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .asset-table,
+  .transaction-table {
+    font-size: 12px;
+  }
+
+  .asset-table th,
+  .asset-table td,
+  .transaction-table th,
+  .transaction-table td {
+    padding: 10px;
+  }
+
+  .balance-main {
+    font-size: 24px;
+  }
+
+  .tab-navigation {
+    gap: 10px;
+  }
+
+  .tab-button {
+    font-size: 12px;
+  }
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../../hooks/useAuth';
 
 // components
 import Box from '../../Common/Box';
@@ -41,6 +42,9 @@ const BankProcess: React.FC = () => {
   const [tab, setTab] = useState<number>(0);
   const [bankDetails, setBankDetails] = useState<IBankDetails[]>([]);
   const [selectedBank, setSelectedBank] = useState<IBankDetails | null>(null);
+  const [isClaimingFaucet, setIsClaimingFaucet] = useState(false);
+  const [faucetMessage, setFaucetMessage] = useState<string | null>(null);
+  const { token, isAuthenticated } = useAuth();
 
   useEffect(() => {
     setBankDetails(dataArray);
@@ -64,6 +68,48 @@ const BankProcess: React.FC = () => {
 
     if (findBank) {
       setSelectedBank(findBank);
+    }
+  };
+
+  const handleClaimFaucet = async (): Promise<void> => {
+    if (!isAuthenticated || !token) {
+      setFaucetMessage('Please sign in first to claim demo funds.');
+      return;
+    }
+
+    setIsClaimingFaucet(true);
+    setFaucetMessage(null);
+
+    try {
+      const response = await fetch('/api/v1/faucet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const rawBody = await response.text();
+      let data: any = null;
+
+      if (rawBody.trim()) {
+        try {
+          data = JSON.parse(rawBody);
+        } catch {
+          throw new Error(rawBody);
+        }
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || `HTTP ${response.status}`);
+      }
+
+      setFaucetMessage('Demo funds granted. Open My Assets to see the updated balance.');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to claim faucet';
+      setFaucetMessage(message);
+    } finally {
+      setIsClaimingFaucet(false);
     }
   };
 
@@ -135,6 +181,25 @@ const BankProcess: React.FC = () => {
               </>
             )}
           </div>
+
+          <div className='box-text box-horizontal-padding center' style={{ marginTop: '16px' }}>
+            <p>
+              <strong>Demo Faucet</strong>
+            </p>
+            <p>
+              Get starter funds instantly: 10,000 USDT, 10 BTC, and 100 ETH.
+            </p>
+            {faucetMessage && <p>{faucetMessage}</p>}
+          </div>
+
+          <button
+            type='button'
+            className='button button-purple button-medium button-block'
+            onClick={handleClaimFaucet}
+            disabled={isClaimingFaucet}
+          >
+            {isClaimingFaucet ? 'Claiming...' : 'Claim Demo Faucet'}
+          </button>
         </div>
       )}
 

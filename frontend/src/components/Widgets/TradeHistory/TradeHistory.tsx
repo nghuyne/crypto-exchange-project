@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 // hooks
 import useClickOutside from '../../../hooks/useClickOutside';
@@ -7,103 +7,53 @@ import useClickOutside from '../../../hooks/useClickOutside';
 import Box from '../../Common/Box';
 import TradeHistoryRow from './TradeHistoryRow';
 
-// interfaces
 interface IHistory {
   id: number;
-  type: number;
-  time: string;
-  weight: number;
-  amount: string;
-  currency: string;
+  price: number;
+  quantity: number;
+  taker_side: string;
+  maker_user_masked: string;
+  taker_user_masked: string;
+  created_at: string;
 }
-
-// variables
-const dataArray: IHistory[] = [
-  {
-    id: 1,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '06:22:15',
-    type: 1,
-  },
-  {
-    id: 2,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '07:30:30',
-    type: 1,
-  },
-  {
-    id: 3,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '09:15:42',
-    type: 2,
-  },
-  {
-    id: 4,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '11:12:50',
-    type: 2,
-  },
-  {
-    id: 5,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '13:30:01',
-    type: 1,
-  },
-  {
-    id: 6,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '14:20:36',
-    type: 1,
-  },
-  {
-    id: 7,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '17:45:58',
-    type: 1,
-  },
-  {
-    id: 8,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '20:05:54',
-    type: 1,
-  },
-  {
-    id: 9,
-    amount: '146,70',
-    currency: 'TRY',
-    weight: 10,
-    time: '22:30:45',
-    type: 2,
-  },
-];
 
 const TradeHistory: React.FC = () => {
   const ref = useRef<any>(null);
 
   const [data, setData] = useState<IHistory[]>([]);
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useClickOutside(ref, () => setMenuOpened(false));
 
-  useEffect(() => {
-    setData(dataArray);
+  const fetchTrades = useCallback(async () => {
+    try {
+      const res = await fetch('/api/v1/market/trades?symbol=btc_usdt');
+      if (!res.ok) return;
+      const result = await res.json();
+      const items = Array.isArray(result.data) ? result.data : [];
+
+      setData(
+        items.map((item: any) => ({
+          id: Number(item.id ?? 0),
+          price: Number(item.price ?? 0),
+          quantity: Number(item.quantity ?? 0),
+          taker_side: String(item.taker_side ?? 'BUY'),
+          maker_user_masked: String(item.maker_user_masked ?? 'U***--'),
+          taker_user_masked: String(item.taker_user_masked ?? 'U***--'),
+          created_at: String(item.created_at ?? new Date().toISOString()),
+        }))
+      );
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchTrades();
+    const interval = setInterval(fetchTrades, 5000);
+    return () => clearInterval(interval);
+  }, [fetchTrades]);
 
   /**
    * Toggles the state of the menu to open or close.
@@ -114,7 +64,7 @@ const TradeHistory: React.FC = () => {
     <Box>
       <div className='box-title box-vertical-padding box-horizontal-padding no-select'>
         <div ref={ref} className='flex flex-center flex-space-between'>
-          Market history
+          <p>Market History</p>
           <button type='button' className='box-icon pointer' onClick={() => handleMenuOpen()}>
             <i className='material-icons'>more_vert</i>
           </button>
@@ -146,22 +96,40 @@ const TradeHistory: React.FC = () => {
       </div>
       <div className='box-content box-content-height-nobutton'>
         <div className='trade-history-row'>
-          {data && data.length > 0 && (
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '30px', color: '#999' }}>
+              Loading trades...
+            </div>
+          ) : data && data.length > 0 ? (
             <table>
               <thead>
                 <tr>
                   <th className='left no-select'>Price</th>
                   <th className='center no-select'>Amount</th>
-                  <th className='center no-select'>Order</th>
+                  <th className='center no-select'>Order / Counterpart</th>
                   <th className='right no-select'>Time</th>
                 </tr>
               </thead>
               <tbody>
                 {data.map((item: IHistory) => (
-                  <TradeHistoryRow key={item.id.toString()} item={item} />
+                  <TradeHistoryRow
+                    key={item.id.toString()}
+                    item={{
+                      price: item.price,
+                      quantity: item.quantity,
+                      takerSide: item.taker_side,
+                      makerUserMasked: item.maker_user_masked,
+                      takerUserMasked: item.taker_user_masked,
+                      createdAt: item.created_at,
+                    }}
+                  />
                 ))}
               </tbody>
             </table>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '30px', color: '#999' }}>
+              No trade history
+            </div>
           )}
         </div>
       </div>

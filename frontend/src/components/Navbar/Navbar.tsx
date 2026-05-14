@@ -26,6 +26,13 @@ const Navbar: React.FC = () => (
         <NavbarButton url='/transactions' icon='sync' title='Transactions' />
       </li>
       <li>
+        <NavbarButton
+          url='/blockchain-explorer'
+          icon='hub'
+          title='Blockchain Explorer'
+        />
+      </li>
+      <li>
         <NavbarButton url='/dashboard' icon='dashboard' title='Deposit / Withdraw' />
       </li>
     </ul>

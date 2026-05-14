@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Chart from 'react-apexcharts';
+import { Link } from 'react-router-dom';
 import './BlockchainExplorer.css';
 import MainLayout from '../layouts/MainLayout';
 
@@ -20,7 +21,8 @@ interface Block {
   Transactions: Transaction[];
 }
 
-const API_URL = '/api/blockchain/blocks';
+// /api/v1/blockchain/blocks — khop voi route duoc dang ky trong main.go
+const API_URL = '/api/v1/blockchain/blocks';
 
 function shortenHash(hash: string): string {
   if (!hash || hash.length < 16) return hash;
@@ -323,9 +325,18 @@ export default function BlockchainExplorer() {
               Dữ liệu bằng chứng rủi ro được AI ghi vĩnh viễn lên chuỗi khối (Audit Trail).
             </p>
           </div>
-          <button className="refresh-btn" onClick={fetchBlocks} disabled={loading}>
-            {loading ? '...' : '↺ Làm mới'}
-          </button>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <Link
+              to='/market'
+              className='refresh-btn'
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+            >
+              ← Về trang chính
+            </Link>
+            <button className="refresh-btn" onClick={fetchBlocks} disabled={loading}>
+              {loading ? '...' : '↺ Làm mới'}
+            </button>
+          </div>
         </div>
 
         {/* Stats bar */}

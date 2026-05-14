@@ -4,6 +4,9 @@ import (
 	"net/http"
 	"strings"
 
+	"crypto-exchange-backend/config"
+	"crypto-exchange-backend/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -44,4 +47,42 @@ func AuthRequired() gin.HandlerFunc {
 		// Token hop le, cho di tiep vao controller
 		c.Next()
 	}
+}
+
+// AdminRequired la middleware kiem tra admin role
+func AdminRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userID, exists := c.Get("user_id")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "User ID not found"})
+			c.Abort()
+			return
+		}
+
+		var user models.User
+		if err := config.DB.First(&user, userID).Error; err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "User not found"})
+			c.Abort()
+			return
+		}
+
+		if user.Role != "ADMIN" && user.Role != "MODERATOR" {
+			c.JSON(http.StatusForbidden, gin.H{"status": "error", "message": "Yeu cau quyen admin!"})
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
+}
+
+// LogAdminAction ghi log hanh dong admin
+func LogAdminAction(adminID uint, action string, targetID uint, details string) error {
+	log := models.AdminLog{
+		AdminID:  adminID,
+		Action:   action,
+		TargetID: targetID,
+		Details:  details,
+	}
+	return config.DB.Create(&log).Error
 }

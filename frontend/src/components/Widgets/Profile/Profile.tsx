@@ -4,14 +4,17 @@ import { Link } from 'react-router-dom';
 
 // hooks
 import useClickOutside from '../../../hooks/useClickOutside';
+import { useAuth } from '../../../hooks/useAuth';
 
 // components
 import Box from '../../Common/Box';
 
 const Profile: React.FC = () => {
   const ref = useRef<any>(null);
+  const { user } = useAuth();
 
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
+  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest User');
 
   useClickOutside(ref, () => setMenuOpened(false));
 
@@ -74,7 +77,7 @@ const Profile: React.FC = () => {
         </div>
         <div className='box-horizontal-padding'>
           <div className='center'>
-            <h3>Cenk SARI</h3>
+            <h3>{displayName}</h3>
             <strong>Level 1</strong>
             <p>You must be Level 2 to increase your limits.</p>
             <Link to='/members/application'>Level 2 application</Link>

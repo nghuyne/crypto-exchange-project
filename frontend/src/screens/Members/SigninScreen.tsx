@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 // hooks
 import useFormEvents from '../../hooks/useFormEvents';
+import { useAuth } from '../../hooks/useAuth';
 
 // components
 import Box from '../../components/Common/Box';
@@ -19,6 +20,7 @@ interface IFormProps {
 
 const SigninScreen: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const { onlyNumbers } = useFormEvents();
 
@@ -26,6 +28,8 @@ const SigninScreen: React.FC = () => {
     email: '',
     password: '',
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   /**
    * Handles input changes in the sign-in form.
@@ -44,7 +48,7 @@ const SigninScreen: React.FC = () => {
 
   /**
    * Handles the form submission for the sign-in screen.
-   * Goi API POST /api/v1/login, luu JWT vao localStorage.
+   * Sử dụng AuthContext để login.
    *
    * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
    * @returns {Promise<void>}
@@ -57,26 +61,14 @@ const SigninScreen: React.FC = () => {
       return;
     }
 
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/v1/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email:    formValues.email,
-          password: formValues.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.data.token);
-        navigate('/market');
-      } else {
-        alert(`Loi dang nhap: ${data.message}`);
-      }
-    } catch {
-      alert('Khong the ket noi Backend. Hay chay may chu Go (port 8080) truoc!');
+      await login(formValues.email, formValues.password);
+      navigate('/market');
+    } catch (error: any) {
+      alert(`Loi dang nhap: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
