@@ -111,6 +111,7 @@ type Address struct {
 	ID         uint      `gorm:"primaryKey" json:"id"`
 	UserID     uint      `gorm:"index;not null" json:"user_id"`
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Label      string    `gorm:"type:varchar(100);not null" json:"label"`     // VD: "Main Wallet", "Trading Account"
 	Address    string    `gorm:"type:varchar(255);not null" json:"address"`   // Blockchain address
 	Blockchain string    `gorm:"type:varchar(50);not null" json:"blockchain"` // VD: "Bitcoin", "Ethereum"
@@ -124,6 +125,11 @@ type Address struct {
 	Label      string    `gorm:"type:varchar(100);not null" json:"label"`       // VD: "Main Wallet", "Trading Account"
 	Address    string    `gorm:"type:varchar(255);not null" json:"address"`     // Blockchain address
 	Blockchain string    `gorm:"type:varchar(50);not null" json:"blockchain"`   // VD: "Bitcoin", "Ethereum"
+=======
+	Label      string    `gorm:"type:varchar(100);not null" json:"label"`     // VD: "Main Wallet", "Trading Account"
+	Address    string    `gorm:"type:varchar(255);not null" json:"address"`   // Blockchain address
+	Blockchain string    `gorm:"type:varchar(50);not null" json:"blockchain"` // VD: "Bitcoin", "Ethereum"
+>>>>>>> b06e4ab (fix: resolve merge conflicts in HeaderRight and Profile components)
 	CreatedAt  time.Time `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt  time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }

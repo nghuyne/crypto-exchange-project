@@ -45,20 +45,20 @@ export const addressService = {
             if (!response.ok) {
                 // Fallback to mock if API fails
                 console.warn('API failed, using mock addresses');
-                return { 
-                    status: 'success', 
+                return {
+                    status: 'success',
                     message: 'Using demo addresses (no saved addresses yet)',
-                    data: MOCK_ADDRESSES 
+                    data: MOCK_ADDRESSES
                 };
             }
 
             const result = await response.json();
             // If no addresses in backend, use mock
             if (result.data && result.data.length === 0) {
-                return { 
-                    status: 'success', 
+                return {
+                    status: 'success',
                     message: 'No saved addresses, showing demo data',
-                    data: MOCK_ADDRESSES 
+                    data: MOCK_ADDRESSES
                 };
             }
 
@@ -66,10 +66,10 @@ export const addressService = {
         } catch (error) {
             console.error('Lỗi lấy danh sách địa chỉ:', error);
             // Fallback to mock on network error
-            return { 
-                status: 'success', 
+            return {
+                status: 'success',
                 message: 'Using demo addresses (offline)',
-                data: MOCK_ADDRESSES 
+                data: MOCK_ADDRESSES
             };
         }
     },

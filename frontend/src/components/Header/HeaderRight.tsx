@@ -1,13 +1,13 @@
-<<<<<<< HEAD
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuthLogout } from '../../hooks/useAuthLogout';
 import { useAuth } from '../../hooks/useAuth';
 import { notificationService } from '../../api/services/appService';
 
 const HeaderRight: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { logout } = useAuthLogout();
+  const { user, isAuthenticated } = useAuth();
   const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
@@ -28,28 +28,14 @@ const HeaderRight: React.FC = () => {
     const interval = setInterval(fetchNotificationCount, 30000);
     return () => clearInterval(interval);
   }, [isAuthenticated]);
-=======
-import { Link, useLocation } from 'react-router-dom';
-import { useAuthLogout } from '../../hooks/useAuthLogout';
-import { useAuth } from '../../hooks/useAuth';
-
-const HeaderRight: React.FC = () => {
-  const location = useLocation();
-  const { logout } = useAuthLogout();
-  const { user } = useAuth();
-
-  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
-  const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
->>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     logout();
-    navigate('/');
   };
 
-  const userName = user?.full_name || 'User';
-  const userHandle = user?.email?.split('@')[0] || 'user';
+  const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
+  const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
 
   return (
     <div className='header-right no-select'>
@@ -110,13 +96,12 @@ const HeaderRight: React.FC = () => {
           </li>
         </ul>
         <ul className='header-user nowrap'>
-<<<<<<< HEAD
           {isAuthenticated && user ? (
             <>
               <li>
                 <Link to='/members'>
-                  <span>{userName}</span>
-                  <span>@{userHandle}</span>
+                  <span>{displayName}</span>
+                  <span>{displayHandle}</span>
                 </Link>
               </li>
               <li>
@@ -142,29 +127,6 @@ const HeaderRight: React.FC = () => {
               </Link>
             </li>
           )}
-=======
-          <li>
-            <Link to='/members'>
-              <span>{displayName}</span>
-              <span>{displayHandle}</span>
-            </Link>
-          </li>
-          <li>
-            <Link to='/members'>
-              <div
-                className='profile-picture cover'
-                style={{
-                  backgroundImage: `url('https://www.cenksari.com/content/profile.jpg')`,
-                }}
-              />
-            </Link>
-          </li>
-          <li className='responsive-hide'>
-            <button onClick={handleLogout} className='signout' style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-              <i className='material-icons'>power_settings_new</i>
-            </button>
-          </li>
->>>>>>> 6e458ee (feat: implement admin API, faucet feature, user profile display, and project documentation)
         </ul>
       </div>
     </div>
