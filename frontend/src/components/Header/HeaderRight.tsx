@@ -6,6 +6,7 @@ const HeaderRight: React.FC = () => {
   const location = useLocation();
   const { logout } = useAuthLogout();
   const { user } = useAuth();
+  const isAdmin = user?.role?.toUpperCase() === 'ADMIN';
 
   const displayName = user?.full_name?.trim() || (user?.email ? user.email.split('@')[0] : 'Guest');
   const displayHandle = user?.email ? `@${user.email.split('@')[0]}` : '@guest';
@@ -43,22 +44,35 @@ const HeaderRight: React.FC = () => {
               Blockchain Explorer
             </Link>
           </li>
-          <li>
-            <Link
-              to='/docs'
-              className={location.pathname.toLowerCase().includes('/docs') ? 'active' : 'passive'}
-            >
-              Docs
-            </Link>
-          </li>
-          <li>
-            <Link
-              to='/api'
-              className={location.pathname.toLowerCase().includes('/api') ? 'active' : 'passive'}
-            >
-              API
-            </Link>
-          </li>
+          {isAdmin ? (
+            <li>
+              <Link
+                to='/admin'
+                className={location.pathname.toLowerCase().includes('/admin') ? 'active' : 'passive'}
+              >
+                Admin Explorer
+              </Link>
+            </li>
+          ) : (
+            <>
+              <li>
+                <Link
+                  to='/docs'
+                  className={location.pathname.toLowerCase().includes('/docs') ? 'active' : 'passive'}
+                >
+                  Docs
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to='/api'
+                  className={location.pathname.toLowerCase().includes('/api') ? 'active' : 'passive'}
+                >
+                  API
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
         <ul className='header-icons nowrap'>
           <li>
